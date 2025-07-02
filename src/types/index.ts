@@ -16,4 +16,5 @@ export interface Mod {
   enabled: boolean;
   configOptions?: ConfigOption[];
   functionString: string;
+  mediaUrl?: string;
 }

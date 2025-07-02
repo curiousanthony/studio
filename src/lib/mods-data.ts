@@ -17,6 +17,7 @@ export const initialModsData: Mod[] = [
         log("School name element not found");
       }
     }`,
+    mediaUrl: 'https://placehold.co/1280x720.png',
   },
   {
     id: 'programs-singular',
@@ -36,6 +37,7 @@ export const initialModsData: Mod[] = [
         log("Programs nav element not found");
       }
     }`,
+    mediaUrl: 'https://placehold.co/1280x720.png',
   },
   {
     id: 'update-program-link',
@@ -69,6 +71,7 @@ export const initialModsData: Mod[] = [
         log("No matching elements found for updateProgramsLink");
       }
     }`,
+    mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   },
   {
     id: 'ask-question-new-tab',

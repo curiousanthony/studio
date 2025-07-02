@@ -3,15 +3,16 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings } from 'lucide-react';
+import { Settings, Eye } from 'lucide-react';
 
 interface ModCardProps {
   mod: Mod;
   onToggle: () => void;
   onConfigure: () => void;
+  onPreview: () => void;
 }
 
-export default function ModCard({ mod, onToggle, onConfigure }: ModCardProps) {
+export default function ModCard({ mod, onToggle, onConfigure, onPreview }: ModCardProps) {
   return (
     <Card className="flex flex-col hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
@@ -30,11 +31,18 @@ export default function ModCard({ mod, onToggle, onConfigure }: ModCardProps) {
             <Badge key={tag} variant="secondary">{tag}</Badge>
           ))}
         </div>
-        {mod.configOptions && mod.configOptions.length > 0 && (
-          <Button variant="ghost" size="icon" onClick={onConfigure} aria-label={`Configure ${mod.name}`}>
-            <Settings className="h-5 w-5 text-primary" />
-          </Button>
-        )}
+        <div className="flex items-center gap-1">
+          {mod.mediaUrl && (
+            <Button variant="ghost" size="icon" onClick={onPreview} aria-label={`Preview ${mod.name}`}>
+              <Eye className="h-5 w-5 text-primary" />
+            </Button>
+          )}
+          {mod.configOptions && mod.configOptions.length > 0 && (
+            <Button variant="ghost" size="icon" onClick={onConfigure} aria-label={`Configure ${mod.name}`}>
+              <Settings className="h-5 w-5 text-primary" />
+            </Button>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
