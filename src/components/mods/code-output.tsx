@@ -18,9 +18,6 @@ export default function CodeOutput({ mods }: CodeOutputProps) {
 
   const generatedCode = useMemo(() => {
     const enabledMods = mods.filter(mod => mod.enabled);
-    if (enabledMods.length === 0) {
-      return '[]';
-    }
 
     const modObjects = enabledMods.map(mod => {
       const config: Record<string, string> = {};
@@ -38,7 +35,44 @@ export default function CodeOutput({ mods }: CodeOutputProps) {
       }`;
     });
 
-    return `const mods = [\n  ${modObjects.join(',\n  ')}\n];\n\n// To run enabled mods:\n// mods.forEach(mod => mod.run(mod.config));`;
+    const modsArrayString = `const mods = [\n  ${modObjects.join(',\n  ')}\n];`;
+
+    return `<script>
+  // Helper functions for targeting elements
+  const qs = (arg) => document.querySelector(arg);
+  const qsa = (arg) => document.querySelectorAll(arg);
+
+  // Set to true when debugging. Will log tests to the console
+  const debug = true;
+
+  // Helper function for conditional logging
+  function log(message, ...args) {
+    if (debug) {
+      console.log(message, ...args);
+    }
+  }
+
+  ${enabledMods.length > 0 ? modsArrayString : 'const mods = [];'}
+
+  // Loops through mods and executes all enabled functions
+  function executeMods() {
+    mods.forEach(mod => {
+      try {
+        if (typeof mod.run === 'function') {
+          mod.run(mod.config);
+        }
+      } catch (e) {
+        console.error(\`Error executing mod: \${mod.name}\`, e);
+      }
+    });
+  }
+  
+  // Run on initial load
+  document.addEventListener("DOMContentLoaded", executeMods);
+  
+  // Run on Turbo navigation
+  document.addEventListener("turbo:load", executeMods);
+<\/script>`;
   }, [mods]);
 
   const handleCopy = () => {

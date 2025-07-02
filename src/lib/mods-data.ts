@@ -2,123 +2,90 @@ import type { Mod } from '@/types';
 
 export const initialModsData: Mod[] = [
   {
-    id: 'welcome-banner',
-    name: 'Welcome Banner',
-    description: 'Displays a customizable welcome banner at the top of the page.',
+    id: 'transform-school-name',
+    name: 'Transform School Name',
+    description: 'Removes the default uppercase styling from the school name in the navigation bar.',
     category: 'Appearance',
-    tags: ['ui', 'messaging', 'welcome'],
+    tags: ['ui', 'navigation', 'branding'],
     enabled: true,
-    configOptions: [
-      {
-        key: 'message',
-        label: 'Banner Message',
-        type: 'text',
-        placeholder: 'e.g. Welcome to our school!',
-        value: 'Welcome to our school!',
-      },
-      {
-        key: 'position',
-        label: 'Banner Position',
-        type: 'select',
-        options: ['top', 'bottom'],
-        value: 'top',
-      },
-    ],
     functionString: `(config) => {
-      const banner = document.createElement('div');
-      banner.textContent = config.message || 'Welcome!';
-      banner.style.position = 'fixed';
-      banner.style.left = '0';
-      banner.style.right = '0';
-      banner.style[config.position || 'top'] = '0';
-      banner.style.backgroundColor = '#2563EB';
-      banner.style.color = 'white';
-      banner.style.padding = '12px';
-      banner.style.textAlign = 'center';
-      banner.style.zIndex = '1000';
-      document.body.appendChild(banner);
-    }`,
-  },
-  {
-    id: 'custom-cursor',
-    name: 'Custom Cursor',
-    description: 'Changes the default mouse cursor to a custom one.',
-    category: 'Appearance',
-    tags: ['ui', 'cosmetic'],
-    enabled: false,
-    configOptions: [
-      {
-        key: 'cursorUrl',
-        label: 'Cursor Image URL',
-        type: 'text',
-        placeholder: 'https://example.com/cursor.png',
-        value: '',
-      },
-    ],
-    functionString: `(config) => {
-      if (config.cursorUrl) {
-        document.body.style.cursor = \`url(\${config.cursorUrl}), auto\`;
+      const schoolName = qs('.desktop-navigation-bar a[href="/"]');
+      if (schoolName) {
+        schoolName.style.textTransform = "none";
+        log("School name transformed");
+      } else {
+        log("School name element not found");
       }
     }`,
   },
   {
-    id: 'live-chat',
-    name: 'Live Chat Widget',
-    description: 'Integrates a third-party live chat widget on your site.',
+    id: 'programs-singular',
+    name: 'Singular Program Title',
+    description: "Changes the plural 'Programmes' title to singular 'Programme' in the navigation.",
+    category: 'Appearance',
+    tags: ['ui', 'navigation', 'localization'],
+    enabled: true,
+    functionString: `(config) => {
+      const programsTitleElements = qsa(".programs-page-title > span");
+      if (programsTitleElements.length > 0) {
+        programsTitleElements.forEach(el => {
+          el.innerText = "Programme";
+        });
+        log("Programs nav edited");
+      } else {
+        log("Programs nav element not found");
+      }
+    }`,
+  },
+  {
+    id: 'update-program-link',
+    name: 'Update Program Link',
+    description: "Updates the main 'Programs' navigation link to point to a specific program ID.",
     category: 'Functionality',
-    tags: ['support', 'integration', 'communication'],
-    enabled: false,
+    tags: ['navigation', 'program'],
+    enabled: true,
     configOptions: [
       {
-        key: 'widgetId',
-        label: 'Widget ID',
+        key: 'programId',
+        label: 'Program ID',
         type: 'text',
-        placeholder: 'Enter your live chat provider Widget ID',
-        value: '',
+        placeholder: 'e.g. db61dab4-edde-48af-9c38-b344f6cc8a6d',
+        value: 'db61dab4-edde-48af-9c38-b344f6cc8a6d',
       },
     ],
     functionString: `(config) => {
-      // This is a placeholder for a real integration script
-      console.log('Live Chat Widget enabled with ID:', config.widgetId);
-      const chatScript = document.createElement('script');
-      chatScript.src = \`https://example-chat.com/widget.js?id=\${config.widgetId}\`;
-      chatScript.async = true;
-      document.body.appendChild(chatScript);
+      const programId = config.programId;
+      if (!programId) {
+        log("Update Program Link mod is enabled, but no Program ID is configured.");
+        return;
+      }
+      const programsLinkElements = qsa('.desktop-navigation-bar:has(.programs-page-title) a[href="/products"]');
+      if (programsLinkElements.length > 0) {
+        programsLinkElements.forEach(el => {
+          el.setAttribute("href", "/products/" + programId);
+        });
+        log("Programs link updated to program ID: " + programId, programsLinkElements);
+      } else {
+        log("No matching elements found for updateProgramsLink");
+      }
     }`,
   },
   {
-    id: 'analytics',
-    name: 'Analytics Integration',
-    description: 'Adds analytics tracking to your site.',
+    id: 'ask-question-new-tab',
+    name: 'Ask Question in New Tab',
+    description: "Makes the 'Ask a question' button under lessons open in a new tab.",
     category: 'Functionality',
-    tags: ['analytics', 'tracking', 'data'],
+    tags: ['lessons', 'q&a', 'ux'],
     enabled: false,
-    functionString: `() => {
-      console.log('Analytics tracking enabled.');
-      // Placeholder for analytics script like Google Analytics
-    }`,
-  },
-    {
-    id: 'disable-right-click',
-    name: 'Disable Right-Click',
-    description: 'Disables the context menu to prevent content copying.',
-    category: 'Functionality',
-    tags: ['security', 'content protection'],
-    enabled: false,
-    functionString: `() => {
-      document.addEventListener('contextmenu', event => event.preventDefault());
-    }`,
-  },
-  {
-    id: 'snow-fall-effect',
-    name: 'Snow Fall Effect',
-    description: 'Adds a festive snow falling animation to the background.',
-    category: 'Appearance',
-    tags: ['animation', 'seasonal', 'cosmetic'],
-    enabled: false,
-    functionString: `() => {
-      // A simple implementation of a snow effect
-      console.log('Let it snow!');
+    functionString: `(config) => {
+      setTimeout(() => {
+        const askQButton = qs('#products_lesson_questions_frame > div > div > div > a');
+        log("Checking for 'Ask a question' button:", askQButton);
+        if (askQButton) {
+          askQButton.setAttribute("target", "_blank");
+          log("'Ask a question' button now opens in a new tab.");
+        }
+      }, 1000);
     }`,
   },
 ];
