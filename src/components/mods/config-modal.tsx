@@ -38,7 +38,8 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
 
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues
+    defaultValues,
+    mode: 'onChange'
   });
 
   const onSubmit = (data: Record<string, string>) => {
@@ -51,13 +52,13 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-headline">{t('configureTitle', { modName })}</DialogTitle>
+          <DialogTitle className="font-headline pr-8">{t('configureTitle', { modName })}</DialogTitle>
           <DialogDescription>
             {t('configureDescription')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
             {mod.configOptions?.map(option => (
               <FormField
                 key={option.key}
@@ -91,7 +92,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
             ))}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>{t('cancel')}</Button>
-              <Button type="submit">{t('saveChanges')}</Button>
+              <Button type="submit" disabled={!form.formState.isValid}>{t('saveChanges')}</Button>
             </DialogFooter>
           </form>
         </Form>

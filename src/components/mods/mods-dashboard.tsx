@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from 'react';
 import type { Mod } from '@/types';
 import { initialModsData } from '@/lib/mods-data';
 import ModCard from './mod-card';
-import ModListItem from './mod-list-item';
 import ConfigModal from './config-modal';
 import CodeOutput from './code-output';
 import PreviewModal from './preview-modal';
@@ -23,9 +22,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Category = 'All' | 'Appearance' | 'Functionality';
 type Layout = 'grid' | 'list';
+
+const LOCAL_STORAGE_KEY = 'schoolmakerModsState';
 
 export default function ModsDashboard() {
   const [mods, setMods] = useState<Mod[]>(initialModsData);
@@ -38,7 +40,62 @@ export default function ModsDashboard() {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const { t } = useTranslations();
+  const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
 
+  useEffect(() => {
+    try {
+      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedStateJSON) {
+        const savedState = JSON.parse(savedStateJSON);
+        
+        const rehydratedMods = initialModsData.map(initialMod => {
+          const savedMod = savedState.mods?.find(m => m.id === initialMod.id);
+          if (savedMod) {
+            const rehydratedOptions = initialMod.configOptions?.map(opt => {
+              const savedValue = savedMod.configOptions?.find(c => c.key === opt.key)?.value;
+              return { ...opt, value: savedValue ?? opt.value };
+            });
+            return { ...initialMod, enabled: savedMod.enabled, configOptions: rehydratedOptions };
+          }
+          return initialMod;
+        });
+
+        setMods(rehydratedMods);
+        setSearchQuery(savedState.searchQuery || '');
+        setActiveCategory(savedState.activeCategory || 'All');
+        setActiveTags(savedState.activeTags || []);
+        setLayout(savedState.layout || 'grid');
+      }
+    } catch (error) {
+      console.error("Failed to load state from localStorage", error);
+    }
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    try {
+      const stateToSave = {
+        mods: mods.map(mod => ({
+          id: mod.id,
+          enabled: mod.enabled,
+          configOptions: mod.configOptions?.map(opt => ({
+            key: opt.key,
+            value: opt.value
+          }))
+        })),
+        searchQuery,
+        activeCategory,
+        activeTags,
+        layout,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (error) {
+      console.error("Failed to save state to localStorage", error);
+    }
+  }, [isMounted, mods, searchQuery, activeCategory, activeTags, layout]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -184,11 +241,6 @@ export default function ModsDashboard() {
     });
   };
   
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   if (!isMounted) {
     return null;
   }
@@ -229,7 +281,7 @@ export default function ModsDashboard() {
 
         <div className="relative">
           <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
-              <div className="p-4 bg-card border rounded-lg shadow-sm max-w-7xl mx-auto">
+              <div className="p-4 bg-card border rounded-lg shadow-sm">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                       <Input
                       type="search"
@@ -270,47 +322,39 @@ export default function ModsDashboard() {
                           <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                       )}
                   </div>
-                   <div className="mt-4 flex items-center gap-4">
-                    <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
-                     <div className="flex items-center gap-2">
-                        <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                          <LayoutGrid className="mr-2 h-4 w-4" />
-                          {t('layoutGrid')}
-                        </Button>
-                        <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                          <List className="mr-2 h-4 w-4" />
-                          {t('layoutList')}
-                        </Button>
-                      </div>
-                  </div>
+                   {!isMobile && (
+                    <div className="mt-4 flex items-center gap-4">
+                      <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
+                      <div className="flex items-center gap-2">
+                          <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                            <LayoutGrid className="mr-2 h-4 w-4" />
+                            {t('layoutGrid')}
+                          </Button>
+                          <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                            <List className="mr-2 h-4 w-4" />
+                            {t('layoutList')}
+                          </Button>
+                        </div>
+                    </div>
+                   )}
               </div>
           </div>
 
 
           <div className={cn(
             "transition-all",
-            layout === 'grid'
+            !isMobile && layout === 'grid'
               ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-              : 'flex flex-col gap-4'
+              : 'grid grid-cols-1 gap-4'
           )}>
               {filteredMods.map(mod =>
-                layout === 'grid' ? (
-                  <ModCard
-                      key={mod.id}
-                      mod={mod}
-                      onToggle={() => handleToggleMod(mod.id)}
-                      onConfigure={() => handleOpenConfig(mod)}
-                      onPreview={() => setPreviewingMod(mod)}
-                  />
-                ) : (
-                  <ModListItem
-                      key={mod.id}
-                      mod={mod}
-                      onToggle={() => handleToggleMod(mod.id)}
-                      onConfigure={() => handleOpenConfig(mod)}
-                      onPreview={() => setPreviewingMod(mod)}
-                  />
-                )
+                <ModCard
+                    key={mod.id}
+                    mod={mod}
+                    onToggle={() => handleToggleMod(mod.id)}
+                    onConfigure={() => handleOpenConfig(mod)}
+                    onPreview={() => setPreviewingMod(mod)}
+                />
               )}
           </div>
           
