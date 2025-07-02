@@ -1,3 +1,9 @@
+import ModsDashboard from '@/components/mods/mods-dashboard';
+
 export default function Home() {
-  return <></>;
+  return (
+    <main>
+      <ModsDashboard />
+    </main>
+  );
 }
