@@ -66,7 +66,10 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                 name={option.key}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t(`mod_${mod.id}_config_${option.key}_label`)}</FormLabel>
+                    <FormLabel>
+                      {t(`mod_${mod.id}_config_${option.key}_label`)}
+                      {option.required && <span className="text-destructive"> *</span>}
+                    </FormLabel>
                     <FormControl>
                       {option.type === 'text' ? (
                         <Input placeholder={t(`mod_${mod.id}_config_${option.key}_placeholder`)} {...field} />

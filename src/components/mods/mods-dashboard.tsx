@@ -265,7 +265,7 @@ export default function ModsDashboard() {
         
         <Accordion type="single" collapsible className="w-full mb-8">
             <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg font-headline">{t('howToUseTitle')}</AccordionTrigger>
+            <AccordionTrigger className="text-lg font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
             <AccordionContent>
                 <Card>
                     <CardContent className="pt-6 text-sm space-y-4">
@@ -300,7 +300,7 @@ export default function ModsDashboard() {
                               size="sm"
                               onClick={() => setActiveCategory(category)}
                           >
-                              {t(category.toLowerCase() as any)}
+                              {category === 'All' ? t('all') : t(`category_${category.toLowerCase()}`)}
                           </Button>
                           ))}
                       </div>
@@ -393,12 +393,14 @@ export default function ModsDashboard() {
         />
       )}
 
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button onClick={handleCopy} size="lg" className="shadow-2xl">
-            {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
-            {t('copyCodeButton', { count: enabledModsCount })}
-        </Button>
-      </div>
+      {enabledModsCount > 0 && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button onClick={handleCopy} size="lg" className="shadow-2xl">
+              {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
+              {t('copyCodeButton', { count: enabledModsCount })}
+          </Button>
+        </div>
+      )}
 
       <footer className="text-center p-4 text-muted-foreground text-sm">
         <p dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}}/>
