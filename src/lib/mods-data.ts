@@ -53,6 +53,7 @@ export const initialModsData: Mod[] = [
         type: 'text',
         placeholder: 'e.g. db61dab4-edde-48af-9c38-b344f6cc8a6d',
         value: 'db61dab4-edde-48af-9c38-b344f6cc8a6d',
+        required: true,
       },
     ],
     functionString: `(config) => {

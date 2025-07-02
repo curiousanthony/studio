@@ -23,12 +23,13 @@ export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
   if (!mod.mediaUrl) return null;
   
   const videoId = getYoutubeVideoId(mod.mediaUrl);
+  const modName = t(`mod_${mod.id}_name`);
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="font-headline">{t('previewTitle', { modName: mod.name })}</DialogTitle>
+          <DialogTitle className="font-headline">{t('previewTitle', { modName })}</DialogTitle>
            <DialogDescription>
             {t('previewDescription')}
           </DialogDescription>
@@ -47,7 +48,7 @@ export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
           ) : (
             <Image
               src={mod.mediaUrl}
-              alt={`Preview for ${mod.name}`}
+              alt={`Preview for ${modName}`}
               width={1280}
               height={720}
               className="w-full h-auto object-contain"

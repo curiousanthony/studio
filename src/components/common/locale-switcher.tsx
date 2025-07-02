@@ -1,27 +1,20 @@
 "use client";
 
 import { useTranslations } from '@/hooks/use-translations';
-import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LocaleSwitcher() {
   const { locale, setLocale } = useTranslations();
 
   return (
-    <div className="flex gap-2">
-      <Button
-        variant={locale === 'en' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setLocale('en')}
-      >
-        English
-      </Button>
-      <Button
-        variant={locale === 'fr' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setLocale('fr')}
-      >
-        Français
-      </Button>
-    </div>
+    <Select value={locale} onValueChange={(value) => setLocale(value as 'en' | 'fr')}>
+      <SelectTrigger className="w-[120px]">
+        <SelectValue placeholder="Language" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="en">English</SelectItem>
+        <SelectItem value="fr">Français</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }

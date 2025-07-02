@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import type { Mod } from '@/types';
 import { initialModsData } from '@/lib/mods-data';
 import ModCard from './mod-card';
+import ModListItem from './mod-list-item';
 import ConfigModal from './config-modal';
 import CodeOutput from './code-output';
 import PreviewModal from './preview-modal';
@@ -11,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, Eye } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -21,8 +22,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
+import { cn } from '@/lib/utils';
 
 type Category = 'All' | 'Appearance' | 'Functionality';
+type Layout = 'grid' | 'list';
 
 export default function ModsDashboard() {
   const [mods, setMods] = useState<Mod[]>(initialModsData);
@@ -31,6 +34,7 @@ export default function ModsDashboard() {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [selectedMod, setSelectedMod] = useState<Mod | null>(null);
   const [previewingMod, setPreviewingMod] = useState<Mod | null>(null);
+  const [layout, setLayout] = useState<Layout>('grid');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const { t } = useTranslations();
@@ -57,12 +61,14 @@ export default function ModsDashboard() {
       .filter(mod => {
         if (searchQuery.trim() === '') return true;
         const lowerCaseQuery = searchQuery.toLowerCase();
+        const name = t(`mod_${mod.id}_name`).toLowerCase();
+        const description = t(`mod_${mod.id}_description`).toLowerCase();
         return (
-          mod.name.toLowerCase().includes(lowerCaseQuery) ||
-          mod.description.toLowerCase().includes(lowerCaseQuery)
+          name.includes(lowerCaseQuery) ||
+          description.includes(lowerCaseQuery)
         );
       });
-  }, [mods, activeCategory, activeTags, searchQuery]);
+  }, [mods, activeCategory, activeTags, searchQuery, t]);
 
   const handleToggleMod = (modId: string) => {
     setMods(prevMods =>
@@ -190,7 +196,7 @@ export default function ModsDashboard() {
   return (
     <div className="container mx-auto px-4 flex flex-col min-h-full">
        <div className="flex-grow">
-        <header className="text-center mb-6 pt-8">
+        <header className="text-center pt-8 mb-6">
             <div className="flex justify-end mb-4 -mt-4">
               <LocaleSwitcher />
             </div>
@@ -199,7 +205,9 @@ export default function ModsDashboard() {
                 {t('pageDescription')}
             </p>
             <p className="text-base text-primary font-semibold mt-2">
-                {t('enabledMods', { count: enabledModsCount })}
+                {enabledModsCount > 0 
+                  ? t('enabledMods', { count: enabledModsCount }) 
+                  : t('gettingStarted')}
             </p>
         </header>
         
@@ -219,67 +227,98 @@ export default function ModsDashboard() {
             </AccordionItem>
         </Accordion>
 
-        <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
-            <div className="p-4 bg-card border rounded-lg shadow-sm max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                    <Input
-                    type="search"
-                    placeholder={t('searchPlaceholder')}
-                    className="md:col-span-1"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
-                    <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
-                    <div className="flex items-center gap-2 flex-wrap">
-                        {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
-                        <Button
-                            key={category}
-                            variant={activeCategory === category ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => setActiveCategory(category)}
-                        >
-                            {t(category.toLowerCase() as any)}
+        <div className="relative">
+          <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+              <div className="p-4 bg-card border rounded-lg shadow-sm max-w-7xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                      <Input
+                      type="search"
+                      placeholder={t('searchPlaceholder')}
+                      className="md:col-span-1"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                      <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
+                      <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                          {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
+                          <Button
+                              key={category}
+                              variant={activeCategory === category ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => setActiveCategory(category)}
+                          >
+                              {t(category.toLowerCase() as any)}
+                          </Button>
+                          ))}
+                      </div>
+                      </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2 items-center">
+                      <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}</span>
+                      {allTags.map(tag => (
+                          <Badge
+                              key={tag}
+                              variant={activeTags.includes(tag) ? 'default' : 'secondary'}
+                              onClick={() => handleTagClick(tag)}
+                              className="cursor-pointer transition-colors"
+                          >
+                              {t(`tag_${tag}`)}
+                          </Badge>
+                      ))}
+                      {activeTags.length > 0 && (
+                          <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                      )}
+                  </div>
+                   <div className="mt-4 flex items-center gap-4">
+                    <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
+                     <div className="flex items-center gap-2">
+                        <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                          <LayoutGrid className="mr-2 h-4 w-4" />
+                          {t('layoutGrid')}
                         </Button>
-                        ))}
-                    </div>
-                    </div>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2 items-center">
-                    <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}</span>
-                    {allTags.map(tag => (
-                        <Badge
-                            key={tag}
-                            variant={activeTags.includes(tag) ? 'default' : 'secondary'}
-                            onClick={() => handleTagClick(tag)}
-                            className="cursor-pointer transition-colors"
-                        >
-                            {tag}
-                        </Badge>
-                    ))}
-                    {activeTags.length > 0 && (
-                        <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
-                    )}
-                </div>
-            </div>
-        </div>
+                        <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                          <List className="mr-2 h-4 w-4" />
+                          {t('layoutList')}
+                        </Button>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredMods.map(mod => (
-            <ModCard
-                key={mod.id}
-                mod={mod}
-                onToggle={() => handleToggleMod(mod.id)}
-                onConfigure={() => handleOpenConfig(mod)}
-                onPreview={() => setPreviewingMod(mod)}
-            />
-            ))}
+          <div className={cn(
+            "transition-all",
+            layout === 'grid'
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+              : 'flex flex-col gap-4'
+          )}>
+              {filteredMods.map(mod =>
+                layout === 'grid' ? (
+                  <ModCard
+                      key={mod.id}
+                      mod={mod}
+                      onToggle={() => handleToggleMod(mod.id)}
+                      onConfigure={() => handleOpenConfig(mod)}
+                      onPreview={() => setPreviewingMod(mod)}
+                  />
+                ) : (
+                  <ModListItem
+                      key={mod.id}
+                      mod={mod}
+                      onToggle={() => handleToggleMod(mod.id)}
+                      onConfigure={() => handleOpenConfig(mod)}
+                      onPreview={() => setPreviewingMod(mod)}
+                  />
+                )
+              )}
+          </div>
+          
+          {filteredMods.length === 0 && (
+              <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
+          )}
+
         </div>
-        
-        {filteredMods.length === 0 && (
-            <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
-        )}
 
         <section className="my-16">
             <Card>

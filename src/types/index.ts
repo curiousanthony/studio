@@ -5,6 +5,7 @@ export interface ConfigOption {
   placeholder?: string;
   options?: string[];
   value: string;
+  required?: boolean;
 }
 
 export interface Mod {

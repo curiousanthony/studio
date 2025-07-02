@@ -3,6 +3,9 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useTranslations } from '@/hooks/use-translations';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 
 interface CodeOutputProps {
   generatedCode: string;
@@ -20,10 +23,24 @@ export default function CodeOutput({ generatedCode }: CodeOutputProps) {
             </div>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-72 w-full rounded-md border bg-muted/50">
-            <pre className="p-4 text-sm">
-              <code className="font-code">{generatedCode}</code>
-            </pre>
+          <ScrollArea className="h-72 w-full rounded-md border bg-[#111827]">
+             <SyntaxHighlighter
+                language="html"
+                style={coldarkDark}
+                customStyle={{ 
+                  margin: 0, 
+                  padding: "1rem", 
+                  background: "transparent",
+                  fontFamily: "monospace"
+                }}
+                codeTagProps={{
+                  style: {
+                    fontSize: "0.875rem",
+                  }
+                }}
+              >
+                {generatedCode}
+              </SyntaxHighlighter>
           </ScrollArea>
         </CardContent>
       </Card>
