@@ -18,7 +18,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useTranslations } from '@/hooks/use-translations';
+import LocaleSwitcher from '@/components/common/locale-switcher';
 
 type Category = 'All' | 'Appearance' | 'Functionality';
 
@@ -31,6 +33,8 @@ export default function ModsDashboard() {
   const [previewingMod, setPreviewingMod] = useState<Mod | null>(null);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslations();
+
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -161,14 +165,14 @@ export default function ModsDashboard() {
     navigator.clipboard.writeText(generatedCode).then(() => {
       setCopied(true);
       toast({
-        title: "Copied to clipboard!",
-        description: "You can now paste the code into your project.",
+        title: t('copiedToClipboard'),
+        description: t('copiedToClipboardDescription'),
       });
       setTimeout(() => setCopied(false), 2000);
     }).catch(err => {
       toast({
-        title: "Failed to copy",
-        description: "Could not copy code to clipboard.",
+        title: t('copyFailed'),
+        description: t('copyFailedDescription'),
         variant: "destructive",
       });
     });
@@ -184,101 +188,112 @@ export default function ModsDashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="text-center mb-8">
-        <h1 className="font-headline text-4xl md:text-5xl font-bold mb-2">SchoolMaker Mods</h1>
-        <p className="text-lg text-muted-foreground">
-          Enable, disable, and configure mods to customize your experience.
-        </p>
-         <p className="text-base text-primary font-semibold mt-2">
-          {enabledModsCount} mod{enabledModsCount !== 1 ? 's' : ''} enabled
-        </p>
-      </header>
-      
-      <Accordion type="single" collapsible className="w-full mb-8">
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="text-lg font-headline">How to Use This Tool</AccordionTrigger>
-          <AccordionContent>
-              <Card>
-                  <CardContent className="pt-6 text-sm space-y-4">
-                      <p>
-                          <strong>Step 1:</strong> Enable and configure the mods you want to use from the list below.
-                      </p>
-                      <p>
-                          <strong>Step 2:</strong> Click the floating "Copy Code" button in the bottom right corner to copy the generated script to your clipboard.
-                      </p>
-                      <p>
-                          <strong>Step 3:</strong> In your SchoolMaker admin dashboard, navigate to <strong>Settings</strong> &gt; <strong>Custom Code</strong>.
-                      </p>
-                        <p>
-                          <strong>Step 4:</strong> Paste the copied code into the text area labeled <strong>&lt;head&gt; Custom Code</strong> and save your changes. The mods will be active on your live school site.
-                      </p>
-                  </CardContent>
-              </Card>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+    <div className="container mx-auto px-4 flex flex-col min-h-full">
+       <div className="flex-grow">
+        <header className="text-center mb-6 pt-8">
+            <div className="flex justify-end mb-4 -mt-4">
+              <LocaleSwitcher />
+            </div>
+            <h1 className="font-headline text-4xl font-bold mb-1">{t('pageTitle')}</h1>
+            <p className="text-md text-muted-foreground max-w-2xl mx-auto">
+                {t('pageDescription')}
+            </p>
+            <p className="text-base text-primary font-semibold mt-2">
+                {t('enabledMods', { count: enabledModsCount })}
+            </p>
+        </header>
+        
+        <Accordion type="single" collapsible className="w-full mb-8">
+            <AccordionItem value="item-1">
+            <AccordionTrigger className="text-lg font-headline">{t('howToUseTitle')}</AccordionTrigger>
+            <AccordionContent>
+                <Card>
+                    <CardContent className="pt-6 text-sm space-y-4">
+                        <p>{t('step1')}</p>
+                        <p>{t('step2')}</p>
+                        <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
+                    </CardContent>
+                </Card>
+            </AccordionContent>
+            </AccordionItem>
+        </Accordion>
 
-      <div className="mb-8 p-4 bg-card border rounded-lg shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-            <Input
-              type="search"
-              placeholder="Search mods..."
-              className="md:col-span-1"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
-              <span className="text-sm font-medium mr-2 shrink-0">Category:</span>
-              <div className="flex items-center gap-2 flex-wrap">
-                {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
-                  <Button
-                    key={category}
-                    variant={activeCategory === category ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setActiveCategory(category)}
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
+        <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div className="p-4 bg-card border rounded-lg shadow-sm max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <Input
+                    type="search"
+                    placeholder={t('searchPlaceholder')}
+                    className="md:col-span-1"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
+                    <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
+                        <Button
+                            key={category}
+                            variant={activeCategory === category ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setActiveCategory(category)}
+                        >
+                            {t(category.toLowerCase() as any)}
+                        </Button>
+                        ))}
+                    </div>
+                    </div>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2 items-center">
+                    <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}</span>
+                    {allTags.map(tag => (
+                        <Badge
+                            key={tag}
+                            variant={activeTags.includes(tag) ? 'default' : 'secondary'}
+                            onClick={() => handleTagClick(tag)}
+                            className="cursor-pointer transition-colors"
+                        >
+                            {tag}
+                        </Badge>
+                    ))}
+                    {activeTags.length > 0 && (
+                        <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                    )}
+                </div>
             </div>
         </div>
-        <div className="mt-4 flex flex-wrap gap-2 items-center">
-            <span className="text-sm font-medium mr-2 shrink-0">Tags:</span>
-            {allTags.map(tag => (
-                <Badge
-                    key={tag}
-                    variant={activeTags.includes(tag) ? 'default' : 'secondary'}
-                    onClick={() => handleTagClick(tag)}
-                    className="cursor-pointer transition-colors"
-                >
-                    {tag}
-                </Badge>
+
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredMods.map(mod => (
+            <ModCard
+                key={mod.id}
+                mod={mod}
+                onToggle={() => handleToggleMod(mod.id)}
+                onConfigure={() => handleOpenConfig(mod)}
+                onPreview={() => setPreviewingMod(mod)}
+            />
             ))}
-            {activeTags.length > 0 && (
-                <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">Clear</Button>
-            )}
         </div>
-      </div>
+        
+        {filteredMods.length === 0 && (
+            <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
+        )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMods.map(mod => (
-          <ModCard
-            key={mod.id}
-            mod={mod}
-            onToggle={() => handleToggleMod(mod.id)}
-            onConfigure={() => handleOpenConfig(mod)}
-            onPreview={() => setPreviewingMod(mod)}
-          />
-        ))}
-      </div>
-      
-      {filteredMods.length === 0 && (
-          <p className="text-center col-span-full text-muted-foreground mt-8">No mods match your criteria.</p>
-      )}
+        <section className="my-16">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">{t('whyTitle')}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-2">
+                    <p className="text-muted-foreground">{t('whyContent')}</p>
+                </CardContent>
+            </Card>
+        </section>
 
-      <CodeOutput generatedCode={generatedCode} />
+        <CodeOutput generatedCode={generatedCode} />
+      </div>
       
       {selectedMod && (
         <ConfigModal
@@ -298,9 +313,13 @@ export default function ModsDashboard() {
       <div className="fixed bottom-6 right-6 z-50">
         <Button onClick={handleCopy} size="lg" className="shadow-2xl">
             {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
-            Copy Code ({enabledModsCount} enabled)
+            {t('copyCodeButton', { count: enabledModsCount })}
         </Button>
       </div>
+
+      <footer className="text-center p-4 text-muted-foreground text-sm">
+        <p dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}}/>
+      </footer>
     </div>
   );
 }

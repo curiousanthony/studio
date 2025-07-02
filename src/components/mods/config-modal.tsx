@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface ConfigModalProps {
   mod: Mod;
@@ -15,6 +16,7 @@ interface ConfigModalProps {
 }
 
 export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) {
+  const { t } = useTranslations();
   const defaultValues = mod.configOptions?.reduce((acc, option) => {
     acc[option.key] = option.value;
     return acc;
@@ -30,9 +32,9 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-headline">Configure: {mod.name}</DialogTitle>
+          <DialogTitle className="font-headline">{t('configureTitle', { modName: mod.name })}</DialogTitle>
           <DialogDescription>
-            Adjust the settings for this mod. Click save when you're done.
+            {t('configureDescription')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -69,8 +71,8 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
               />
             ))}
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-              <Button type="submit">Save Changes</Button>
+              <Button type="button" variant="outline" onClick={onClose}>{t('cancel')}</Button>
+              <Button type="submit">{t('saveChanges')}</Button>
             </DialogFooter>
           </form>
         </Form>

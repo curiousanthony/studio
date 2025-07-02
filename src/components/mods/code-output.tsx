@@ -2,19 +2,21 @@
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface CodeOutputProps {
   generatedCode: string;
 }
 
 export default function CodeOutput({ generatedCode }: CodeOutputProps) {
+  const { t } = useTranslations();
   return (
     <section className="mt-16 mb-8">
       <Card>
         <CardHeader>
             <div>
-              <CardTitle className="font-headline">Generated Code</CardTitle>
-              <CardDescription>Below is the generated code for all enabled mods.</CardDescription>
+              <CardTitle className="font-headline">{t('generatedCodeTitle')}</CardTitle>
+              <CardDescription>{t('generatedCodeDescription')}</CardDescription>
             </div>
         </CardHeader>
         <CardContent>

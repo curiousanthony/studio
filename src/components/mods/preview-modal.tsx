@@ -3,6 +3,7 @@
 import type { Mod } from '@/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import Image from 'next/image';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface PreviewModalProps {
   mod: Mod;
@@ -17,6 +18,8 @@ const getYoutubeVideoId = (url: string): string | null => {
 };
 
 export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
+  const { t } = useTranslations();
+
   if (!mod.mediaUrl) return null;
   
   const videoId = getYoutubeVideoId(mod.mediaUrl);
@@ -25,9 +28,9 @@ export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="font-headline">Preview: {mod.name}</DialogTitle>
+          <DialogTitle className="font-headline">{t('previewTitle', { modName: mod.name })}</DialogTitle>
            <DialogDescription>
-            A preview of what this mod does. Close the modal when you're done.
+            {t('previewDescription')}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 bg-muted rounded-lg overflow-hidden">
