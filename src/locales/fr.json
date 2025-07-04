@@ -50,7 +50,7 @@
   "mod_sticky-sections_description": "Rend les en-têtes de section d'un programme collants en haut de la page lors du défilement.",
   "mod_sticky-sections_config_topPosition_label": "Position supérieure (en px)",
   "mod_sticky-sections_config_topPosition_placeholder": "ex: 0",
-  "mod_course-card-customizer_name": "Personnalisateur de carte de cours",
+  "mod_course-card-customizer_name": "Personnalisation de carte de cours",
   "mod_course-card-customizer_description": "Personnalisez l'apparence des cartes de cours sur la page des programmes.",
   "mod_course-card-customizer_config_enableCustomBorder_label": "Activer la bordure personnalisée",
   "mod_course-card-customizer_config_borderColor_label": "Couleur de la bordure",
@@ -60,7 +60,7 @@
   "mod_course-card-customizer_config_cardTitleSuffix_label": "Suffixe de titre de carte personnalisé",
   "mod_course-card-customizer_config_cardTitleSuffix_placeholder": "ex: - Nouveau !",
   "mod_course-card-customizer_config_cardTitleSuffix_validationMessage": "Seuls les lettres, chiffres, espaces, tirets et points d'exclamation sont autorisés.",
-  "mod_chapter-style-customizer_name": "Personnalisateur de Style de Chapitre",
+  "mod_chapter-style-customizer_name": "Personnalisation de Style de Chapitre",
   "mod_chapter-style-customizer_description": "Personnalise l'apparence des groupes de sections (chapitres) d'un programme pour une meilleure cohérence visuelle.",
   "mod_chapter-style-customizer_config_backgroundColor_label": "Couleur de fond",
   "mod_chapter-style-customizer_config_textColor_label": "Couleur du texte",
@@ -68,6 +68,8 @@
   "mod_chapter-style-customizer_config_textColorHover_label": "Couleur du texte (survol)",
   "mod_chapter-style-customizer_config_fontSize_label": "Taille de la police",
   "mod_chapter-style-customizer_config_fontWeight_label": "Graisse de la police",
+  "mod_section-arrow-reorder_name": "Réorganisation Flèche de Section",
+  "mod_section-arrow-reorder_description": "Déplace la flèche d'expansion des sections vers la droite pour une mise en page plus épurée.",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -80,5 +82,6 @@
   "tag_ux": "UX",
   "tag_sticky": "Collant",
   "tag_customization": "Personnalisation",
-  "tag_chapters": "Chapitres"
+  "tag_chapters": "Chapitres",
+  "tag_layout": "Mise en page"
 }

@@ -68,6 +68,8 @@
   "mod_chapter-style-customizer_config_textColorHover_label": "Text Color (Hover)",
   "mod_chapter-style-customizer_config_fontSize_label": "Font Size",
   "mod_chapter-style-customizer_config_fontWeight_label": "Font Weight",
+  "mod_section-arrow-reorder_name": "Section Arrow Reorder",
+  "mod_section-arrow-reorder_description": "Moves the expand/collapse arrow for sections to the right side, for a cleaner layout.",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -80,5 +82,6 @@
   "tag_ux": "UX",
   "tag_sticky": "Sticky",
   "tag_customization": "Customization",
-  "tag_chapters": "Chapters"
+  "tag_chapters": "Chapters",
+  "tag_layout": "Layout"
 }
