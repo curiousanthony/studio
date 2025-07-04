@@ -22,7 +22,9 @@ export interface Mod {
   modType: 'javascript' | 'css';
   functionString?: string;
   cssString?: string;
+  /** A URL or a local path (e.g., /images/mod-preview.png) for the "After" or single preview image. */
   mediaUrl?: string;
+  /** A URL or a local path for the "Before" preview image. */
   mediaBeforeUrl?: string;
   previewEnabled?: boolean;
   requiresGoogleIcons?: boolean;

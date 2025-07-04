@@ -10,8 +10,8 @@ export const mod: Mod = {
   published: true,
   modType: 'css',
   previewEnabled: true,
-  mediaBeforeUrl: 'https://placehold.co/600x400.png',
-  mediaUrl: 'https://placehold.co/600x401.png',
+  mediaBeforeUrl: '/images/mods/section-arrow-reorder-before.png',
+  mediaUrl: '/images/mods/section-arrow-reorder-after.png',
   cssString: `
 /* Reorder the arrow in section headers to the right */
 [data-target^="#products_section_"] > svg {
