@@ -70,6 +70,10 @@
   "mod_chapter-style-customizer_config_fontWeight_label": "Graisse de la police",
   "mod_section-arrow-reorder_name": "Réorganisation Flèche de Section",
   "mod_section-arrow-reorder_description": "Déplace la flèche d'expansion des sections vers la droite pour une mise en page plus épurée.",
+  "mod_sidebar-toggle-customizer_name": "Personnalisation des boutons de la barre latérale",
+  "mod_sidebar-toggle-customizer_description": "Remplace les icônes par défaut des boutons de la barre latérale par des icônes Google Material et permet la personnalisation des couleurs.",
+  "mod_sidebar-toggle-customizer_config_backgroundColor_label": "Couleur de fond",
+  "mod_sidebar-toggle-customizer_config_iconColor_label": "Couleur de l'icône",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -83,5 +87,7 @@
   "tag_sticky": "Collant",
   "tag_customization": "Personnalisation",
   "tag_chapters": "Chapitres",
-  "tag_layout": "Mise en page"
+  "tag_layout": "Mise en page",
+  "tag_sidebar": "Barre latérale",
+  "tag_icons": "Icônes"
 }

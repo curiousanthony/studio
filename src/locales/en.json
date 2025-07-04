@@ -70,6 +70,10 @@
   "mod_chapter-style-customizer_config_fontWeight_label": "Font Weight",
   "mod_section-arrow-reorder_name": "Section Arrow Reorder",
   "mod_section-arrow-reorder_description": "Moves the expand/collapse arrow for sections to the right side, for a cleaner layout.",
+  "mod_sidebar-toggle-customizer_name": "Sidebar Toggle Customizer",
+  "mod_sidebar-toggle-customizer_description": "Replaces the default sidebar toggle icons with Google Material Icons and allows color customization.",
+  "mod_sidebar-toggle-customizer_config_backgroundColor_label": "Background Color",
+  "mod_sidebar-toggle-customizer_config_iconColor_label": "Icon Color",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -83,5 +87,7 @@
   "tag_sticky": "Sticky",
   "tag_customization": "Customization",
   "tag_chapters": "Chapters",
-  "tag_layout": "Layout"
+  "tag_layout": "Layout",
+  "tag_sidebar": "Sidebar",
+  "tag_icons": "Icons"
 }

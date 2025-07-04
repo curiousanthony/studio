@@ -24,4 +24,5 @@ export interface Mod {
   cssString?: string;
   mediaUrl?: string;
   previewEnabled?: boolean;
+  requiresGoogleIcons?: boolean;
 }

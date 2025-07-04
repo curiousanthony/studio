@@ -7,6 +7,7 @@ import { mod as stickySectionsMod } from './sticky-sections';
 import { mod as courseCardCustomizerMod } from './course-card-customizer';
 import { mod as chapterStyleCustomizerMod } from './chapter-style-customizer';
 import { mod as sectionArrowReorderMod } from './section-arrow-reorder';
+import { mod as sidebarToggleCustomizerMod } from './sidebar-toggle-customizer';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -17,6 +18,7 @@ const allModsRaw: Mod[] = [
   courseCardCustomizerMod,
   chapterStyleCustomizerMod,
   sectionArrowReorderMod,
+  sidebarToggleCustomizerMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

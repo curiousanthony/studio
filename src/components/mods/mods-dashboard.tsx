@@ -169,6 +169,9 @@ export default function ModsDashboard() {
     const enabledMods = mods.filter(mod => mod.enabled);
     const jsMods = enabledMods.filter(mod => mod.modType === 'javascript');
     const cssMods = enabledMods.filter(mod => mod.modType === 'css');
+    const needsGoogleIcons = enabledMods.some(mod => mod.requiresGoogleIcons);
+
+    const googleIconsLink = needsGoogleIcons ? '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,1,0" />' : '';
 
     // Generate CSS code
     const cssString = cssMods.length > 0 ?
@@ -263,7 +266,7 @@ export default function ModsDashboard() {
 <\/script>`;
     })() : '';
 
-    return [styleBlock, scriptBlock].filter(Boolean).join('\n\n');
+    return [googleIconsLink, styleBlock, scriptBlock].filter(Boolean).join('\n\n');
   }, [mods, t]);
 
   const handleCopy = () => {
