@@ -174,16 +174,30 @@ export default function ModsDashboard() {
     const cssString = cssMods.length > 0 ?
       cssMods.map(mod => {
         let modCss = mod.cssString || '';
+        const config: Record<string, string> = {};
         if (mod.configOptions) {
-          const config: Record<string, string> = {};
           mod.configOptions.forEach(opt => {
             config[opt.key] = opt.value;
           });
-          // Replace placeholders
-          modCss = modCss.replace(/\{\{([a-zA-Z0-9_]+)\}\}/g, (_, key) => config[key.trim()] || '');
         }
+        
+        // Process conditionals based on config values
+        modCss = modCss.replace(
+            /\/\*\[--if ([a-zA-Z0-9_]+)--\]\*\/([\s\S]*?)\/\*\[--endif \1--\]\*\//g,
+            (match, key, content) => {
+                const configValue = config[key.trim()];
+                const isTruthy = configValue && configValue !== 'false' && configValue !== '';
+                return isTruthy ? content : '';
+            }
+        );
+
+        // Replace placeholders
+        modCss = modCss.replace(/\{\{([a-zA-Z0-9_]+)\}\}/g, (_, key) => config[key.trim()] || '');
+        
+        if (modCss.trim() === '') return '';
+
         return `/* --- Mod: ${t(`mod_${mod.id}_name`)} --- */\n${modCss.trim()}`;
-      }).join('\n\n')
+      }).filter(Boolean).join('\n\n')
       : '';
     
     const styleBlock = cssString ? `<style>\n${cssString}\n</style>` : '';

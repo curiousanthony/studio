@@ -1,11 +1,13 @@
 export interface ConfigOption {
   key: string;
   label: string;
-  type: 'text' | 'select';
+  type: 'text' | 'select' | 'number' | 'color' | 'checkbox';
   placeholder?: string;
   options?: string[];
   value: string;
   required?: boolean;
+  validationRegex?: string;
+  validationMessage?: string;
 }
 
 export interface Mod {

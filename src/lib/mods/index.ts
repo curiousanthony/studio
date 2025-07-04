@@ -4,6 +4,7 @@ import { mod as programsSingularMod } from './programs-singular';
 import { mod as updateProgramLinkMod } from './update-program-link';
 import { mod as askQuestionNewTabMod } from './ask-question-new-tab';
 import { mod as stickySectionsMod } from './sticky-sections';
+import { mod as courseCardCustomizerMod } from './course-card-customizer';
 
 export const allMods: Mod[] = [
   transformSchoolNameMod,
@@ -11,4 +12,5 @@ export const allMods: Mod[] = [
   updateProgramLinkMod,
   askQuestionNewTabMod,
   stickySectionsMod,
+  courseCardCustomizerMod,
 ];

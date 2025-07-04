@@ -34,6 +34,8 @@
   "layoutGrid": "Grille",
   "layoutList": "Liste",
   "fieldIsRequired": "Ce champ est requis.",
+  "fieldIsNumber": "Ce champ doit être un nombre.",
+  "fieldInvalid": "La valeur saisie est invalide.",
   "mod_transform-school-name_name": "Transformer le nom de l'école",
   "mod_transform-school-name_description": "Supprime le style majuscule par défaut du nom de l'école dans la barre de navigation.",
   "mod_programs-singular_name": "Titre de programme au singulier",
@@ -48,6 +50,16 @@
   "mod_sticky-sections_description": "Rend les en-têtes de section d'un programme collants en haut de la page lors du défilement.",
   "mod_sticky-sections_config_topPosition_label": "Position supérieure (en px)",
   "mod_sticky-sections_config_topPosition_placeholder": "ex: 0",
+  "mod_course-card-customizer_name": "Personnalisateur de carte de cours",
+  "mod_course-card-customizer_description": "Personnalisez l'apparence des cartes de cours sur la page des programmes.",
+  "mod_course-card-customizer_config_enableCustomBorder_label": "Activer la bordure personnalisée",
+  "mod_course-card-customizer_config_borderColor_label": "Couleur de la bordure",
+  "mod_course-card-customizer_config_borderColor_placeholder": "#3b82f6",
+  "mod_course-card-customizer_config_borderRadius_label": "Rayon de la bordure (px)",
+  "mod_course-card-customizer_config_borderRadius_placeholder": "ex: 12",
+  "mod_course-card-customizer_config_cardTitleSuffix_label": "Suffixe de titre de carte personnalisé",
+  "mod_course-card-customizer_config_cardTitleSuffix_placeholder": "ex: - Nouveau !",
+  "mod_course-card-customizer_config_cardTitleSuffix_validationMessage": "Seuls les lettres, chiffres, espaces, tirets et points d'exclamation sont autorisés.",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -58,5 +70,6 @@
   "tag_lessons": "Leçons",
   "tag_q&a": "Q&R",
   "tag_ux": "UX",
-  "tag_sticky": "Collant"
+  "tag_sticky": "Collant",
+  "tag_customization": "Personnalisation"
 }
