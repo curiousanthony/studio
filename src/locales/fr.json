@@ -44,6 +44,10 @@
   "mod_update-program-link_config_programId_placeholder": "ex: db61dab4-edde-48af-9c38-b344f6cc8a6d",
   "mod_ask-question-new-tab_name": "Poser une question dans un nouvel onglet",
   "mod_ask-question-new-tab_description": "Fait en sorte que le bouton 'Poser une question' sous les leçons s'ouvre dans un nouvel onglet.",
+  "mod_sticky-sections_name": "En-têtes de section collants",
+  "mod_sticky-sections_description": "Rend les en-têtes de section d'un programme collants en haut de la page lors du défilement.",
+  "mod_sticky-sections_config_topPosition_label": "Position supérieure (en px)",
+  "mod_sticky-sections_config_topPosition_placeholder": "ex: 0",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -53,5 +57,6 @@
   "tag_program": "Programme",
   "tag_lessons": "Leçons",
   "tag_q&a": "Q&R",
-  "tag_ux": "UX"
+  "tag_ux": "UX",
+  "tag_sticky": "Collant"
 }

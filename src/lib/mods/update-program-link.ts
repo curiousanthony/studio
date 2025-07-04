@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Functionality',
   tags: ['navigation', 'program'],
   enabled: true,
+  modType: 'javascript',
   configOptions: [
     {
       key: 'programId',
@@ -33,5 +34,6 @@ export const mod: Mod = {
         log("No matching elements found for updateProgramsLink");
       }
     }`,
-  //mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  previewEnabled: false,
 };

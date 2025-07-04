@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'navigation', 'branding'],
   enabled: true,
+  modType: 'javascript',
   functionString: `(config) => {
       const schoolName = qs('.desktop-navigation-bar a[href="/"]');
       if (schoolName) {
@@ -16,5 +17,6 @@ export const mod: Mod = {
         log("School name element not found");
       }
     }`,
-  //mediaUrl: 'https://placehold.co/1280x720.png',
+  mediaUrl: 'https://placehold.co/1280x720.png',
+  previewEnabled: false,
 };

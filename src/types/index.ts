@@ -16,6 +16,9 @@ export interface Mod {
   tags: string[];
   enabled: boolean;
   configOptions?: ConfigOption[];
-  functionString: string;
+  modType: 'javascript' | 'css';
+  functionString?: string;
+  cssString?: string;
   mediaUrl?: string;
+  previewEnabled?: boolean;
 }

@@ -44,6 +44,10 @@
   "mod_update-program-link_config_programId_placeholder": "e.g. db61dab4-edde-48af-9c38-b344f6cc8a6d",
   "mod_ask-question-new-tab_name": "Ask Question in New Tab",
   "mod_ask-question-new-tab_description": "Makes the 'Ask a question' button under lessons open in a new tab.",
+  "mod_sticky-sections_name": "Sticky Section Headers",
+  "mod_sticky-sections_description": "Makes the section headers in a program sticky to the top of the page when scrolling.",
+  "mod_sticky-sections_config_topPosition_label": "Top Position (in px)",
+  "mod_sticky-sections_config_topPosition_placeholder": "e.g. 0",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -53,5 +57,6 @@
   "tag_program": "Program",
   "tag_lessons": "Lessons",
   "tag_q&a": "Q&A",
-  "tag_ux": "UX"
+  "tag_ux": "UX",
+  "tag_sticky": "Sticky"
 }

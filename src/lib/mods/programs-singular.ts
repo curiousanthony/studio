@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'navigation', 'localization'],
   enabled: true,
+  modType: 'javascript',
   functionString: `(config) => {
       const programsTitleElements = qsa(".programs-page-title > span");
       if (programsTitleElements.length > 0) {
@@ -18,5 +19,6 @@ export const mod: Mod = {
         log("Programs nav element not found");
       }
     }`,
-  //mediaUrl: 'https://placehold.co/1280x720.png',
+  mediaUrl: 'https://placehold.co/1280x720.png',
+  previewEnabled: false,
 };

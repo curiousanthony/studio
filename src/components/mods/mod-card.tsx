@@ -36,7 +36,7 @@ export default function ModCard({ mod, onToggle, onConfigure, onPreview }: ModCa
           ))}
         </div>
         <div className="flex items-center gap-1">
-          {mod.mediaUrl && (
+          {mod.mediaUrl && mod.previewEnabled && (
             <Button variant="ghost" size="icon" onClick={onPreview} aria-label={`Preview ${mod.name}`}>
               <Eye className="h-5 w-5 text-primary" />
             </Button>

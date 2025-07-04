@@ -167,26 +167,48 @@ export default function ModsDashboard() {
 
   const generatedCode = useMemo(() => {
     const enabledMods = mods.filter(mod => mod.enabled);
+    const jsMods = enabledMods.filter(mod => mod.modType === 'javascript');
+    const cssMods = enabledMods.filter(mod => mod.modType === 'css');
 
-    const modObjects = enabledMods.map(mod => {
-      const config: Record<string, string> = {};
-      mod.configOptions?.forEach(opt => {
-        config[opt.key] = opt.value;
+    // Generate CSS code
+    const cssString = cssMods.length > 0 ?
+      cssMods.map(mod => {
+        let modCss = mod.cssString || '';
+        if (mod.configOptions) {
+          const config: Record<string, string> = {};
+          mod.configOptions.forEach(opt => {
+            config[opt.key] = opt.value;
+          });
+          // Replace placeholders
+          modCss = modCss.replace(/\{\{([a-zA-Z0-9_]+)\}\}/g, (_, key) => config[key.trim()] || '');
+        }
+        return `/* --- Mod: ${t(`mod_${mod.id}_name`)} --- */\n${modCss.trim()}`;
+      }).join('\n\n')
+      : '';
+    
+    const styleBlock = cssString ? `<style>\n${cssString}\n</style>` : '';
+
+    // Generate JS code
+    const scriptBlock = jsMods.length > 0 ? (() => {
+      const modObjects = jsMods.map(mod => {
+        const config: Record<string, string> = {};
+        mod.configOptions?.forEach(opt => {
+          config[opt.key] = opt.value;
+        });
+
+        const functionImplementation = mod.functionString;
+        
+        return `{
+          id: '${mod.id}',
+          name: '${t(`mod_${mod.id}_name`)}',
+          config: ${JSON.stringify(config, null, 2)},
+          run: ${functionImplementation}
+        }`;
       });
 
-      const functionImplementation = mod.functionString;
-      
-      return `{
-        id: '${mod.id}',
-        name: '${mod.name}',
-        config: ${JSON.stringify(config, null, 2)},
-        run: ${functionImplementation}
-      }`;
-    });
+      const modsArrayString = `const mods = [\n  ${modObjects.join(',\n  ')}\n];`;
 
-    const modsArrayString = `const mods = [\n  ${modObjects.join(',\n  ')}\n];`;
-
-    return `<script>
+      return `<script>
   // Helper functions for targeting elements
   const qs = (arg) => document.querySelector(arg);
   const qsa = (arg) => document.querySelectorAll(arg);
@@ -201,7 +223,7 @@ export default function ModsDashboard() {
     }
   }
 
-  ${enabledMods.length > 0 ? modsArrayString : 'const mods = [];'}
+  ${modsArrayString}
 
   // Loops through mods and executes all enabled functions
   function executeMods() {
@@ -218,11 +240,17 @@ export default function ModsDashboard() {
   
   // Run on initial load
   document.addEventListener("DOMContentLoaded", executeMods);
+
+  // Run on Turbo frame element reload
+  document.addEventListener("turbo:frame-render", executeMods);
   
   // Run on Turbo navigation
   document.addEventListener("turbo:load", executeMods);
 <\/script>`;
-  }, [mods]);
+    })() : '';
+
+    return [styleBlock, scriptBlock].filter(Boolean).join('\n\n');
+  }, [mods, t]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedCode).then(() => {

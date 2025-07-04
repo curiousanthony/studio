@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Functionality',
   tags: ['lessons', 'q&a', 'ux'],
   enabled: false,
+  modType: 'javascript',
   functionString: `(config) => {
       setTimeout(() => {
         const askQButton = qs('#products_lesson_questions_frame > div > div > div > a');
