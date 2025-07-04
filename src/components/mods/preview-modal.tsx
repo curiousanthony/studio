@@ -17,6 +17,37 @@ const getYoutubeVideoId = (url: string): string | null => {
     return (match && match[2].length === 11) ? match[2] : null;
 };
 
+// Helper component to render either video or image
+const MediaDisplay = ({ src, alt, hint, width = 800, height = 450 }: { src: string, alt: string, hint: string, width?: number, height?: number }) => {
+    if (src.endsWith('.webm')) {
+        return (
+            <video
+                src={src}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-contain"
+                data-ai-hint={hint}
+            >
+                Your browser does not support the video tag.
+            </video>
+        );
+    }
+
+    return (
+        <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            className="w-full h-auto object-contain"
+            data-ai-hint={hint}
+        />
+    );
+};
+
+
 export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
   const { t } = useTranslations();
 
@@ -56,38 +87,31 @@ export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
                 <div className="flex flex-col items-center">
                     <h3 className="text-lg font-semibold mb-2">{t('previewBefore')}</h3>
                     <div className="border rounded-md overflow-hidden">
-                        <Image
+                        <MediaDisplay
                             src={beforeMediaUrl!}
                             alt={`'Before' preview for ${modName}`}
-                            width={800}
-                            height={450}
-                            className="w-full h-auto object-contain"
-                            data-ai-hint="user interface before"
+                            hint="user interface before"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col items-center">
                     <h3 className="text-lg font-semibold mb-2">{t('previewAfter')}</h3>
                     <div className="border rounded-md overflow-hidden">
-                        <Image
+                        <MediaDisplay
                             src={mainMediaUrl}
                             alt={`'After' preview for ${modName}`}
-                            width={800}
-                            height={450}
-                            className="w-full h-auto object-contain"
-                            data-ai-hint="user interface after"
+                            hint="user interface after"
                         />
                     </div>
                 </div>
             </div>
           ) : (
-            <Image
+            <MediaDisplay
               src={mainMediaUrl}
               alt={`Preview for ${modName}`}
+              hint="abstract technology"
               width={1280}
               height={720}
-              className="w-full h-auto object-contain"
-              data-ai-hint="abstract technology"
             />
           )}
         </div>
