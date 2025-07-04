@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslations } from '@/hooks/use-translations';
@@ -17,6 +17,26 @@ interface ConfigModalProps {
   onSave: (modId: string, newConfig: Record<string, string>) => void;
   onClose: () => void;
 }
+
+// Helper to format color strings for the color picker input
+const toPickerHex = (color: string): string => {
+    if (typeof color !== 'string') return '#000000';
+    if (color.startsWith('#')) {
+        // color picker only supports #rrggbb, so we truncate if alpha is present
+        return color.length === 9 ? color.slice(0, 7) : color;
+    }
+    // Check for 6 digit hex codes and prepend #
+    if (/^[0-9a-fA-F]{6}$/.test(color)) {
+        return `#${color}`;
+    }
+    // Check for 8 digit hex codes and prepend #, but drop alpha for picker
+    if (/^[0-9a-fA-F]{8}$/.test(color)) {
+        return `#${color.slice(0, 6)}`;
+    }
+    // If it's not a recognizable hex, return black for the picker to prevent errors
+    return '#000000'; 
+}
+
 
 export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) {
   const { t } = useTranslations();
@@ -85,9 +105,20 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
   const onSubmit = (data: Record<string, any>) => {
     const newConfig: Record<string, string> = {};
     for (const key in data) {
-        newConfig[key] = String(data[key]);
+        const option = mod.configOptions?.find(o => o.key === key);
+        let value = data[key];
+
+        if (option?.type === 'color' && typeof value === 'string') {
+            // Ensure hex codes have a '#' for CSS validity
+            if (!value.startsWith('#') && /^[0-9a-fA-F]{6,8}$/.test(value)) {
+                value = `#${value}`;
+            }
+        }
+
+        newConfig[key] = String(value);
     }
     onSave(mod.id, newConfig);
+    onClose();
   };
 
   const modName = t(`mod_${mod.id}_name`);
@@ -124,8 +155,10 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                                 <div className="flex items-center gap-2">
                                     <Input 
                                         type="color" 
-                                        className="h-10 w-12 p-1" 
-                                        {...{...field, value: field.value || '#000000'}}
+                                        className="h-10 w-12 p-1 cursor-pointer" 
+                                        // The color picker should update the form with a # prefixed value
+                                        onChange={(e) => field.onChange(e.target.value)}
+                                        value={toPickerHex(field.value)}
                                     />
                                     <Input 
                                         type="text" 
