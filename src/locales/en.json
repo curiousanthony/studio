@@ -20,7 +20,7 @@
   "generatedCodeDescription": "This is the generated code for all enabled mods, ready to be copied.",
   "copyCodeButton": "Copy Code ({count} enabled)",
   "copiedToClipboard": "Copied to clipboard!",
-  "copiedToClipboardDescription": "You can now paste the code into your project.",
+  "copiedToClipboardDescription": "You can now paste the code into your school.",
   "copyFailed": "Failed to copy",
   "copyFailedDescription": "Could not copy code to clipboard.",
   "configureTitle": "Configure: {modName}",

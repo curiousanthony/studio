@@ -13,7 +13,7 @@ export const mod: Mod = {
       label: 'Program ID',
       type: 'text',
       placeholder: 'e.g. db61dab4-edde-48af-9c38-b344f6cc8a6d',
-      value: 'db61dab4-edde-48af-9c38-b344f6cc8a6d',
+      value: '',
       required: true,
     },
   ],
@@ -33,5 +33,5 @@ export const mod: Mod = {
         log("No matching elements found for updateProgramsLink");
       }
     }`,
-  mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  //mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 };

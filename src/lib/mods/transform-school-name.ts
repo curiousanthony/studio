@@ -16,5 +16,5 @@ export const mod: Mod = {
         log("School name element not found");
       }
     }`,
-  mediaUrl: 'https://placehold.co/1280x720.png',
+  //mediaUrl: 'https://placehold.co/1280x720.png',
 };

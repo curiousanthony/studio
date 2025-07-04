@@ -20,7 +20,7 @@
   "generatedCodeDescription": "Voici le code généré pour tous les mods activés, prêt à être copié.",
   "copyCodeButton": "Copier le code ({count} activé)",
   "copiedToClipboard": "Copié dans le presse-papiers !",
-  "copiedToClipboardDescription": "Vous pouvez maintenant coller le code dans votre projet.",
+  "copiedToClipboardDescription": "Vous pouvez maintenant coller le code dans votre école.",
   "copyFailed": "La copie a échoué",
   "copyFailedDescription": "Impossible de copier le code dans le presse-papiers.",
   "configureTitle": "Configurer : {modName}",

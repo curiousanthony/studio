@@ -18,5 +18,5 @@ export const mod: Mod = {
         log("Programs nav element not found");
       }
     }`,
-  mediaUrl: 'https://placehold.co/1280x720.png',
+  //mediaUrl: 'https://placehold.co/1280x720.png',
 };
