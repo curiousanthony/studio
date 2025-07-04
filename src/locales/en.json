@@ -29,6 +29,8 @@
   "saveChanges": "Save Changes",
   "previewTitle": "Preview: {modName}",
   "previewDescription": "A preview of what this mod does. Close the modal when you're done.",
+  "previewBefore": "Before",
+  "previewAfter": "After",
   "footerDisclaimer": "This app is not made by SchoolMaker and is not official. It's made with ♥ by Anthony from the SchoolMaker Community.",
   "layout": "Layout:",
   "layoutGrid": "Grid",

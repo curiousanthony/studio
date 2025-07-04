@@ -29,6 +29,8 @@
   "saveChanges": "Enregistrer les modifications",
   "previewTitle": "Aperçu : {modName}",
   "previewDescription": "Un aperçu de ce que fait ce mod. Fermez la fenêtre lorsque vous avez terminé.",
+  "previewBefore": "Avant",
+  "previewAfter": "Après",
   "footerDisclaimer": "Cette application n'est pas créée par SchoolMaker et n'est pas officielle. Elle est faite avec ♥ par Anthony de la communauté SchoolMaker.",
   "layout": "Affichage :",
   "layoutGrid": "Grille",

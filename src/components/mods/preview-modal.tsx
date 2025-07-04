@@ -20,14 +20,20 @@ const getYoutubeVideoId = (url: string): string | null => {
 export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
   const { t } = useTranslations();
 
-  if (!mod.mediaUrl) return null;
+  // The main URL is used for YouTube videos, the "after" image, or a single preview image.
+  const mainMediaUrl = mod.mediaUrl;
+  const beforeMediaUrl = mod.mediaBeforeUrl;
+
+  if (!mainMediaUrl) return null;
   
-  const videoId = getYoutubeVideoId(mod.mediaUrl);
+  const videoId = getYoutubeVideoId(mainMediaUrl);
   const modName = t(`mod_${mod.id}_name`);
+
+  const hasBeforeAfter = beforeMediaUrl && mainMediaUrl && !videoId;
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-5xl">
         <DialogHeader>
           <DialogTitle className="font-headline">{t('previewTitle', { modName })}</DialogTitle>
            <DialogDescription>
@@ -45,9 +51,38 @@ export default function PreviewModal({ mod, onClose }: PreviewModalProps) {
                 className="absolute top-0 left-0 w-full h-full"
               ></iframe>
             </div>
+          ) : hasBeforeAfter ? (
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <div className="flex flex-col items-center">
+                    <h3 className="text-lg font-semibold mb-2">{t('previewBefore')}</h3>
+                    <div className="border rounded-md overflow-hidden">
+                        <Image
+                            src={beforeMediaUrl!}
+                            alt={`'Before' preview for ${modName}`}
+                            width={800}
+                            height={450}
+                            className="w-full h-auto object-contain"
+                            data-ai-hint="user interface before"
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-col items-center">
+                    <h3 className="text-lg font-semibold mb-2">{t('previewAfter')}</h3>
+                    <div className="border rounded-md overflow-hidden">
+                        <Image
+                            src={mainMediaUrl}
+                            alt={`'After' preview for ${modName}`}
+                            width={800}
+                            height={450}
+                            className="w-full h-auto object-contain"
+                            data-ai-hint="user interface after"
+                        />
+                    </div>
+                </div>
+            </div>
           ) : (
             <Image
-              src={mod.mediaUrl}
+              src={mainMediaUrl}
               alt={`Preview for ${modName}`}
               width={1280}
               height={720}

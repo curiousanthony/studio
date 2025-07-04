@@ -23,6 +23,7 @@ export interface Mod {
   functionString?: string;
   cssString?: string;
   mediaUrl?: string;
+  mediaBeforeUrl?: string;
   previewEnabled?: boolean;
   requiresGoogleIcons?: boolean;
 }
