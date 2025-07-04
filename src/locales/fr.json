@@ -60,6 +60,14 @@
   "mod_course-card-customizer_config_cardTitleSuffix_label": "Suffixe de titre de carte personnalisé",
   "mod_course-card-customizer_config_cardTitleSuffix_placeholder": "ex: - Nouveau !",
   "mod_course-card-customizer_config_cardTitleSuffix_validationMessage": "Seuls les lettres, chiffres, espaces, tirets et points d'exclamation sont autorisés.",
+  "mod_chapter-style-customizer_name": "Personnalisateur de Style de Chapitre",
+  "mod_chapter-style-customizer_description": "Personnalise l'apparence des groupes de sections (chapitres) d'un programme pour une meilleure cohérence visuelle.",
+  "mod_chapter-style-customizer_config_backgroundColor_label": "Couleur de fond",
+  "mod_chapter-style-customizer_config_textColor_label": "Couleur du texte",
+  "mod_chapter-style-customizer_config_backgroundColorHover_label": "Couleur de fond (survol)",
+  "mod_chapter-style-customizer_config_textColorHover_label": "Couleur du texte (survol)",
+  "mod_chapter-style-customizer_config_fontSize_label": "Taille de la police",
+  "mod_chapter-style-customizer_config_fontWeight_label": "Graisse de la police",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -71,5 +79,6 @@
   "tag_q&a": "Q&R",
   "tag_ux": "UX",
   "tag_sticky": "Collant",
-  "tag_customization": "Personnalisation"
+  "tag_customization": "Personnalisation",
+  "tag_chapters": "Chapitres"
 }

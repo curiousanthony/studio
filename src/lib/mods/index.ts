@@ -5,6 +5,7 @@ import { mod as updateProgramLinkMod } from './update-program-link';
 import { mod as askQuestionNewTabMod } from './ask-question-new-tab';
 import { mod as stickySectionsMod } from './sticky-sections';
 import { mod as courseCardCustomizerMod } from './course-card-customizer';
+import { mod as chapterStyleCustomizerMod } from './chapter-style-customizer';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -13,6 +14,7 @@ const allModsRaw: Mod[] = [
   askQuestionNewTabMod,
   stickySectionsMod,
   courseCardCustomizerMod,
+  chapterStyleCustomizerMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

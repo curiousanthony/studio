@@ -60,6 +60,14 @@
   "mod_course-card-customizer_config_cardTitleSuffix_label": "Custom Card Title Suffix",
   "mod_course-card-customizer_config_cardTitleSuffix_placeholder": "e.g., - New!",
   "mod_course-card-customizer_config_cardTitleSuffix_validationMessage": "Only letters, numbers, spaces, hyphens, and exclamation marks are allowed.",
+  "mod_chapter-style-customizer_name": "Chapter Style Customizer",
+  "mod_chapter-style-customizer_description": "Customizes the appearance of a program's section groups (chapters) for better visual consistency.",
+  "mod_chapter-style-customizer_config_backgroundColor_label": "Background Color",
+  "mod_chapter-style-customizer_config_textColor_label": "Text Color",
+  "mod_chapter-style-customizer_config_backgroundColorHover_label": "Background Color (Hover)",
+  "mod_chapter-style-customizer_config_textColorHover_label": "Text Color (Hover)",
+  "mod_chapter-style-customizer_config_fontSize_label": "Font Size",
+  "mod_chapter-style-customizer_config_fontWeight_label": "Font Weight",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -71,5 +79,6 @@
   "tag_q&a": "Q&A",
   "tag_ux": "UX",
   "tag_sticky": "Sticky",
-  "tag_customization": "Customization"
+  "tag_customization": "Customization",
+  "tag_chapters": "Chapters"
 }
