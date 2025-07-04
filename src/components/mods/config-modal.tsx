@@ -1,7 +1,8 @@
+
 "use client"
 
 import { useEffect } from 'react';
-import type { Mod } from '@/types';
+import type { Mod, ConfigOption } from '@/types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -158,75 +159,82 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                   key={option.key}
                   control={form.control}
                   name={option.key}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {t(`mod_${mod.id}_config_${option.key}_label`)}
-                        {option.required && <span className="text-destructive"> *</span>}
-                      </FormLabel>
-                      <FormControl>
-                        {(() => {
-                          switch (option.type) {
-                            case 'number':
-                              return <Input type="number" placeholder={t(`mod_${mod.id}_config_${option.key}_placeholder`)} {...field} />;
-                            case 'color':
-                              return (
-                                  <div className="flex items-center gap-2">
-                                      <Input 
-                                          type="color" 
-                                          className="h-10 w-12 p-1 cursor-pointer" 
-                                          // The color picker should update the form with a # prefixed value
-                                          onChange={(e) => field.onChange(e.target.value)}
-                                          value={toPickerHex(field.value)}
-                                      />
-                                      <Input 
-                                          type="text" 
-                                          placeholder={t(`mod_${mod.id}_config_${option.key}_placeholder`)} 
-                                          {...field}
-                                      />
-                                  </div>
-                              );
-                            case 'checkbox':
-                              return (
-                                  <div className="flex items-center pt-2">
-                                      <Switch
-                                          checked={field.value}
-                                          onCheckedChange={field.onChange}
-                                      />
-                                  </div>
-                              );
-                            case 'select':
-                              return (
-                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                      <SelectTrigger>
-                                          <SelectValue placeholder={t(`mod_${mod.id}_config_${option.key}_placeholder`)} />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                          {option.options?.map(opt => (
-                                          <SelectItem key={opt} value={opt}>
-                                              {opt}
-                                          </SelectItem>
-                                          ))}
-                                      </SelectContent>
-                                  </Select>
-                              );
-                            case 'text':
-                            default:
-                              return <Input placeholder={t(`mod_${mod.id}_config_${option.key}_placeholder`)} {...field} />;
-                          }
-                        })()}
-                      </FormControl>
-                      {option.preview?.type === 'font' && watchedValue && (
-                        <div 
-                          className="p-3 border rounded-md mt-2 bg-muted text-muted-foreground" 
-                          style={{ fontFamily: `'${watchedValue}', sans-serif`}}
-                        >
-                          {option.preview.text}
-                        </div>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const placeholderKey = `mod_${mod.id}_config_${option.key}_placeholder` as const;
+                    const translatedPlaceholder = t(placeholderKey);
+                    // If translation key is returned, it means translation was not found. Fallback to mod definition.
+                    const placeholder = translatedPlaceholder === placeholderKey ? option.placeholder : translatedPlaceholder;
+
+                    return (
+                      <FormItem>
+                        <FormLabel>
+                          {t(`mod_${mod.id}_config_${option.key}_label`)}
+                          {option.required && <span className="text-destructive"> *</span>}
+                        </FormLabel>
+                        <FormControl>
+                          {(() => {
+                            switch (option.type) {
+                              case 'number':
+                                return <Input type="number" placeholder={placeholder} {...field} />;
+                              case 'color':
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <Input 
+                                            type="color" 
+                                            className="h-10 w-12 p-1 cursor-pointer" 
+                                            // The color picker should update the form with a # prefixed value
+                                            onChange={(e) => field.onChange(e.target.value)}
+                                            value={toPickerHex(field.value)}
+                                        />
+                                        <Input 
+                                            type="text" 
+                                            placeholder={placeholder}
+                                            {...field}
+                                        />
+                                    </div>
+                                );
+                              case 'checkbox':
+                                return (
+                                    <div className="flex items-center pt-2">
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </div>
+                                );
+                              case 'select':
+                                return (
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder={placeholder} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {option.options?.map(opt => (
+                                            <SelectItem key={opt} value={opt}>
+                                                {opt}
+                                            </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                );
+                              case 'text':
+                              default:
+                                return <Input placeholder={placeholder} {...field} />;
+                            }
+                          })()}
+                        </FormControl>
+                        {option.preview?.type === 'font' && watchedValue && (
+                          <div 
+                            className="p-3 border rounded-md mt-2 bg-muted text-muted-foreground" 
+                            style={{ fontFamily: `'${watchedValue}', sans-serif`}}
+                          >
+                            {option.preview.text}
+                          </div>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
               )
             })}
