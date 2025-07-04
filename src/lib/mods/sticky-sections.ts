@@ -7,7 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'lessons', 'sticky'],
   enabled: false,
-  published: true,
+  published: false,
   modType: 'css',
   configOptions: [
     {

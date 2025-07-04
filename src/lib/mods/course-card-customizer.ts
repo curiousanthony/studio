@@ -7,7 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'program', 'customization'],
   enabled: false,
-  published: true,
+  published: false,
   modType: 'css',
   previewEnabled: true,
   mediaUrl: 'https://placehold.co/1280x720.png',
