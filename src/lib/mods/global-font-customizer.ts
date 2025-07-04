@@ -14,10 +14,9 @@ export const mod: Mod = {
       key: 'fontFamily',
       label: 'Font Family',
       type: 'select',
-      value: 'Inter',
+      value: '',
       required: true,
       options: [
-        'Inter',
         'Lato',
         'Montserrat',
         'Open Sans',
