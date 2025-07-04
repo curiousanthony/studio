@@ -217,7 +217,7 @@ export default function ModsDashboard() {
         
         return `{
           id: '${mod.id}',
-          name: '${t(`mod_${mod.id}_name`)}',
+          name: "${t(`mod_${mod.id}_name`)}",
           config: ${JSON.stringify(config, null, 2)},
           run: ${functionImplementation}
         }`;
