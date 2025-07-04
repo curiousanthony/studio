@@ -15,8 +15,8 @@ export const mod: Mod = {
       key: 'backgroundColor',
       label: 'Background Color',
       type: 'color',
-      value: '#E8E8E8',
-      placeholder: '#E8E8E8',
+      value: '#F9FAFB',
+      placeholder: '#F9FAFB',
     },
     {
       key: 'iconColor',
