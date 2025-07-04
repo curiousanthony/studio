@@ -15,15 +15,15 @@ export const mod: Mod = {
       key: 'backgroundColor',
       label: 'Background Color',
       type: 'color',
-      value: '#111827',
-      placeholder: '#111827',
+      value: '#E8E8E8',
+      placeholder: '#E8E8E8',
     },
     {
       key: 'iconColor',
       label: 'Icon Color',
       type: 'color',
-      value: '#FFFFFF',
-      placeholder: '#FFFFFF',
+      value: '#1F1F1F',
+      placeholder: '#1F1F1F',
     }
   ],
   functionString: `(config) => {
@@ -39,6 +39,7 @@ export const mod: Mod = {
         if (config.backgroundColor) {
             element.style.backgroundColor = config.backgroundColor;
         }
+            element.style.border = '1px solid hsla(0 0% 0% / .1)'
         if (config.iconColor) {
             iconSpan.style.color = config.iconColor;
         }
