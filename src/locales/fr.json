@@ -18,7 +18,7 @@
   "whyContent": "J'ai créé cet outil pour gérer et partager facilement des extraits de code JavaScript (mods) utiles qui personnalisent la plateforme SchoolMaker. Il simplifie le processus d'activation, de désactivation et de configuration de différentes fonctionnalités sans avoir à éditer manuellement le code. J'espère que vous le trouverez aussi utile que moi !",
   "generatedCodeTitle": "Code Généré",
   "generatedCodeDescription": "Voici le code généré pour tous les mods activés, prêt à être copié.",
-  "copyCodeButton": "Copier le code ({count} activé)",
+  "copyCodeButton": "Copier le code ({count} activé) | Copier le code ({count} activés)",
   "copiedToClipboard": "Copié dans le presse-papiers !",
   "copiedToClipboardDescription": "Vous pouvez maintenant coller le code dans votre école.",
   "copyFailed": "La copie a échoué",
