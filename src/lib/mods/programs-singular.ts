@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'navigation', 'localization'],
   enabled: true,
+  published: true,
   modType: 'javascript',
   functionString: `(config) => {
       const programsTitleElements = qsa(".programs-page-title > span");

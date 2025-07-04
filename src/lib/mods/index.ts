@@ -6,7 +6,7 @@ import { mod as askQuestionNewTabMod } from './ask-question-new-tab';
 import { mod as stickySectionsMod } from './sticky-sections';
 import { mod as courseCardCustomizerMod } from './course-card-customizer';
 
-export const allMods: Mod[] = [
+const allModsRaw: Mod[] = [
   transformSchoolNameMod,
   programsSingularMod,
   updateProgramLinkMod,
@@ -14,3 +14,7 @@ export const allMods: Mod[] = [
   stickySectionsMod,
   courseCardCustomizerMod,
 ];
+
+// Filter out mods that are explicitly set to `published: false`
+// Mods without the `published` key will be included by default.
+export const allMods: Mod[] = allModsRaw.filter(mod => mod.published !== false);

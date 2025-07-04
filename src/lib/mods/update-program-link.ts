@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Functionality',
   tags: ['navigation', 'program'],
   enabled: true,
+  published: true,
   modType: 'javascript',
   configOptions: [
     {

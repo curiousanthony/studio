@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['ui', 'navigation', 'branding'],
   enabled: true,
+  published: true,
   modType: 'javascript',
   functionString: `(config) => {
       const schoolName = qs('.desktop-navigation-bar a[href="/"]');

@@ -17,6 +17,7 @@ export interface Mod {
   category: 'Appearance' | 'Functionality';
   tags: string[];
   enabled: boolean;
+  published?: boolean;
   configOptions?: ConfigOption[];
   modType: 'javascript' | 'css';
   functionString?: string;

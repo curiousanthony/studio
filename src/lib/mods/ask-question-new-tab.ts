@@ -7,6 +7,7 @@ export const mod: Mod = {
   category: 'Functionality',
   tags: ['lessons', 'q&a', 'ux'],
   enabled: false,
+  published: true,
   modType: 'javascript',
   functionString: `(config) => {
       setTimeout(() => {
