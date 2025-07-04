@@ -9,6 +9,9 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
+  mediaBeforeUrl: '/images/mods/sidebar-toggle-customizer-before.webm',
+  mediaUrl: '/images/mods/sidebar-toggle-customizer-after.webm',
+  previewEnabled: true,
   requiresGoogleIcons: true,
   configOptions: [
     {

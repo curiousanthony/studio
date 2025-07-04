@@ -9,8 +9,9 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'css',
-  previewEnabled: false,
-  mediaUrl: '',
+  previewEnabled: true,
+  mediaBeforeUrl: '/images/mods/chapter-style-customizer-before.png',
+  mediaUrl: '/images/mods/chapter-style-customizer-after.png',
   configOptions: [
     {
       key: 'backgroundColor',

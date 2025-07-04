@@ -38,6 +38,9 @@
   "fieldIsRequired": "Ce champ est requis.",
   "fieldIsNumber": "Ce champ doit être un nombre.",
   "fieldInvalid": "La valeur saisie est invalide.",
+  "modCantBeEnabledTitle": "Configuration requise",
+  "modCantBeEnabledDescription": "Ce mod ne peut pas être activé tant que toutes les options requises ne sont pas configurées.",
+  "modNeedsConfigTooltip": "Nécessite une configuration",
   "mod_transform-school-name_name": "Transformer le nom de l'école",
   "mod_transform-school-name_description": "Supprime le style majuscule par défaut du nom de l'école dans la barre de navigation.",
   "mod_programs-singular_name": "Titre de programme au singulier",
@@ -76,6 +79,9 @@
   "mod_sidebar-toggle-customizer_description": "Remplace les icônes par défaut des boutons de la barre latérale par des icônes Google Material et permet la personnalisation des couleurs.",
   "mod_sidebar-toggle-customizer_config_backgroundColor_label": "Couleur de fond",
   "mod_sidebar-toggle-customizer_config_iconColor_label": "Couleur de l'icône",
+  "mod_global-font-customizer_name": "Personnalisateur de police globale",
+  "mod_global-font-customizer_description": "Change la police par défaut de toute votre école en important une police Google.",
+  "mod_global-font-customizer_config_fontFamily_label": "Famille de police",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -91,5 +97,6 @@
   "tag_chapters": "Chapitres",
   "tag_layout": "Mise en page",
   "tag_sidebar": "Barre latérale",
-  "tag_icons": "Icônes"
+  "tag_icons": "Icônes",
+  "tag_font": "Police"
 }

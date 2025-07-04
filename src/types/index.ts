@@ -8,6 +8,10 @@ export interface ConfigOption {
   required?: boolean;
   validationRegex?: string;
   validationMessage?: string;
+  preview?: {
+    type: 'font';
+    text: string;
+  };
 }
 
 export interface Mod {

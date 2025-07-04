@@ -18,6 +18,7 @@ export const mod: Mod = {
         log("School name element not found");
       }
     }`,
-  mediaUrl: 'https://placehold.co/1280x720.png',
-  previewEnabled: false,
+  mediaBeforeUrl: '/images/mods/transform-school-name-before.png',
+  mediaUrl: '/images/mods/transform-school-name-after.png',
+  previewEnabled: true,
 };

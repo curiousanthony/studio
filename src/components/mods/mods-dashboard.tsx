@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -23,6 +23,12 @@ import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 type Category = 'All' | 'Appearance' | 'Functionality';
 type Layout = 'grid' | 'list';
@@ -105,6 +111,16 @@ export default function ModsDashboard() {
 
   const enabledModsCount = useMemo(() => mods.filter(mod => mod.enabled).length, [mods]);
 
+  const isModConfigValid = (mod: Mod): boolean => {
+    if (!mod.configOptions) {
+      return true;
+    }
+    return mod.configOptions.every(opt => {
+      if (!opt.required) return true;
+      return opt.value !== undefined && opt.value !== null && opt.value !== '';
+    });
+  };
+
   const filteredMods = useMemo(() => {
     return mods
       .filter(mod => {
@@ -128,6 +144,19 @@ export default function ModsDashboard() {
   }, [mods, activeCategory, activeTags, searchQuery, t]);
 
   const handleToggleMod = (modId: string) => {
+    const modToToggle = mods.find(m => m.id === modId);
+    if (!modToToggle) return;
+
+    // If user is trying to enable a mod with invalid config
+    if (!modToToggle.enabled && !isModConfigValid(modToToggle)) {
+      toast({
+        title: t('modCantBeEnabledTitle'),
+        description: t('modCantBeEnabledDescription'),
+        variant: "destructive",
+      });
+      return;
+    }
+
     setMods(prevMods =>
       prevMods.map(mod =>
         mod.id === modId ? { ...mod, enabled: !mod.enabled } : mod
@@ -167,13 +196,27 @@ export default function ModsDashboard() {
 
   const generatedCode = useMemo(() => {
     const enabledMods = mods.filter(mod => mod.enabled);
+    if (enabledMods.length === 0) return '';
+    
     const jsMods = enabledMods.filter(mod => mod.modType === 'javascript');
     const cssMods = enabledMods.filter(mod => mod.modType === 'css');
+    
+    // --- Link Generation ---
+    const fontMod = enabledMods.find(m => m.id === 'global-font-customizer');
+    const selectedFont = fontMod?.configOptions?.find(o => o.key === 'fontFamily')?.value;
     const needsGoogleIcons = enabledMods.some(mod => mod.requiresGoogleIcons);
+    
+    const fontLinks: string[] = [];
+    if (needsGoogleIcons) {
+      fontLinks.push('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,1,0" />');
+    }
+    if (selectedFont) {
+      const fontUrl = `https://fonts.googleapis.com/css2?family=${selectedFont.replace(/ /g, '+')}:wght@400;700&display=swap`;
+      fontLinks.push(`<link rel="stylesheet" href="${fontUrl}" />`);
+    }
+    const linksBlock = fontLinks.join('\n');
 
-    const googleIconsLink = needsGoogleIcons ? '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,1,0" />' : '';
-
-    // Generate CSS code
+    // --- CSS Generation ---
     const cssString = cssMods.length > 0 ?
       cssMods.map(mod => {
         let modCss = mod.cssString || '';
@@ -205,7 +248,7 @@ export default function ModsDashboard() {
     
     const styleBlock = cssString ? `<style>\n${cssString}\n</style>` : '';
 
-    // Generate JS code
+    // --- JS Generation ---
     const scriptBlock = jsMods.length > 0 ? (() => {
       const modObjects = jsMods.map(mod => {
         const config: Record<string, string> = {};
@@ -266,7 +309,7 @@ export default function ModsDashboard() {
 <\/script>`;
     })() : '';
 
-    return [googleIconsLink, styleBlock, scriptBlock].filter(Boolean).join('\n\n');
+    return [linksBlock, styleBlock, scriptBlock].filter(Boolean).join('\n\n');
   }, [mods, t]);
 
   const handleCopy = () => {
@@ -291,165 +334,169 @@ export default function ModsDashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 flex flex-col min-h-full">
-       <div className="flex-grow">
-        <header className="text-center pt-8 mb-6">
-            <div className="flex justify-end mb-4 -mt-4">
-              <LocaleSwitcher />
-            </div>
-            <h1 className="font-headline text-4xl font-bold mb-1">{t('pageTitle')}</h1>
-            <p className="text-md text-muted-foreground max-w-2xl mx-auto">
-                {t('pageDescription')}
-            </p>
-            <p className="text-base text-primary font-semibold mt-2">
-                {enabledModsCount > 0 
-                  ? t('enabledMods', { count: enabledModsCount }) 
-                  : t('gettingStarted')}
-            </p>
-        </header>
-        
-        <Accordion type="single" collapsible className="w-full mb-8">
-            <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
-            <AccordionContent>
-                <Card>
-                    <CardContent className="pt-6 text-sm space-y-4">
-                        <p>{t('step1')}</p>
-                        <p>{t('step2')}</p>
-                        <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
-                        <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
-                    </CardContent>
-                </Card>
-            </AccordionContent>
-            </AccordionItem>
-        </Accordion>
+    <TooltipProvider>
+      <div className="container mx-auto px-4 flex flex-col min-h-full">
+        <div className="flex-grow">
+          <header className="text-center pt-8 mb-6">
+              <div className="flex justify-end mb-4 -mt-4">
+                <LocaleSwitcher />
+              </div>
+              <h1 className="font-headline text-4xl font-bold mb-1">{t('pageTitle')}</h1>
+              <p className="text-md text-muted-foreground max-w-2xl mx-auto">
+                  {t('pageDescription')}
+              </p>
+              <p className="text-base text-primary font-semibold mt-2">
+                  {enabledModsCount > 0 
+                    ? t('enabledMods', { count: enabledModsCount }) 
+                    : t('gettingStarted')}
+              </p>
+          </header>
+          
+          <Accordion type="single" collapsible className="w-full mb-8">
+              <AccordionItem value="item-1">
+              <AccordionTrigger className="text-lg font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
+              <AccordionContent>
+                  <Card>
+                      <CardContent className="pt-6 text-sm space-y-4">
+                          <p>{t('step1')}</p>
+                          <p>{t('step2')}</p>
+                          <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
+                          <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
+                      </CardContent>
+                  </Card>
+              </AccordionContent>
+              </AccordionItem>
+          </Accordion>
 
-        <div className="relative">
-          <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
-              <div className="p-4 bg-card border rounded-lg shadow-sm">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                      <Input
-                      type="search"
-                      placeholder={t('searchPlaceholder')}
-                      className="md:col-span-1"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                      <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
-                      <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
-                      <div className="flex items-center gap-2 flex-wrap">
-                          {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
-                          <Button
-                              key={category}
-                              variant={activeCategory === category ? 'default' : 'outline'}
-                              size="sm"
-                              onClick={() => setActiveCategory(category)}
-                          >
-                              {category === 'All' ? t('all') : t(`category_${category.toLowerCase()}`)}
-                          </Button>
-                          ))}
-                      </div>
-                      </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2 items-center">
-                      <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}</span>
-                      {allTags.map(tag => (
-                          <Badge
-                              key={tag}
-                              variant={activeTags.includes(tag) ? 'default' : 'secondary'}
-                              onClick={() => handleTagClick(tag)}
-                              className="cursor-pointer transition-colors"
-                          >
-                              {t(`tag_${tag}`)}
-                          </Badge>
-                      ))}
-                      {activeTags.length > 0 && (
-                          <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
-                      )}
-                  </div>
-                   {!isMobile && (
-                    <div className="mt-4 flex items-center gap-4">
-                      <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
-                      <div className="flex items-center gap-2">
-                          <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                            <LayoutGrid className="mr-2 h-4 w-4" />
-                            {t('layoutGrid')}
-                          </Button>
-                          <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                            <List className="mr-2 h-4 w-4" />
-                            {t('layoutList')}
-                          </Button>
+          <div className="relative">
+            <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+                <div className="p-4 bg-card border rounded-lg shadow-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                        <Input
+                        type="search"
+                        placeholder={t('searchPlaceholder')}
+                        className="md:col-span-1"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
+                        <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
+                        <div className="flex items-center gap-2 flex-wrap">
+                            {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
+                            <Button
+                                key={category}
+                                variant={activeCategory === category ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setActiveCategory(category)}
+                            >
+                                {category === 'All' ? t('all') : t(`category_${category.toLowerCase()}`)}
+                            </Button>
+                            ))}
+                        </div>
                         </div>
                     </div>
-                   )}
-              </div>
+                    <div className="mt-4 flex flex-wrap gap-2 items-center">
+                        <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}
+                        </span>
+                        {allTags.map(tag => (
+                            <Badge
+                                key={tag}
+                                variant={activeTags.includes(tag) ? 'default' : 'secondary'}
+                                onClick={() => handleTagClick(tag)}
+                                className="cursor-pointer transition-colors"
+                            >
+                                {t(`tag_${tag}`)}
+                            </Badge>
+                        ))}
+                        {activeTags.length > 0 && (
+                            <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                        )}
+                    </div>
+                    {!isMobile && (
+                      <div className="mt-4 flex items-center gap-4">
+                        <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
+                        <div className="flex items-center gap-2">
+                            <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                              <LayoutGrid className="mr-2 h-4 w-4" />
+                              {t('layoutGrid')}
+                            </Button>
+                            <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                              <List className="mr-2 h-4 w-4" />
+                              {t('layoutList')}
+                            </Button>
+                          </div>
+                      </div>
+                    )}
+                </div>
+            </div>
+
+
+            <div className={cn(
+              "transition-all",
+              !isMobile && layout === 'grid'
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+                : 'grid grid-cols-1 gap-4'
+            )}>
+                {filteredMods.map(mod =>
+                  <ModCard
+                      key={mod.id}
+                      mod={mod}
+                      onToggle={() => handleToggleMod(mod.id)}
+                      onConfigure={() => handleOpenConfig(mod)}
+                      onPreview={() => setPreviewingMod(mod)}
+                      isConfigValid={isModConfigValid(mod)}
+                  />
+                )}
+            </div>
+            
+            {filteredMods.length === 0 && (
+                <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
+            )}
+
           </div>
 
+          <section className="my-16">
+              <Card>
+                  <CardHeader>
+                      <CardTitle className="font-headline">{t('whyTitle')}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                      <p className="text-muted-foreground">{t('whyContent')}</p>
+                  </CardContent>
+              </Card>
+          </section>
 
-          <div className={cn(
-            "transition-all",
-            !isMobile && layout === 'grid'
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-              : 'grid grid-cols-1 gap-4'
-          )}>
-              {filteredMods.map(mod =>
-                <ModCard
-                    key={mod.id}
-                    mod={mod}
-                    onToggle={() => handleToggleMod(mod.id)}
-                    onConfigure={() => handleOpenConfig(mod)}
-                    onPreview={() => setPreviewingMod(mod)}
-                />
-              )}
-          </div>
-          
-          {filteredMods.length === 0 && (
-              <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
-          )}
-
+          <CodeOutput generatedCode={generatedCode} />
         </div>
+        
+        {selectedMod && (
+          <ConfigModal
+            mod={selectedMod}
+            onSave={handleSaveConfig}
+            onClose={handleCloseConfig}
+          />
+        )}
 
-        <section className="my-16">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline">{t('whyTitle')}</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-2">
-                    <p className="text-muted-foreground">{t('whyContent')}</p>
-                </CardContent>
-            </Card>
-        </section>
+        {previewingMod && (
+          <PreviewModal
+            mod={previewingMod}
+            onClose={() => setPreviewingMod(null)}
+          />
+        )}
 
-        <CodeOutput generatedCode={generatedCode} />
+        {enabledModsCount > 0 && (
+          <div className="fixed bottom-6 right-6 z-50">
+            <Button onClick={handleCopy} size="lg" className="shadow-2xl">
+                {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
+                {t('copyCodeButton', { count: enabledModsCount })}
+            </Button>
+          </div>
+        )}
+
+        <footer className="text-center p-4 text-muted-foreground text-sm">
+          <p dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}}/>
+        </footer>
       </div>
-      
-      {selectedMod && (
-        <ConfigModal
-          mod={selectedMod}
-          onSave={handleSaveConfig}
-          onClose={handleCloseConfig}
-        />
-      )}
-
-      {previewingMod && (
-        <PreviewModal
-          mod={previewingMod}
-          onClose={() => setPreviewingMod(null)}
-        />
-      )}
-
-      {enabledModsCount > 0 && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <Button onClick={handleCopy} size="lg" className="shadow-2xl">
-              {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
-              {t('copyCodeButton', { count: enabledModsCount })}
-          </Button>
-        </div>
-      )}
-
-      <footer className="text-center p-4 text-muted-foreground text-sm">
-        <p dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}}/>
-      </footer>
-    </div>
+    </TooltipProvider>
   );
 }

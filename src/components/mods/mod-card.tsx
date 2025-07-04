@@ -3,28 +3,48 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings, Eye } from 'lucide-react';
+import { Settings, Eye, AlertCircle } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ModCardProps {
   mod: Mod;
   onToggle: () => void;
   onConfigure: () => void;
   onPreview: () => void;
+  isConfigValid: boolean;
 }
 
-export default function ModCard({ mod, onToggle, onConfigure, onPreview }: ModCardProps) {
+export default function ModCard({ mod, onToggle, onConfigure, onPreview, isConfigValid }: ModCardProps) {
   const { t } = useTranslations();
   const modName = t(`mod_${mod.id}_name`);
   
+  const canEnable = isConfigValid || mod.enabled;
+
   return (
     <Card className="flex flex-col hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-            <CardTitle className="font-headline text-xl">{modName}</CardTitle>
+        <div className="space-y-1 pr-2">
+            <CardTitle className="font-headline text-xl flex items-center gap-2">
+              {modName}
+              {!canEnable && (
+                 <Tooltip>
+                    <TooltipTrigger>
+                      <AlertCircle className="h-5 w-5 text-destructive" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('modNeedsConfigTooltip')}</p>
+                    </TooltipContent>
+                  </Tooltip>
+              )}
+            </CardTitle>
             <CardDescription>{t(`category_${mod.category.toLowerCase()}`)}</CardDescription>
         </div>
-        <Switch checked={mod.enabled} onCheckedChange={onToggle} aria-label={`Enable ${mod.name}`}/>
+        <Switch 
+          checked={mod.enabled} 
+          onCheckedChange={onToggle}
+          aria-label={`Enable ${mod.name}`}
+        />
       </CardHeader>
       <CardContent className="flex-grow">
         <p className="text-sm text-muted-foreground">{t(`mod_${mod.id}_description`)}</p>

@@ -8,6 +8,7 @@ import { mod as courseCardCustomizerMod } from './course-card-customizer';
 import { mod as chapterStyleCustomizerMod } from './chapter-style-customizer';
 import { mod as sectionArrowReorderMod } from './section-arrow-reorder';
 import { mod as sidebarToggleCustomizerMod } from './sidebar-toggle-customizer';
+import { mod as globalFontCustomizerMod } from './global-font-customizer';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -19,6 +20,7 @@ const allModsRaw: Mod[] = [
   chapterStyleCustomizerMod,
   sectionArrowReorderMod,
   sidebarToggleCustomizerMod,
+  globalFontCustomizerMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

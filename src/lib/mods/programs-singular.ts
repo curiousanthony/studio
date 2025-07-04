@@ -20,6 +20,7 @@ export const mod: Mod = {
         log("Programs nav element not found");
       }
     }`,
-  mediaUrl: 'https://placehold.co/1280x720.png',
-  previewEnabled: false,
+  mediaBeforeUrl: '/images/mods/programs-singular-before.png',
+  mediaUrl: '/images/mods/programs-singular-after.png',
+  previewEnabled: true,
 };
