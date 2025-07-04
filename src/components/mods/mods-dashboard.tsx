@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import type { Mod } from '@/types';
-import { initialModsData } from '@/lib/mods-data';
+import { allMods } from '@/lib/mods';
 import ModCard from './mod-card';
 import ConfigModal from './config-modal';
 import CodeOutput from './code-output';
@@ -30,7 +30,7 @@ type Layout = 'grid' | 'list';
 const LOCAL_STORAGE_KEY = 'schoolmakerModsState';
 
 export default function ModsDashboard() {
-  const [mods, setMods] = useState<Mod[]>(initialModsData);
+  const [mods, setMods] = useState<Mod[]>(allMods);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [activeTags, setActiveTags] = useState<string[]>([]);
@@ -49,7 +49,7 @@ export default function ModsDashboard() {
       if (savedStateJSON) {
         const savedState = JSON.parse(savedStateJSON);
         
-        const rehydratedMods = initialModsData.map(initialMod => {
+        const rehydratedMods = allMods.map(initialMod => {
           const savedMod = savedState.mods?.find(m => m.id === initialMod.id);
           if (savedMod) {
             const rehydratedOptions = initialMod.configOptions?.map(opt => {
@@ -99,7 +99,7 @@ export default function ModsDashboard() {
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    initialModsData.forEach(mod => mod.tags.forEach(tag => tags.add(tag)));
+    allMods.forEach(mod => mod.tags.forEach(tag => tags.add(tag)));
     return Array.from(tags).sort();
   }, []);
 
