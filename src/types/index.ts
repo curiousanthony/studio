@@ -1,7 +1,7 @@
 export interface ConfigOption {
   key: string;
   label: string;
-  type: 'text' | 'select' | 'number' | 'color' | 'checkbox';
+  type: 'text' | 'select' | 'number' | 'color' | 'checkbox' | 'level_config';
   placeholder?: string;
   options?: string[];
   value: string;
@@ -32,4 +32,5 @@ export interface Mod {
   mediaBeforeUrl?: string;
   previewEnabled?: boolean;
   requiresGoogleIcons?: boolean;
+  requiresFontAwesome?: boolean;
 }

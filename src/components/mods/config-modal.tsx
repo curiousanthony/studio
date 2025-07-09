@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import type { Mod, ConfigOption } from '@/types';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslations } from '@/hooks/use-translations';
 import { Switch } from '@/components/ui/switch';
+import { Card, CardContent } from '@/components/ui/card';
+import { Plus, Trash2 } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 interface ConfigModalProps {
   mod: Mod;
@@ -39,6 +42,97 @@ const toPickerHex = (color: string): string => {
     return '#000000'; 
 }
 
+const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: string, t: any }) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: fieldName,
+  });
+
+  const colors = ['blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'];
+
+  return (
+    <div className="space-y-4">
+      {fields.map((field, index) => (
+        <Card key={field.id}>
+          <CardContent className="p-4 space-y-4">
+             <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold">{t('level')} {index + 1}</h4>
+                {fields.length > 1 && (
+                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} className="text-destructive hover:bg-destructive/10">
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                )}
+            </div>
+            
+            <FormField
+              control={control}
+              name={`${fieldName}.${index}.title`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('levelTitle')}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t('levelTitlePlaceholder')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={`${fieldName}.${index}.icon`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('levelIcon')}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t('levelIconPlaceholder')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={control}
+              name={`${fieldName}.${index}.color`}
+              render={({ field }) => (
+                 <FormItem>
+                    <FormLabel>{t('levelColor')}</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder={t('levelColorPlaceholder')} />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {colors.map(color => (
+                                <SelectItem key={color} value={color}>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
+                                        {t(`color_${color}`)}
+                                    </div>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+      ))}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => append({ title: '', icon: '', color: 'blue' })}
+        disabled={fields.length >= 9}
+        className="w-full"
+      >
+        <Plus className="mr-2 h-4 w-4" /> {t('addLevel')}
+      </Button>
+    </div>
+  );
+};
+
 
 export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) {
   const { t } = useTranslations();
@@ -53,10 +147,13 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
           break;
         case 'number':
           fieldSchema = z.coerce.number({ invalid_type_error: t('fieldIsNumber') });
-          if (option.required) {
-            // Coercing an empty string to a number results in NaN, which fails the number validation.
-            // This implicitly handles the "required" check.
-          }
+          break;
+        case 'level_config':
+          fieldSchema = z.array(z.object({
+            title: z.string().min(1, { message: t('fieldIsRequired') }),
+            icon: z.string().min(1, { message: t('fieldIsRequired') }),
+            color: z.string(),
+          })).min(1);
           break;
         case 'text':
         case 'color':
@@ -91,6 +188,12 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
     } else if (option.type === 'number') {
         const num = parseFloat(option.value);
         acc[option.key] = isNaN(num) ? '' : num;
+    } else if (option.type === 'level_config') {
+        try {
+            acc[option.key] = JSON.parse(option.value);
+        } catch {
+            acc[option.key] = [];
+        }
     }
     else {
         acc[option.key] = option.value;
@@ -111,10 +214,11 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
         let value = data[key];
 
         if (option?.type === 'color' && typeof value === 'string') {
-            // Ensure hex codes have a '#' for CSS validity
             if (!value.startsWith('#') && /^[0-9a-fA-F]{6,8}$/.test(value)) {
                 value = `#${value}`;
             }
+        } else if (option?.type === 'level_config') {
+            value = JSON.stringify(value);
         }
 
         newConfig[key] = String(value);
@@ -127,7 +231,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] flex flex-col">
         <DialogHeader className="pr-8">
           <DialogTitle className="font-headline">{t('configureTitle', { modName })}</DialogTitle>
           <DialogDescription>
@@ -135,7 +239,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 flex-grow overflow-y-auto pr-2">
             {mod.configOptions?.map(option => {
               const watchedValue = form.watch(option.key);
 
@@ -153,6 +257,10 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                   }
                 }
               }, [watchedValue, option.preview]);
+              
+              if (option.type === 'level_config') {
+                  return <LevelConfigField key={option.key} control={form.control} fieldName={option.key} t={t} />;
+              }
 
               return (
                 <FormField
@@ -162,7 +270,6 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                   render={({ field }) => {
                     const placeholderKey = `mod_${mod.id}_config_${option.key}_placeholder` as const;
                     const translatedPlaceholder = t(placeholderKey);
-                    // If translation key is returned, it means translation was not found. Fallback to mod definition.
                     const placeholder = translatedPlaceholder === placeholderKey ? option.placeholder : translatedPlaceholder;
 
                     return (
@@ -182,7 +289,6 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                                         <Input 
                                             type="color" 
                                             className="h-10 w-12 p-1 cursor-pointer" 
-                                            // The color picker should update the form with a # prefixed value
                                             onChange={(e) => field.onChange(e.target.value)}
                                             value={toPickerHex(field.value)}
                                         />
@@ -238,7 +344,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                 />
               )
             })}
-            <DialogFooter className="pt-4">
+             <DialogFooter className="pt-4 sticky bottom-0 bg-background">
               <Button type="button" variant="outline" onClick={onClose}>{t('cancel')}</Button>
               <Button type="submit" disabled={!form.formState.isValid}>{t('saveChanges')}</Button>
             </DialogFooter>
