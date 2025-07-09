@@ -56,7 +56,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
         <Card key={field.id}>
           <CardContent className="p-4 space-y-4">
              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold">{t('level')} {index + 1}</h4>
+                <h4 className="font-semibold">{t('levelEntry')} {index + 1}</h4>
                 {fields.length > 1 && (
                     <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} className="text-destructive hover:bg-destructive/10">
                         <Trash2 className="h-4 w-4" />
@@ -64,6 +64,19 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
                 )}
             </div>
             
+             <FormField
+              control={control}
+              name={`${fieldName}.${index}.level`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('levelNumber')}</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder={t('levelNumberPlaceholder')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={control}
               name={`${fieldName}.${index}.title`}
@@ -125,7 +138,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
       <Button
         type="button"
         variant="outline"
-        onClick={() => append({ title: '', icon: '', color: 'primary' })}
+        onClick={() => append({ level: '', title: '', icon: '', color: 'primary' })}
         disabled={fields.length >= 9}
         className="w-full"
       >
@@ -152,10 +165,14 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
           break;
         case 'level_config':
           fieldSchema = z.array(z.object({
+            level: z.coerce.number({ invalid_type_error: t('fieldIsNumber')}).min(1, { message: t('levelMustBePositive')}),
             title: z.string().min(1, { message: t('fieldIsRequired') }),
             icon: z.string().min(1, { message: t('fieldIsRequired') }),
             color: z.string().min(1, { message: t('fieldIsRequired') }),
-          })).min(1);
+          })).min(1).refine(levels => {
+            const levelNumbers = levels.map(l => l.level);
+            return new Set(levelNumbers).size === levelNumbers.length;
+          }, { message: t('levelMustBeUnique')});
           break;
         case 'text':
         case 'color':

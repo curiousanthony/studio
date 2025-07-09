@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -121,7 +122,7 @@ export default function ModsDashboard() {
         try {
           const levels = JSON.parse(opt.value);
           if (!Array.isArray(levels)) return false;
-          return levels.every(level => level.title && level.icon && level.color);
+          return levels.every(level => level.level && level.title && level.icon && level.color);
         } catch {
           return false;
         }

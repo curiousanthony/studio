@@ -16,7 +16,7 @@ export const mod: Mod = {
       label: 'Level Configuration',
       type: 'level_config',
       value: JSON.stringify([
-        { title: "Creator", icon: "award", color: "primary" },
+        { level: 1, title: "Creator", icon: "award", color: "primary" },
       ]),
     }
   ],
@@ -25,12 +25,8 @@ export const mod: Mod = {
     if (levelConfigs.length === 0) return;
 
     const getLevelData = (level) => {
-      // Levels in SchoolMaker are 1-based, array is 0-based.
-      const levelIndex = parseInt(level, 10) - 1;
-      if (levelIndex >= 0 && levelIndex < levelConfigs.length) {
-        return levelConfigs[levelIndex];
-      }
-      return null;
+      const numericLevel = parseInt(level, 10);
+      return levelConfigs.find(c => c.level === numericLevel);
     }
 
     const postsEl = qsa('div[id^="forums_topic_"]');
