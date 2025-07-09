@@ -270,8 +270,8 @@ export default function ModsDashboard() {
 
       return `<script>
   // Helper functions for targeting elements
-  const qs = (arg) => document.querySelector(arg);
-  const qsa = (arg) => document.querySelectorAll(arg);
+  const qs = (arg, queryFrom = document) => queryFrom.querySelector(arg);
+  const qsa = (arg, queryFrom = document) => queryFrom.querySelectorAll(arg);
 
   // Set to true when debugging. Will log tests to the console
   const debug = true;
