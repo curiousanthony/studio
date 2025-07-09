@@ -106,7 +106,9 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
                             {colors.map(color => (
                                 <SelectItem key={color} value={color}>
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${color === 'primary' ? 'bg-primary' : `bg-${color}-500`}`}></div>
+                                        {color !== 'primary' && (
+                                            <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
+                                        )}
                                         {t(`color_${color}`)}
                                     </div>
                                 </SelectItem>
@@ -235,7 +237,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
       <DialogContent className="sm:max-w-xl max-h-[90vh] flex flex-col">
         <DialogHeader className="pr-8">
           <DialogTitle className="font-headline">{t('configureTitle', { modName })}</DialogTitle>
-          <DialogDescription dangerouslySetInnerHTML={{ __html: configDescription }} />
+          <DialogDescription className="[&_a]:text-primary [&_a]:underline" dangerouslySetInnerHTML={{ __html: configDescription }} />
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 flex-grow overflow-y-auto pr-2">
