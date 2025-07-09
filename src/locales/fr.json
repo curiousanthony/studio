@@ -1,3 +1,4 @@
+
 {
   "pageTitle": "Mods SchoolMaker",
   "pageDescription": "Activez, désactivez et configurez des mods pour personnaliser votre expérience.",
@@ -63,6 +64,7 @@
   "levelNumberPlaceholder": "ex: 5",
   "levelMustBePositive": "Le niveau doit être un nombre positif.",
   "levelMustBeUnique": "Chaque numéro de niveau doit être unique.",
+  "levelMustBeBetween_1_9": "Le niveau doit être compris entre 1 et 9.",
   "mod_transform-school-name_name": "Transformer le nom de l'école",
   "mod_transform-school-name_description": "Supprime le style majuscule par défaut du nom de l'école dans la barre de navigation.",
   "mod_programs-singular_name": "Titre de programme au singulier",

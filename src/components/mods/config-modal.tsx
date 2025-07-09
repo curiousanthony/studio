@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import type { Mod, ConfigOption } from '@/types';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useForm, useFieldArray, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -48,93 +48,98 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
     name: fieldName,
   });
 
+  const watchedValues = useWatch({ control, name: fieldName });
+
   const colors = ['primary', 'blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'];
 
   return (
     <div className="space-y-4">
-      {fields.map((field, index) => (
-        <Card key={field.id}>
-          <CardContent className="p-4 space-y-4">
-             <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold">{t('levelEntry')} {index + 1}</h4>
-                {fields.length > 1 && (
-                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} className="text-destructive hover:bg-destructive/10">
-                        <Trash2 className="h-4 w-4" />
-                    </Button>
-                )}
-            </div>
-            
-             <FormField
-              control={control}
-              name={`${fieldName}.${index}.level`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('levelNumber')}</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder={t('levelNumberPlaceholder')} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name={`${fieldName}.${index}.title`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('levelTitle')}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t('levelTitlePlaceholder')} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name={`${fieldName}.${index}.icon`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('levelIcon')}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t('levelIconPlaceholder')} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={control}
-              name={`${fieldName}.${index}.color`}
-              render={({ field }) => (
-                 <FormItem>
-                    <FormLabel>{t('levelColor')}</FormLabel>
-                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder={t('levelColorPlaceholder')} />
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            {colors.map(color => (
-                                <SelectItem key={color} value={color}>
-                                    <div className="flex items-center gap-2">
-                                        {color !== 'primary' && (
-                                            <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
-                                        )}
-                                        {t(`color_${color}`)}
-                                    </div>
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+      {fields.map((field, index) => {
+        const watchedLevel = watchedValues?.[index]?.level;
+        return (
+          <Card key={field.id}>
+            <CardContent className="p-4 space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold">{t('levelEntry')}{watchedLevel ? ` - ${t('level')} ${watchedLevel}` : ` ${index + 1}`}</h4>
+                  {fields.length > 1 && (
+                      <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} className="text-destructive hover:bg-destructive/10">
+                          <Trash2 className="h-4 w-4" />
+                      </Button>
+                  )}
+              </div>
+              
+              <FormField
+                control={control}
+                name={`${fieldName}.${index}.level`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('levelNumber')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" min="1" max="9" placeholder={t('levelNumberPlaceholder')} {...field} />
+                    </FormControl>
                     <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-      ))}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`${fieldName}.${index}.title`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('levelTitle')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t('levelTitlePlaceholder')} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`${fieldName}.${index}.icon`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('levelIcon')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t('levelIconPlaceholder')} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`${fieldName}.${index}.color`}
+                render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>{t('levelColor')}</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                              <SelectTrigger>
+                                  <SelectValue placeholder={t('levelColorPlaceholder')} />
+                              </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                              {colors.map(color => (
+                                  <SelectItem key={color} value={color}>
+                                      <div className="flex items-center gap-2">
+                                          {color !== 'primary' && (
+                                              <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
+                                          )}
+                                          {t(`color_${color}`)}
+                                      </div>
+                                  </SelectItem>
+                              ))}
+                          </SelectContent>
+                      </Select>
+                      <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+        )
+      })}
       <Button
         type="button"
         variant="outline"
@@ -165,7 +170,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
           break;
         case 'level_config':
           fieldSchema = z.array(z.object({
-            level: z.coerce.number({ invalid_type_error: t('fieldIsNumber')}).min(1, { message: t('levelMustBePositive')}),
+            level: z.coerce.number({ invalid_type_error: t('fieldIsNumber')}).min(1, { message: t('levelMustBePositive') }).max(9, { message: t('levelMustBeBetween_1_9')}),
             title: z.string().min(1, { message: t('fieldIsRequired') }),
             icon: z.string().min(1, { message: t('fieldIsRequired') }),
             color: z.string().min(1, { message: t('fieldIsRequired') }),
