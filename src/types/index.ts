@@ -23,6 +23,8 @@ export interface Mod {
   enabled: boolean;
   published?: boolean;
   configOptions?: ConfigOption[];
+  /** A description for the configuration modal, which can include HTML. */
+  configDescription?: string;
   modType: 'javascript' | 'css';
   functionString?: string;
   cssString?: string;

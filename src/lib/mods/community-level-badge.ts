@@ -9,28 +9,26 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
-  requiresFontAwesome: true,
+  configDescription: 'mod_community-level-badge_config_description',
   configOptions: [
     {
       key: 'levelConfig',
       label: 'Level Configuration',
       type: 'level_config',
       value: JSON.stringify([
-        { title: "Newbie", icon: "seedling", color: "green" },
-        { title: "Regular", icon: "star", color: "yellow" },
-        { title: "Expert", icon: "shield-alt", color: "blue" }
+        { title: "Creator", icon: "award", color: "primary" },
       ]),
     }
   ],
   functionString: `(config) => {
-    const levelTitles = JSON.parse(config.levelConfig || '[]');
-    if (levelTitles.length === 0) return;
+    const levelConfigs = JSON.parse(config.levelConfig || '[]');
+    if (levelConfigs.length === 0) return;
 
     const getLevelData = (level) => {
       // Levels in SchoolMaker are 1-based, array is 0-based.
       const levelIndex = parseInt(level, 10) - 1;
-      if (levelIndex >= 0 && levelIndex < levelTitles.length) {
-        return levelTitles[levelIndex];
+      if (levelIndex >= 0 && levelIndex < levelConfigs.length) {
+        return levelConfigs[levelIndex];
       }
       return null;
     }
@@ -49,11 +47,15 @@ export const mod: Mod = {
           if (authorNameContainer && !qs("h5#custom-badge", authorNameContainer)) {
             authorNameContainer.classList.add("gap-1");
 
+            const colorClass = levelData.color === 'primary'
+              ? 'text-primary'
+              : \`text-\${levelData.color}-500\`;
+
             const badgeEl = document.createElement('h5');
             badgeEl.className = "text-xs text-gray-700 ml-1 bg-white border rounded-md px-2 flex items-center gap-1 py-[3px]";
             badgeEl.id = "custom-badge";
             badgeEl.innerHTML = \`
-              <i class="fas fa-\${levelData.icon} text-\${levelData.color}-500"></i>
+              <i class="fas fa-\${levelData.icon} \${colorClass}"></i>
               <span class="hidden sm:inline-block leading-3 pt-[1px]">
                 \${levelData.title}
               </span>

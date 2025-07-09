@@ -48,7 +48,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
     name: fieldName,
   });
 
-  const colors = ['blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'];
+  const colors = ['primary', 'blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'];
 
   return (
     <div className="space-y-4">
@@ -106,7 +106,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
                             {colors.map(color => (
                                 <SelectItem key={color} value={color}>
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
+                                        <div className={`w-3 h-3 rounded-full ${color === 'primary' ? 'bg-primary' : `bg-${color}-500`}`}></div>
                                         {t(`color_${color}`)}
                                     </div>
                                 </SelectItem>
@@ -123,7 +123,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
       <Button
         type="button"
         variant="outline"
-        onClick={() => append({ title: '', icon: '', color: 'blue' })}
+        onClick={() => append({ title: '', icon: '', color: 'primary' })}
         disabled={fields.length >= 9}
         className="w-full"
       >
@@ -152,7 +152,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
           fieldSchema = z.array(z.object({
             title: z.string().min(1, { message: t('fieldIsRequired') }),
             icon: z.string().min(1, { message: t('fieldIsRequired') }),
-            color: z.string(),
+            color: z.string().min(1, { message: t('fieldIsRequired') }),
           })).min(1);
           break;
         case 'text':
@@ -228,15 +228,14 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
   };
 
   const modName = t(`mod_${mod.id}_name`);
+  const configDescription = mod.configDescription ? t(mod.configDescription as any) : t('configureDescription');
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-xl max-h-[90vh] flex flex-col">
         <DialogHeader className="pr-8">
           <DialogTitle className="font-headline">{t('configureTitle', { modName })}</DialogTitle>
-          <DialogDescription>
-            {t('configureDescription')}
-          </DialogDescription>
+          <DialogDescription dangerouslySetInnerHTML={{ __html: configDescription }} />
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 flex-grow overflow-y-auto pr-2">

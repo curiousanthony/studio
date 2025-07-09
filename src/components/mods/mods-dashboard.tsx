@@ -121,7 +121,7 @@ export default function ModsDashboard() {
         try {
           const levels = JSON.parse(opt.value);
           if (!Array.isArray(levels)) return false;
-          return levels.every(level => level.title && level.icon);
+          return levels.every(level => level.title && level.icon && level.color);
         } catch {
           return false;
         }
@@ -214,14 +214,10 @@ export default function ModsDashboard() {
     const fontMod = enabledMods.find(m => m.id === 'global-font-customizer');
     const selectedFont = fontMod?.configOptions?.find(o => o.key === 'fontFamily')?.value;
     const needsGoogleIcons = enabledMods.some(mod => mod.requiresGoogleIcons);
-    const needsFontAwesome = enabledMods.some(mod => mod.requiresFontAwesome);
     
     const links: string[] = [];
     if (needsGoogleIcons) {
       links.push('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,1,0" />');
-    }
-    if (needsFontAwesome) {
-      links.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />');
     }
     if (selectedFont) {
       const fontUrl = `https://fonts.googleapis.com/css2?family=${selectedFont.replace(/ /g, '+')}:wght@400;700&display=swap`;
