@@ -60,7 +60,7 @@ const LevelConfigField = ({ control, fieldName, t }: { control: any, fieldName: 
           <Card key={field.id}>
             <CardContent className="p-4 space-y-4">
               <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-semibold">{t('levelEntry')}{watchedLevel ? ` - ${t('level')} ${watchedLevel}` : ` ${index + 1}`}</h4>
+                  <h4 className="font-semibold">{t('levelEntry')}{watchedLevel ? ` - ${t('level')} ${watchedLevel}` : ''}</h4>
                   {fields.length > 1 && (
                       <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} className="text-destructive hover:bg-destructive/10">
                           <Trash2 className="h-4 w-4" />
