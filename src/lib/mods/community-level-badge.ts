@@ -8,6 +8,9 @@ export const mod: Mod = {
   tags: ['community', 'badge', 'level', 'gamification', 'ui'],
   enabled: false,
   published: true,
+  mediaBeforeUrl: "/images/mods/community-level-badge-before.png",
+  mediaUrl: "/images/mods/community-level-badge-after.png",
+  previewEnabled: true,
   modType: 'javascript',
   configDescription: 'mod_community-level-badge_config_description',
   configOptions: [
@@ -16,7 +19,7 @@ export const mod: Mod = {
       label: 'Level Configuration',
       type: 'level_config',
       value: JSON.stringify([
-        { level: 1, title: "Creator", icon: "award", color: "primary" },
+        { level: 1, title: "Novice", icon: "seedling", color: "green" },
       ]),
     }
   ],
