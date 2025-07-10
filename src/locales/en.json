@@ -108,7 +108,7 @@
   "mod_global-font-customizer_config_fontFamily_label": "Font Family",
   "mod_community-level-badge_name": "Community Level Badge",
   "mod_community-level-badge_description": "Displays a custom badge next to a community member's name based on their level.",
-  "mod_community-level-badge_config_description": "For each level, specify a title, an icon, and a color. The icon should be a valid <a href='https://fontawesome.com/search?o=r&m=free' target='_blank' class='underline'>Font Awesome V5 icon name</a> (e.g., 'award', 'star', 'user-graduate').",
+  "mod_community-level-badge_config_description": "For each level, specify a title, an icon, and a color. The icon should be a valid <a href='https://fontawesome.com/v5/search?o=r&s=solid' target='_blank' class='underline'>Font Awesome V5 icon name</a> (e.g., 'award', 'star', 'user-graduate').",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
