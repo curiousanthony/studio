@@ -135,29 +135,30 @@ export default function ModsDashboard() {
         activeTags.every(tag => mod.tags.includes(tag))
     );
 
-    const tagCounts: Record<string, number> = {};
     const allPossibleTags = new Set<string>();
-
     baseFilteredMods.forEach(mod => {
         mod.tags.forEach(tag => {
             allPossibleTags.add(tag);
         });
     });
 
-    for (const tag of allPossibleTags) {
-        if (activeTags.includes(tag)) {
-            tagCounts[tag] = currentlyFilteredMods.length;
-        } else {
-            tagCounts[tag] = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
-        }
-    }
-    
     const translated = Array.from(allPossibleTags)
-        .map(tag => ({
-            key: tag,
-            display: t(`tag_${tag}` as any),
-            count: tagCounts[tag],
-        }))
+        .map(tag => {
+            const count = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
+            const isSelected = activeTags.includes(tag);
+            
+            // If the tag is not selected, the count is how many mods would be added to the current selection
+            // If the tag is selected, we want to know how many mods are currently being shown
+            const displayCount = isSelected 
+                ? currentlyFilteredMods.length 
+                : currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
+
+            return {
+                key: tag,
+                display: t(`tag_${tag}` as any),
+                count: displayCount,
+            };
+        })
         .filter(tag => tag.count > 0);
 
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
@@ -388,7 +389,7 @@ export default function ModsDashboard() {
 
 
           <div className="relative">
-            <div className="sticky top-[var(--header-height,65px)] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div className="sticky z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="relative md:col-span-1">
@@ -442,9 +443,10 @@ export default function ModsDashboard() {
                                     return (
                                       <CommandItem
                                         key={tag.key}
-                                        value={tag.display}
-                                        onSelect={() => {
-                                          handleTagClick(tag.key);
+                                        value={tag.key}
+                                        onSelect={(currentValue) => {
+                                          handleTagClick(currentValue);
+                                          setTagPopoverOpen(false);
                                         }}
                                       >
                                         <Check
@@ -514,8 +516,8 @@ export default function ModsDashboard() {
           </div>
           
            {enabledModsCount > 0 && (
-             <div className="sticky bottom-4 flex justify-end pr-4 pointer-events-none">
-                <Button onClick={handleCopy} size="lg" className="shadow-lg pointer-events-auto">
+             <div className="fixed bottom-4 right-4 z-50">
+                <Button onClick={handleCopy} size="lg" className="shadow-lg">
                     {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
                     {t('copyCodeButton', { count: enabledModsCount })}
                 </Button>
