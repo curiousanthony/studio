@@ -395,7 +395,7 @@ export default function ModsDashboard() {
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col gap-4">
                     <div className="flex flex-col md:flex-row gap-4">
-                        <div className="relative flex-grow w-full">
+                        <div className="relative w-full md:w-80">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="search"
@@ -407,10 +407,10 @@ export default function ModsDashboard() {
                         </div>
                         <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList className="p-0 bg-transparent flex flex-col md:grid md:grid-cols-3 h-auto md:h-10">
-                                <TabsTrigger value="All" className="w-full rounded-b-none md:rounded-b-none md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-b md:border-b-0">All</TabsTrigger>
+                              <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto md:h-10 w-full">
+                                <TabsTrigger value="All" className="w-full rounded-b-none md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-b md:border-b-0 md:rounded-b-none">All</TabsTrigger>
                                 <TabsTrigger value="Appearance" className="w-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-b md:border-b-0">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="w-full rounded-t-none md:rounded-t-none md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full rounded-t-none md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-t-none">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
@@ -590,5 +590,7 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
 
     
