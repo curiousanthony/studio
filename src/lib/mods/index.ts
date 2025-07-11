@@ -10,6 +10,7 @@ import { mod as sectionArrowReorderMod } from './section-arrow-reorder';
 import { mod as sidebarToggleCustomizerMod } from './sidebar-toggle-customizer';
 import { mod as globalFontCustomizerMod } from './global-font-customizer';
 import { mod as communityLevelBadgeMod } from './community-level-badge';
+import { mod as horizontalPaymentPlansMod } from './horizontal-payment-plans';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -23,6 +24,7 @@ const allModsRaw: Mod[] = [
   sidebarToggleCustomizerMod,
   globalFontCustomizerMod,
   communityLevelBadgeMod,
+  horizontalPaymentPlansMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

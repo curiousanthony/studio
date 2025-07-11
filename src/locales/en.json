@@ -109,6 +109,8 @@
   "mod_community-level-badge_name": "Community Level Badge",
   "mod_community-level-badge_description": "Displays a custom badge next to a community member's name based on their level.",
   "mod_community-level-badge_config_description": "For each level, specify a title, an icon, and a color. The icon should be a valid <a href='https://fontawesome.com/v5/search?o=r&s=solid' target='_blank' class='underline'>Font Awesome V5 icon name</a> (e.g., 'award', 'star', 'user-graduate').",
+  "mod_horizontal-payment-plans_name": "Horizontal Payment Plans",
+  "mod_horizontal-payment-plans_description": "Changes the payment plan selection to a horizontal pricing table and makes the \"Next\" button full width.",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -129,5 +131,8 @@
   "tag_community": "Community",
   "tag_badge": "Badge",
   "tag_level": "Level",
-  "tag_gamification": "Gamification"
+  "tag_gamification": "Gamification",
+  "tag_payment": "Payment",
+  "tag_pricing": "Pricing",
+  "tag_checkout": "Checkout"
 }
