@@ -4,6 +4,7 @@
   "pageTitle": "Explorer les Mods",
   "pageDescription": "Sélectionnez les Mods d'Apparence & de Fonctionnalité à appliquer à votre école SchoolMaker et améliorez l'expérience de vos clients !",
   "enabledMods": "{count} mod activé | {count} mods activés",
+  "showingMods": "{count} affiché(s)",
   "gettingStarted": "Sélectionnez votre premier mod pour commencer !",
   "navHowToUse": "Comment utiliser",
   "navWhyMods": "Pourquoi des Mods ?",

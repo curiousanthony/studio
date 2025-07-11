@@ -408,9 +408,9 @@ export default function ModsDashboard() {
                          <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="w-full h-auto flex flex-col p-0 md:p-1 md:h-10 md:grid md:grid-cols-3 bg-transparent md:bg-muted">
-                                <TabsTrigger value="All" className="w-full rounded-t-md rounded-b-none border-b md:rounded-sm md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
-                                <TabsTrigger value="Appearance" className="w-full rounded-none border-b md:rounded-sm md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="w-full rounded-b-md rounded-t-none md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="All" className="w-full md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-t-md rounded-b-none border-b md:border-b-0">{t('all')}</TabsTrigger>
+                                <TabsTrigger value="Appearance" className="w-full md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none border-b md:border-b-0">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-b-md rounded-t-none">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
@@ -470,11 +470,14 @@ export default function ModsDashboard() {
                           {activeTags.length > 0 && (
                               <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                           )}
-                           <p className="text-sm text-primary font-semibold">
-                            {enabledModsCount > 0 
-                              ? t('enabledMods', { count: enabledModsCount }) 
-                              : t('gettingStarted')}
-                          </p>
+                           <div className="flex items-center gap-x-2">
+                             <p className="text-sm text-primary font-semibold">
+                              {enabledModsCount > 0 
+                                ? t('enabledMods', { count: enabledModsCount }) 
+                                : t('gettingStarted')}
+                            </p>
+                            <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                           </div>
                       </div>
 
                       {!isMobile && (
@@ -585,6 +588,3 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
-
-    
-    
