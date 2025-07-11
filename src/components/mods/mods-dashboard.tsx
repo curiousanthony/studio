@@ -400,14 +400,14 @@ export default function ModsDashboard() {
                           <Input
                             type="search"
                             placeholder={t('searchPlaceholder')}
-                            className="pl-10"
+                            className="w-full pl-10"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         </div>
                         <div className="flex items-center gap-2 md:col-span-1 md:justify-start">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList className="grid w-full grid-cols-3 md:w-auto [&>button]:flex-1">
+                              <TabsList className="grid w-full grid-cols-3">
                                 <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
                                 <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
                                 <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>

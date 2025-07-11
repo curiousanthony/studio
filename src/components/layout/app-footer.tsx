@@ -19,18 +19,20 @@ export function AppFooter() {
 
   return (
     <footer className="border-t">
-      <div className="container flex h-24 items-center justify-between">
-        <div className="flex-1">
-          <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
+      <div className="container flex flex-col md:flex-row h-auto md:h-24 items-center justify-center md:justify-between py-6 md:py-0 gap-6 md:gap-0">
+        <div className="w-full md:w-auto md:flex-1 flex items-center justify-center md:justify-start">
+           <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
             {/* <AppLogo className="h-6 w-6" /> */}
             <span className="font-bold inline-block font-headline">{t('appName')}</span>
           </a>
         </div>
-        <div className="flex-initial text-center text-sm text-muted-foreground max-w-sm">
+        
+        <div className="flex-initial text-center text-sm text-muted-foreground order-last md:order-none max-w-md">
            <p className="mb-1" dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}} />
            <p>{t('createdBy')}</p>
         </div>
-        <div className="flex-1 flex justify-end">
+
+        <div className="w-full md:w-auto md:flex-1 flex items-center justify-center md:justify-end">
           <a href="https://github.com/curiousanthony/SchoolMaker-Mods" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-muted-foreground underline-offset-4 hover:underline">
             <Github className="h-4 w-4" />
             {t('contributeOnGithub')}
