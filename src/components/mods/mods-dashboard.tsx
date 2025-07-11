@@ -11,19 +11,15 @@ import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle, ChevronDown, Filter } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle, ChevronsUpDown, Filter } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
@@ -54,7 +50,7 @@ export default function ModsDashboard() {
   const { t } = useTranslations();
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
-  const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
+  const [tagPopoverOpen, setTagPopoverOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -426,54 +422,56 @@ export default function ModsDashboard() {
                     </div>
                     <div className="mt-4 flex items-center justify-between">
                       <div className="flex flex-wrap gap-2 items-center">
-                          <DropdownMenu open={tagDropdownOpen} onOpenChange={setTagDropdownOpen}>
-                              <DropdownMenuTrigger asChild>
-                                  <Button variant="outline">
-                                      <Filter className="mr-2 h-4 w-4" />
-                                      {t('tagsLabel')}
-                                      {activeTags.length > 0 && (
-                                          <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                              {activeTags.length}
-                                          </div>
-                                      )}
-                                      <ChevronDown className="ml-2 h-4 w-4" />
-                                  </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="w-64" align="start">
-                                  <Command>
-                                      <CommandInput placeholder={t('filterByTag')} />
-                                      <CommandList>
-                                          <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
-                                          <CommandGroup>
-                                              {allTags.map(tag => {
-                                                  const isSelected = activeTags.includes(tag);
-                                                  return (
-                                                      <CommandItem
-                                                          key={tag}
-                                                          value={tag}
-                                                          onSelect={() => {
-                                                            handleTagClick(tag);
-                                                          }}
-                                                      >
-                                                          <div className={cn(
-                                                              "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                              isSelected
-                                                                  ? "bg-primary text-primary-foreground"
-                                                                  : "opacity-50 [&_svg]:invisible"
-                                                          )}>
-                                                              <Check className={cn("h-4 w-4")} />
-                                                          </div>
-                                                          <span className="flex-grow">{t(`tag_${tag}`)}</span>
-                                                          <span className="text-xs text-muted-foreground">{tagCounts[tag]}</span>
-                                                      </CommandItem>
-                                                  )
-                                              })}
-                                          </CommandGroup>
-                                      </CommandList>
-                                  </Command>
-                              </DropdownMenuContent>
-                          </DropdownMenu>
-
+                        <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={tagPopoverOpen}
+                              className="w-[200px] justify-between"
+                            >
+                              <Filter className="mr-2 h-4 w-4 shrink-0" />
+                              {t('tagsLabel')}
+                               {activeTags.length > 0 && (
+                                <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                    {activeTags.length}
+                                </div>
+                              )}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput placeholder={t('filterByTag')} />
+                              <CommandList>
+                                <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
+                                <CommandGroup>
+                                  {allTags.map((tag) => {
+                                    const isSelected = activeTags.includes(tag);
+                                    return (
+                                      <CommandItem
+                                        key={tag}
+                                        value={tag}
+                                        onSelect={() => {
+                                          handleTagClick(tag);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            isSelected ? "opacity-100" : "opacity-0"
+                                          )}
+                                        />
+                                        <span className="flex-grow">{t(`tag_${tag}`)}</span>
+                                        <span className="text-xs text-muted-foreground">{tagCounts[tag]}</span>
+                                      </CommandItem>
+                                    );
+                                  })}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                           {activeTags.length > 0 && (
                               <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                           )}
@@ -568,5 +566,3 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
-
-    
