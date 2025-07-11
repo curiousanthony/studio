@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LocaleProvider } from '@/context/locale-context';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'SchoolMaker Mods',
@@ -27,6 +28,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </LocaleProvider>
+        <Analytics />
       </body>
     </html>
   );
