@@ -407,77 +407,79 @@ export default function ModsDashboard() {
                         </div>
                          <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList className="w-full p-0 md:p-1 md:h-10 bg-transparent md:bg-muted md:grid md:grid-cols-3 flex flex-col md:flex-row">
-                                <TabsTrigger value="All" className="w-full md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-t-md rounded-b-none border-b md:border-b-0 md:rounded-l-md">All</TabsTrigger>
-                                <TabsTrigger value="Appearance" className="w-full md:rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none border-b md:border-b-0">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="w-full md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-b-md rounded-t-none md:rounded-r-md">{t('category_functionality')}</TabsTrigger>
+                              <TabsList className="p-0 md:p-1 md:h-10 bg-transparent md:bg-muted flex flex-col md:grid md:grid-cols-3">
+                                <TabsTrigger value="All" className="w-full rounded-b-none border-b md:border-b-0 md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">All</TabsTrigger>
+                                <TabsTrigger value="Appearance" className="w-full rounded-none border-b md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full rounded-t-none md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
                     </div>
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex flex-wrap gap-2 items-center">
-                        <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={tagPopoverOpen}
-                              className="w-auto justify-between"
-                            >
-                              <Filter className="mr-2 h-4 w-4 shrink-0" />
-                              {t('tagsLabel')}
-                               {activeTags.length > 0 && (
-                                <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                    {activeTags.length}
-                                </div>
-                              )}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Command>
-                              <CommandInput placeholder={t('filterByTag')} />
-                              <CommandList>
-                                <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
-                                <CommandGroup>
-                                  {availableTags
-                                    .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
-                                    .map((tag) => {
-                                      const isSelected = activeTags.includes(tag.key);
-                                      return (
-                                        <CommandItem
-                                          key={tag.key}
-                                          value={tag.key}
-                                          onSelect={() => handleTagClick(tag.key)}
-                                        >
-                                          <Check
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              isSelected ? "opacity-100" : "opacity-0"
-                                            )}
-                                          />
-                                          <span className="flex-grow">{tag.display}</span>
-                                          <span className="text-xs text-muted-foreground">{tag.count}</span>
-                                        </CommandItem>
-                                      );
-                                    })}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                          {activeTags.length > 0 && (
-                              <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
-                          )}
-                           <div className="flex items-center gap-x-2">
-                             <p className="text-sm text-primary font-semibold">
-                              {enabledModsCount > 0 
-                                ? t('enabledMods', { count: enabledModsCount }) 
-                                : t('gettingStarted')}
-                            </p>
-                            <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
-                           </div>
+                    <div className="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex flex-col md:flex-row md:items-center gap-4">
+                        <div className="flex gap-2 items-center">
+                          <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={tagPopoverOpen}
+                                className="w-auto justify-between"
+                              >
+                                <Filter className="mr-2 h-4 w-4 shrink-0" />
+                                {t('tagsLabel')}
+                                 {activeTags.length > 0 && (
+                                  <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                      {activeTags.length}
+                                  </div>
+                                )}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Command>
+                                <CommandInput placeholder={t('filterByTag')} />
+                                <CommandList>
+                                  <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
+                                  <CommandGroup>
+                                    {availableTags
+                                      .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
+                                      .map((tag) => {
+                                        const isSelected = activeTags.includes(tag.key);
+                                        return (
+                                          <CommandItem
+                                            key={tag.key}
+                                            value={tag.key}
+                                            onSelect={() => handleTagClick(tag.key)}
+                                          >
+                                            <Check
+                                              className={cn(
+                                                "mr-2 h-4 w-4",
+                                                isSelected ? "opacity-100" : "opacity-0"
+                                              )}
+                                            />
+                                            <span className="flex-grow">{tag.display}</span>
+                                            <span className="text-xs text-muted-foreground">{tag.count}</span>
+                                          </CommandItem>
+                                        );
+                                      })}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                            {activeTags.length > 0 && (
+                                <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                            )}
+                        </div>
+                         <div className="flex items-center gap-x-2">
+                           <p className="text-sm text-primary font-semibold">
+                            {enabledModsCount > 0 
+                              ? t('enabledMods', { count: enabledModsCount }) 
+                              : t('gettingStarted')}
+                          </p>
+                          <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                         </div>
                       </div>
 
                       {!isMobile && (
