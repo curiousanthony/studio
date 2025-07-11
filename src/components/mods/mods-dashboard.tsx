@@ -394,8 +394,8 @@ export default function ModsDashboard() {
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                        <div className="relative md:col-span-1">
+                    <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
+                        <div className="relative md:col-span-1 w-full">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="search"
@@ -405,12 +405,12 @@ export default function ModsDashboard() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         </div>
-                        <div className="flex items-center gap-2 md:col-span-1 md:justify-start">
+                         <div className="w-full md:col-span-1">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="grid w-full grid-cols-3">
-                                <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
-                                <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('all')}</TabsTrigger>
+                                <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
@@ -585,3 +585,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
