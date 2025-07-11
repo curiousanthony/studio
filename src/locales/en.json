@@ -1,7 +1,7 @@
 
 {
   "pageTitle": "SchoolMaker Mods",
-  "pageDescription": "Enable, disable, and configure mods to customize your experience.",
+  "pageDescription": "Select the Appearance & Functionality Mods to apply to your SchoolMaker School in a sleek and easy-to-use UI and enhance your Clients' User Experience!",
   "enabledMods": "{count} mod enabled | {count} mods enabled",
   "gettingStarted": "Select your first mod to get started!",
   "howToUseTitle": "How to Use This Tool",
@@ -34,7 +34,7 @@
   "previewDescription": "A preview of what this mod does. Close the modal when you're done.",
   "previewBefore": "Before",
   "previewAfter": "After",
-  "footerDisclaimer": "This app is not made by SchoolMaker and is not official. It's made with ♥ by Anthony from the SchoolMaker Community. <a href='https://github.com/curiousanthony/SchoolMaker-Mods/tree/master' target='_blank' rel='noopener noreferrer' class='underline'>Contribute on GitHub</a>.",
+  "footerDisclaimer": "This app is not made by SchoolMaker and is not official. It's made with ♥ by Anthony from the SchoolMaker Community. <a href='https://github.com/curiousanthony/SchoolMaker-Mods' target='_blank' rel='noopener noreferrer' class='underline'>Contribute on GitHub</a>",
   "layout": "Layout:",
   "layoutGrid": "Grid",
   "layoutList": "List",
