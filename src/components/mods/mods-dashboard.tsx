@@ -10,15 +10,22 @@ import CodeOutput from './code-output';
 import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle, ChevronDown, Filter } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
@@ -121,7 +128,7 @@ export default function ModsDashboard() {
        if (opt.type === 'level_config') {
         try {
           const levels = JSON.parse(opt.value);
-          if (!Array.isArray(levels)) return false;
+          if (!Array.isArray(levels) || levels.length === 0) return false;
           return levels.every(level => level.level && level.title && level.icon && level.color);
         } catch {
           return false;
@@ -215,10 +222,14 @@ export default function ModsDashboard() {
     const fontMod = enabledMods.find(m => m.id === 'global-font-customizer');
     const selectedFont = fontMod?.configOptions?.find(o => o.key === 'fontFamily')?.value;
     const needsGoogleIcons = enabledMods.some(mod => mod.requiresGoogleIcons);
+    const needsFontAwesome = enabledMods.some(mod => mod.requiresFontAwesome);
     
     const links: string[] = [];
     if (needsGoogleIcons) {
       links.push('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,1,0" />');
+    }
+     if (needsFontAwesome) {
+      links.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />');
     }
     if (selectedFont) {
       const fontUrl = `https://fonts.googleapis.com/css2?family=${selectedFont.replace(/ /g, '+')}:wght@400;700&display=swap`;
@@ -405,38 +416,58 @@ export default function ModsDashboard() {
                         </div>
                         </div>
                     </div>
-                    <div className="mt-4 flex flex-wrap gap-2 items-center">
-                        <span className="text-sm font-medium mr-2 shrink-0">{t('tagsLabel')}
-                        </span>
-                        {allTags.map(tag => (
-                            <Badge
-                                key={tag}
-                                variant={activeTags.includes(tag) ? 'default' : 'secondary'}
-                                onClick={() => handleTagClick(tag)}
-                                className="cursor-pointer transition-colors"
-                            >
-                                {t(`tag_${tag}`)}
-                            </Badge>
-                        ))}
-                        {activeTags.length > 0 && (
-                            <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
-                        )}
-                    </div>
-                    {!isMobile && (
-                      <div className="mt-4 flex items-center gap-4">
-                        <span className="text-sm font-medium mr-2 shrink-0">{t('layout')}</span>
-                        <div className="flex items-center gap-2">
-                            <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                              <LayoutGrid className="mr-2 h-4 w-4" />
-                              {t('layoutGrid')}
-                            </Button>
-                            <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                              <List className="mr-2 h-4 w-4" />
-                              {t('layoutList')}
-                            </Button>
-                          </div>
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex flex-wrap gap-2 items-center">
+                          <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                  <Button variant="outline">
+                                      <Filter className="mr-2 h-4 w-4" />
+                                      {t('tagsLabel')}
+                                      {activeTags.length > 0 && (
+                                          <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                              {activeTags.length}
+                                          </div>
+                                      )}
+                                      <ChevronDown className="ml-2 h-4 w-4" />
+                                  </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="w-56">
+                                  <DropdownMenuLabel>{t('filterByTag')}</DropdownMenuLabel>
+                                  <DropdownMenuSeparator />
+                                  {allTags.map(tag => (
+                                      <DropdownMenuCheckboxItem
+                                          key={tag}
+                                          checked={activeTags.includes(tag)}
+                                          onCheckedChange={() => handleTagClick(tag)}
+                                          onSelect={(e) => e.preventDefault()}
+                                      >
+                                          {t(`tag_${tag}`)}
+                                      </DropdownMenuCheckboxItem>
+                                  ))}
+                              </DropdownMenuContent>
+                          </DropdownMenu>
+
+                          {activeTags.length > 0 && (
+                              <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                          )}
                       </div>
-                    )}
+
+                      {!isMobile && (
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium shrink-0">{t('layout')}</span>
+                            <div className="flex items-center gap-2">
+                                <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                                  <LayoutGrid className="mr-2 h-4 w-4" />
+                                  {t('layoutGrid')}
+                                </Button>
+                                <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                                  <List className="mr-2 h-4 w-4" />
+                                  {t('layoutList')}
+                                </Button>
+                              </div>
+                        </div>
+                      )}
+                    </div>
                 </div>
             </div>
 
