@@ -393,7 +393,7 @@ export default function ModsDashboard() {
 
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
-                <div className="p-4 bg-card border rounded-lg shadow-sm">
+                <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col gap-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="relative flex-grow w-full">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -408,15 +408,15 @@ export default function ModsDashboard() {
                          <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="p-0 md:p-1 md:h-10 bg-transparent md:bg-muted flex flex-col md:grid md:grid-cols-3">
-                                <TabsTrigger value="All" className="w-full rounded-b-none border-b md:border-b-0 md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">All</TabsTrigger>
+                                <TabsTrigger value="All" className="w-full md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-b-none border-b md:border-b-0">All</TabsTrigger>
                                 <TabsTrigger value="Appearance" className="w-full rounded-none border-b md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="w-full rounded-t-none md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-t-none">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
                     </div>
-                    <div className="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex flex-col md:flex-row md:items-center gap-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex flex-col items-start md:flex-row md:items-center gap-4">
                         <div className="flex gap-2 items-center">
                           <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
                             <PopoverTrigger asChild>
@@ -590,3 +590,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
