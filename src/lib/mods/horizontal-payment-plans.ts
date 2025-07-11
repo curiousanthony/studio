@@ -49,8 +49,7 @@ body.front-office-offers main .card-offers .offers-price input[type="radio"]:che
 /* Position for the checkmark icon */
 body.front-office-offers main .card-offers .offers-price input[type="radio"] + label::after {
   right: 1rem !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
+  top: 1.4rem !important;
 }
 
 /* Make the "Next" button full width */
