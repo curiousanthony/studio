@@ -11,16 +11,10 @@ import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search, Github } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from '@/hooks/use-translations';
 import { cn } from '@/lib/utils';
@@ -521,21 +515,29 @@ export default function ModsDashboard() {
           
           <div className="my-16 space-y-16">
             <section id="how-to-use">
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="item-1">
-                    <AccordionTrigger className="text-2xl font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
-                    <AccordionContent>
-                        <Card>
-                            <CardContent className="pt-6 text-sm space-y-4">
-                                <p>{t('step1')}</p>
-                                <p>{t('step2')}</p>
-                                <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
-                                <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
-                            </CardContent>
-                        </Card>
-                    </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('howToUseTitle')}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-2 text-base space-y-4">
+                        <div className="flex items-start gap-4">
+                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">1</div>
+                            <p className="flex-1 pt-1">{t('step1')}</p>
+                        </div>
+                        <div className="flex items-start gap-4">
+                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">2</div>
+                            <p className="flex-1 pt-1">{t('step2')}</p>
+                        </div>
+                         <div className="flex items-start gap-4">
+                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">3</div>
+                            <p className="flex-1 pt-1" dangerouslySetInnerHTML={{ __html: t('step3') }} />
+                        </div>
+                         <div className="flex items-start gap-4">
+                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">4</div>
+                            <p className="flex-1 pt-1" dangerouslySetInnerHTML={{ __html: t('step4') }} />
+                        </div>
+                    </CardContent>
+                </Card>
             </section>
 
             <section id="why-mods">

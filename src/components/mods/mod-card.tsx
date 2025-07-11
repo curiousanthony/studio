@@ -38,7 +38,7 @@ export default function ModCard({ mod, onToggle, onConfigure, onPreview, isConfi
                   </Tooltip>
               )}
             </CardTitle>
-            <CardDescription>{t(`category_${mod.category.toLowerCase()}`)}</CardDescription>
+            <CardDescription className="font-semibold text-primary/80">{t(`category_${mod.category.toLowerCase()}`)}</CardDescription>
         </div>
         <Switch 
           checked={mod.enabled} 
@@ -50,7 +50,7 @@ export default function ModCard({ mod, onToggle, onConfigure, onPreview, isConfi
         <p className="text-sm text-muted-foreground">{t(`mod_${mod.id}_description`)}</p>
       </CardContent>
       <CardFooter className="flex justify-between items-end">
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1 select-none">
           {mod.tags.map(tag => (
             <Badge key={tag} variant="secondary">{t(`tag_${tag}`)}</Badge>
           ))}

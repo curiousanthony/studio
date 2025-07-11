@@ -37,7 +37,7 @@
   "previewDescription": "Un aperçu de ce que fait ce mod. Fermez la fenêtre lorsque vous avez terminé.",
   "previewBefore": "Avant",
   "previewAfter": "Après",
-  "footerDisclaimer": "Ce projet est indépendant et n'est pas affilié à SchoolMaker.",
+  "footerDisclaimer": "Ce projet est indépendant et n'est pas affilié à <a href='https://schoolmaker.com/' target='_blank' rel='noopener noreferrer' class='underline hover:text-primary'>SchoolMaker</a>.",
   "contributeOnGithub": "Contribuer sur GitHub",
   "createdBy": "Créé par Anthony",
   "layout": "Affichage :",
@@ -142,5 +142,5 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Paiement",
   "tag_pricing": "Tarifs",
-  "tag_checkout": "Validation"
+  "tag_checkout": "Paiement"
 }
