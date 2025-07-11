@@ -22,11 +22,9 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
@@ -567,3 +565,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
