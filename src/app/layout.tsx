@@ -28,7 +28,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </LocaleProvider>
-        <Analytics />
+        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   );
