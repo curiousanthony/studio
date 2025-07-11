@@ -11,7 +11,7 @@ import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle, ChevronsUpDown, Filter } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
@@ -20,7 +20,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
@@ -431,7 +432,7 @@ export default function ModsDashboard() {
           <div className="relative">
             <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <Input
                         type="search"
                         placeholder={t('searchPlaceholder')}
@@ -439,20 +440,14 @@ export default function ModsDashboard() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <div className="flex items-center gap-2 md:col-span-2 justify-center md:justify-start">
-                        <span className="text-sm font-medium mr-2 shrink-0">{t('categoryLabel')}</span>
-                        <div className="flex items-center gap-2 flex-wrap">
-                            {(['All', 'Appearance', 'Functionality'] as Category[]).map(category => (
-                            <Button
-                                key={category}
-                                variant={activeCategory === category ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => setActiveCategory(category)}
-                            >
-                                {category === 'All' ? t('all') : t(`category_${category.toLowerCase()}`)}
-                            </Button>
-                            ))}
-                        </div>
+                        <div className="flex items-center gap-2 md:col-span-1 justify-center md:justify-start">
+                           <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
+                              <TabsList>
+                                <TabsTrigger value="All">{t('all')}</TabsTrigger>
+                                <TabsTrigger value="Appearance">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality">{t('category_functionality')}</TabsTrigger>
+                              </TabsList>
+                            </Tabs>
                         </div>
                     </div>
                     <div className="mt-4 flex items-center justify-between">
@@ -514,7 +509,6 @@ export default function ModsDashboard() {
 
                       {!isMobile && (
                         <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium shrink-0">{t('layout')}</span>
                             <div className="flex items-center gap-2">
                                 <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
                                   <LayoutGrid className="mr-2 h-4 w-4" />
