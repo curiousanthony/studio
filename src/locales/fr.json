@@ -34,7 +34,7 @@
   "previewDescription": "Un aperçu de ce que fait ce mod. Fermez la fenêtre lorsque vous avez terminé.",
   "previewBefore": "Avant",
   "previewAfter": "Après",
-  "footerDisclaimer": "Cette application n'est pas créée par SchoolMaker et n'est pas officielle. Elle est faite avec ♥ par Anthony de la communauté SchoolMaker.",
+  "footerDisclaimer": "Cette application n'est pas créée par SchoolMaker et n'est pas officielle. Elle est faite avec ♥ par Anthony de la communauté SchoolMaker. <a href='https://github.com/curiousanthony/SchoolMaker-Mods/tree/master' target='_blank' rel='noopener noreferrer' class='underline'>Contribuer sur GitHub</a>.",
   "layout": "Affichage :",
   "layoutGrid": "Grille",
   "layoutList": "Liste",
@@ -136,5 +136,5 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Paiement",
   "tag_pricing": "Tarifs",
-  "tag_checkout": "Paiement"
+  "tag_checkout": "Validation"
 }

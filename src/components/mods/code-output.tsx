@@ -27,6 +27,7 @@ export default function CodeOutput({ generatedCode }: CodeOutputProps) {
              <SyntaxHighlighter
                 language="html"
                 style={coldarkDark}
+                wrapLongLines={true}
                 customStyle={{ 
                   margin: 0, 
                   padding: "1rem", 

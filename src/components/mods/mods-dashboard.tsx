@@ -11,7 +11,7 @@ import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
@@ -433,19 +433,22 @@ export default function ModsDashboard() {
             <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                        <Input
-                        type="search"
-                        placeholder={t('searchPlaceholder')}
-                        className="md:col-span-1"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        />
+                        <div className="relative md:col-span-1">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            type="search"
+                            placeholder={t('searchPlaceholder')}
+                            className="pl-10"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                          />
+                        </div>
                         <div className="flex items-center gap-2 md:col-span-1 justify-center md:justify-start">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList>
-                                <TabsTrigger value="All">{t('all')}</TabsTrigger>
-                                <TabsTrigger value="Appearance">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
+                                <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
@@ -509,16 +512,14 @@ export default function ModsDashboard() {
 
                       {!isMobile && (
                         <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-2">
-                                <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                                  <LayoutGrid className="mr-2 h-4 w-4" />
-                                  {t('layoutGrid')}
-                                </Button>
-                                <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                                  <List className="mr-2 h-4 w-4" />
-                                  {t('layoutList')}
-                                </Button>
-                              </div>
+                            <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                              <LayoutGrid className="mr-2 h-4 w-4" />
+                              {t('layoutGrid')}
+                            </Button>
+                            <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                              <List className="mr-2 h-4 w-4" />
+                              {t('layoutList')}
+                            </Button>
                         </div>
                       )}
                     </div>

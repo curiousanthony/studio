@@ -34,7 +34,7 @@
   "previewDescription": "A preview of what this mod does. Close the modal when you're done.",
   "previewBefore": "Before",
   "previewAfter": "After",
-  "footerDisclaimer": "This app is not made by SchoolMaker and is not official. It's made with ♥ by Anthony from the SchoolMaker Community.",
+  "footerDisclaimer": "This app is not made by SchoolMaker and is not official. It's made with ♥ by Anthony from the SchoolMaker Community. <a href='https://github.com/curiousanthony/SchoolMaker-Mods/tree/master' target='_blank' rel='noopener noreferrer' class='underline'>Contribute on GitHub</a>.",
   "layout": "Layout:",
   "layoutGrid": "Grid",
   "layoutList": "List",
