@@ -106,30 +106,76 @@ export default function ModsDashboard() {
     }
   }, [isMounted, mods, searchQuery, activeCategory, activeTags, layout]);
 
-  const { translatedTags, tagCounts } = useMemo(() => {
-    const tagsSet = new Set<string>();
-    const counts: Record<string, number> = {};
-    
-    allMods.forEach(mod => {
-      mod.tags.forEach(tag => {
-        tagsSet.add(tag);
-        counts[tag] = (counts[tag] || 0) + 1;
+  
+  const filteredMods = useMemo(() => {
+    return mods
+      .filter(mod => {
+        if (activeCategory === 'All') return true;
+        return mod.category === activeCategory;
+      })
+      .filter(mod => {
+        if (searchQuery.trim() === '') return true;
+        const lowerCaseQuery = searchQuery.toLowerCase();
+        const name = t(`mod_${mod.id}_name`).toLowerCase();
+        const description = t(`mod_${mod.id}_description`).toLowerCase();
+        return (
+          name.includes(lowerCaseQuery) ||
+          description.includes(lowerCaseQuery)
+        );
+      })
+      .filter(mod => {
+        if (activeTags.length === 0) return true;
+        return activeTags.every(tag => mod.tags.includes(tag));
       });
+  }, [mods, activeCategory, activeTags, searchQuery, t]);
+
+  const availableTags = useMemo(() => {
+    // First, filter mods by category and search, as these are independent of tag selection.
+    const baseFilteredMods = mods.filter(mod => 
+        (activeCategory === 'All' || mod.category === activeCategory) &&
+        (searchQuery.trim() === '' || 
+         t(`mod_${mod.id}_name`).toLowerCase().includes(searchQuery.toLowerCase()) || 
+         t(`mod_${mod.id}_description`).toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
+    // These are the mods that match the currently active tags.
+    const currentlyFilteredMods = baseFilteredMods.filter(mod => 
+        activeTags.every(tag => mod.tags.includes(tag))
+    );
+
+    const tagCounts: Record<string, number> = {};
+    const allPossibleTags = new Set<string>();
+
+    currentlyFilteredMods.forEach(mod => {
+        mod.tags.forEach(tag => {
+            allPossibleTags.add(tag);
+        });
     });
 
-    const translated = Array.from(tagsSet).map(tag => ({
-      key: tag,
-      display: t(`tag_${tag}` as any),
-    }));
+    for (const tag of allPossibleTags) {
+        if (activeTags.includes(tag)) {
+            // If the tag is already selected, its count is the total number of currently visible mods.
+            tagCounts[tag] = currentlyFilteredMods.length;
+        } else {
+            // If the tag is not selected, count how many of the currently visible mods ALSO have this tag.
+            tagCounts[tag] = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
+        }
+    }
+    
+    const translated = Array.from(allPossibleTags)
+        .map(tag => ({
+            key: tag,
+            display: t(`tag_${tag}` as any),
+            count: tagCounts[tag],
+        }))
+        // Hide tags that would result in 0 mods if selected
+        .filter(tag => tag.count > 0);
 
     // Sort by translated display name
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
 
-    return {
-      translatedTags: translated,
-      tagCounts: counts,
-    };
-  }, [t]);
+    return translated;
+  }, [mods, activeCategory, searchQuery, activeTags, t]);
 
 
   const enabledModsCount = useMemo(() => mods.filter(mod => mod.enabled).length, [mods]);
@@ -152,28 +198,6 @@ export default function ModsDashboard() {
       return opt.value !== undefined && opt.value !== null && opt.value !== '';
     });
   };
-
-  const filteredMods = useMemo(() => {
-    return mods
-      .filter(mod => {
-        if (activeCategory === 'All') return true;
-        return mod.category === activeCategory;
-      })
-      .filter(mod => {
-        if (activeTags.length === 0) return true;
-        return activeTags.every(tag => mod.tags.includes(tag));
-      })
-      .filter(mod => {
-        if (searchQuery.trim() === '') return true;
-        const lowerCaseQuery = searchQuery.toLowerCase();
-        const name = t(`mod_${mod.id}_name`).toLowerCase();
-        const description = t(`mod_${mod.id}_description`).toLowerCase();
-        return (
-          name.includes(lowerCaseQuery) ||
-          description.includes(lowerCaseQuery)
-        );
-      });
-  }, [mods, activeCategory, activeTags, searchQuery, t]);
 
   const handleToggleMod = (modId: string) => {
     const modToToggle = mods.find(m => m.id === modId);
@@ -457,12 +481,12 @@ export default function ModsDashboard() {
                               <CommandList>
                                 <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
                                 <CommandGroup>
-                                  {translatedTags.map((tag) => {
+                                  {availableTags.map((tag) => {
                                     const isSelected = activeTags.includes(tag.key);
                                     return (
                                       <CommandItem
                                         key={tag.key}
-                                        value={tag.display} // Search by display value
+                                        value={tag.display}
                                         onSelect={() => {
                                           handleTagClick(tag.key);
                                         }}
@@ -474,7 +498,7 @@ export default function ModsDashboard() {
                                           )}
                                         />
                                         <span className="flex-grow">{tag.display}</span>
-                                        <span className="text-xs text-muted-foreground">{tagCounts[tag.key]}</span>
+                                        <span className="text-xs text-muted-foreground">{tag.count}</span>
                                       </CommandItem>
                                     );
                                   })}
