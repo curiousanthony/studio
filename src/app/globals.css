@@ -81,10 +81,13 @@
   body {
     @apply bg-background text-foreground;
   }
-  header.translate-y-0 ~ main div.sticky {
-    top: var(--header-height, 65px) !important;
+  /* This ensures the sticky filter container accounts for the header height */
+  main div.sticky {
+    top: 64px; /* Default header height */
   }
+
+  /* When header is hidden, sticky container moves to top of viewport */
   header.-translate-y-full ~ main div.sticky {
-    top: 0 !important;
+    top: 0;
   }
 }

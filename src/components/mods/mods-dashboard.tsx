@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from '@/hooks/use-translations';
 import { cn } from '@/lib/utils';
@@ -45,8 +45,7 @@ export default function ModsDashboard() {
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
   const [tagPopoverOpen, setTagPopoverOpen] = useState(false);
-  const filterContainerRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     try {
       const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -111,8 +110,8 @@ export default function ModsDashboard() {
       .filter(mod => {
         if (searchQuery.trim() === '') return true;
         const lowerCaseQuery = searchQuery.toLowerCase();
-        const name = t(`mod_${mod.id}_name`).toLowerCase();
-        const description = t(`mod_${mod.id}_description`).toLowerCase();
+        const name = t(`mod_${mod.id}_name` as any).toLowerCase();
+        const description = t(`mod_${mod.id}_description` as any).toLowerCase();
         return (
           name.includes(lowerCaseQuery) ||
           description.includes(lowerCaseQuery)
@@ -128,8 +127,8 @@ export default function ModsDashboard() {
     const baseFilteredMods = mods.filter(mod => 
         (activeCategory === 'All' || mod.category === activeCategory) &&
         (searchQuery.trim() === '' || 
-         t(`mod_${mod.id}_name`).toLowerCase().includes(searchQuery.toLowerCase()) || 
-         t(`mod_${mod.id}_description`).toLowerCase().includes(searchQuery.toLowerCase()))
+         t(`mod_${mod.id}_name` as any).toLowerCase().includes(searchQuery.toLowerCase()) || 
+         t(`mod_${mod.id}_description` as any).toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     const currentlyFilteredMods = baseFilteredMods.filter(mod => 
@@ -147,10 +146,8 @@ export default function ModsDashboard() {
 
     for (const tag of allPossibleTags) {
         if (activeTags.includes(tag)) {
-            // If tag is active, count is the total number of mods matching all active filters
             tagCounts[tag] = currentlyFilteredMods.length;
         } else {
-            // If tag is not active, count how many *more* mods would match if we added this tag
             tagCounts[tag] = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
         }
     }
@@ -161,7 +158,7 @@ export default function ModsDashboard() {
             display: t(`tag_${tag}` as any),
             count: tagCounts[tag],
         }))
-        .filter(tag => tag.count > 0); // Only show tags that would result in at least one mod
+        .filter(tag => tag.count > 0);
 
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
 
@@ -288,7 +285,7 @@ export default function ModsDashboard() {
         
         if (modCss.trim() === '') return '';
 
-        return `/* --- Mod: ${t(`mod_${mod.id}_name`)} --- */\n${modCss.trim()}`;
+        return `/* --- Mod: ${t(`mod_${mod.id}_name` as any)} --- */\n${modCss.trim()}`;
       }).filter(Boolean).join('\n\n')
       : '';
     
@@ -305,7 +302,7 @@ export default function ModsDashboard() {
         
         return `{
           id: '${mod.id}',
-          name: "${t(`mod_${mod.id}_name`)}",
+          name: "${t(`mod_${mod.id}_name` as any)}",
           config: ${JSON.stringify(config, null, 2)},
           run: ${functionImplementation}
         }`;
@@ -373,24 +370,6 @@ export default function ModsDashboard() {
       });
     });
   };
-  
-  useEffect(() => {
-    const header = document.querySelector('header');
-    if (header && filterContainerRef.current) {
-        const topValue = header.getBoundingClientRect().height;
-        const observer = new IntersectionObserver(
-            ([e]) => e.target.classList.toggle('is-pinned', e.intersectionRatio < 1),
-            { threshold: [1] }
-        );
-
-        observer.observe(filterContainerRef.current);
-        
-        const root = document.documentElement;
-        root.style.setProperty('--header-height', `${topValue}px`);
-
-        return () => observer.disconnect();
-    }
-  }, [isMounted]);
 
   if (!isMounted) {
     return null;
@@ -409,7 +388,7 @@ export default function ModsDashboard() {
 
 
           <div className="relative">
-            <div ref={filterContainerRef} className="sticky top-[var(--header-height,65px)] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div className="sticky top-[var(--header-height,65px)] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="relative md:col-span-1">
@@ -487,7 +466,7 @@ export default function ModsDashboard() {
                           {activeTags.length > 0 && (
                               <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                           )}
-                          <p className="text-sm text-primary font-semibold">
+                           <p className="text-sm text-primary font-semibold">
                             {enabledModsCount > 0 
                               ? t('enabledMods', { count: enabledModsCount }) 
                               : t('gettingStarted')}
@@ -535,8 +514,8 @@ export default function ModsDashboard() {
           </div>
           
            {enabledModsCount > 0 && (
-              <div className="mt-16 flex justify-center">
-                <Button onClick={handleCopy} size="lg" className="shadow-lg">
+             <div className="sticky bottom-4 flex justify-end pr-4 pointer-events-none">
+                <Button onClick={handleCopy} size="lg" className="shadow-lg pointer-events-auto">
                     {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
                     {t('copyCodeButton', { count: enabledModsCount })}
                 </Button>

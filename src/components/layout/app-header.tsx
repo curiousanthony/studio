@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
-import { Button } from '@/components/ui/button';
 import { AppLogo } from '@/components/common/app-logo';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +18,7 @@ export function AppHeader() {
       if (typeof window !== 'undefined') {
         const header = document.querySelector('header');
         if (header) {
+          // Hide if scrolling down past header height, show if scrolling up
           if (window.scrollY > lastScrollY && window.scrollY > header.offsetHeight) {
             setIsHidden(true);
           } else {
@@ -43,19 +43,19 @@ export function AppHeader() {
       isHidden ? '-translate-y-full' : 'translate-y-0'
     )}>
       <div className="container flex h-16 items-center">
-        <div className="mr-4 flex items-center">
+        <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <AppLogo className="h-6 w-6" />
             <span className="font-bold inline-block font-headline">{t('appName')}</span>
           </Link>
         </div>
 
-        <nav className="flex flex-1 items-center justify-center gap-6 text-sm font-medium">
+        <nav className="flex items-center justify-center gap-6 text-sm font-medium">
           <Link href="#how-to-use" className="transition-colors hover:text-foreground/80 text-foreground/60">{t('navHowToUse')}</Link>
           <Link href="#why-mods" className="transition-colors hover:text-foreground/80 text-foreground/60">{t('navWhyMods')}</Link>
         </nav>
 
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex ml-auto items-center justify-end space-x-4">
           <LocaleSwitcher />
         </div>
       </div>
