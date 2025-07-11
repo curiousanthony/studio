@@ -101,7 +101,7 @@ export default function ModsDashboard() {
   }, [isMounted, mods, searchQuery, activeCategory, activeTags, layout]);
 
   
-  const filteredMods = useMemo(() => {
+ const filteredMods = useMemo(() => {
     return mods
       .filter(mod => {
         if (activeCategory === 'All') return true;
@@ -146,10 +146,14 @@ export default function ModsDashboard() {
         .map(tag => {
             const isSelected = activeTags.includes(tag);
             
-            const modsWithThisTag = currentlyFilteredMods.filter(mod => mod.tags.includes(tag));
-            const count = modsWithThisTag.length;
+            const tempFilteredMods = baseFilteredMods.filter(mod => {
+              const currentTags = isSelected ? activeTags.filter(t => t !== tag) : [...activeTags, tag];
+              return currentTags.every(t => mod.tags.includes(t));
+            });
+
+            const count = tempFilteredMods.length;
            
-            if (!isSelected && count === 0) {
+            if (!isSelected && activeTags.length > 0 && !currentlyFilteredMods.some(m => m.tags.includes(tag))) {
               return null;
             }
 
@@ -161,7 +165,7 @@ export default function ModsDashboard() {
         })
         .filter(Boolean) as { key: string; display: string; count: number }[];
 
-    translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
+    translated.sort((a, b) => a.display.localeCompare(b.display, t.locale as string));
 
     return translated;
   }, [mods, activeCategory, searchQuery, activeTags, t]);
