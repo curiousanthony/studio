@@ -24,7 +24,7 @@ export function AppFooter() {
           {/* <AppLogo className="h-6 w-6" /> */}
           <span className="font-bold inline-block font-headline">{t('appName')}</span>
         </a>
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center text-sm text-muted-foreground max-w-sm">
            <p className="mb-1" dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}} />
            <p>{t('createdBy')}</p>
         </div>
