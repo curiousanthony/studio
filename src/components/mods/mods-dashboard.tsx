@@ -106,20 +106,31 @@ export default function ModsDashboard() {
     }
   }, [isMounted, mods, searchQuery, activeCategory, activeTags, layout]);
 
-  const { allTags, tagCounts } = useMemo(() => {
-    const tags = new Set<string>();
+  const { translatedTags, tagCounts } = useMemo(() => {
+    const tagsSet = new Set<string>();
     const counts: Record<string, number> = {};
+    
     allMods.forEach(mod => {
       mod.tags.forEach(tag => {
-        tags.add(tag);
+        tagsSet.add(tag);
         counts[tag] = (counts[tag] || 0) + 1;
       });
     });
+
+    const translated = Array.from(tagsSet).map(tag => ({
+      key: tag,
+      display: t(`tag_${tag}` as any),
+    }));
+
+    // Sort by translated display name
+    translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
+
     return {
-      allTags: Array.from(tags).sort((a, b) => a.localeCompare(b)),
+      translatedTags: translated,
       tagCounts: counts,
     };
-  }, []);
+  }, [t]);
+
 
   const enabledModsCount = useMemo(() => mods.filter(mod => mod.enabled).length, [mods]);
 
@@ -209,9 +220,9 @@ export default function ModsDashboard() {
     handleCloseConfig();
   };
 
-  const handleTagClick = (tag: string) => {
+  const handleTagClick = (tagKey: string) => {
     setActiveTags(prev =>
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+      prev.includes(tagKey) ? prev.filter(t => t !== tagKey) : [...prev, tagKey]
     );
   };
 
@@ -428,7 +439,7 @@ export default function ModsDashboard() {
                               variant="outline"
                               role="combobox"
                               aria-expanded={tagPopoverOpen}
-                              className="w-[200px] justify-between"
+                              className="w-auto justify-between"
                             >
                               <Filter className="mr-2 h-4 w-4 shrink-0" />
                               {t('tagsLabel')}
@@ -446,14 +457,14 @@ export default function ModsDashboard() {
                               <CommandList>
                                 <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
                                 <CommandGroup>
-                                  {allTags.map((tag) => {
-                                    const isSelected = activeTags.includes(tag);
+                                  {translatedTags.map((tag) => {
+                                    const isSelected = activeTags.includes(tag.key);
                                     return (
                                       <CommandItem
-                                        key={tag}
-                                        value={tag}
+                                        key={tag.key}
+                                        value={tag.display} // Search by display value
                                         onSelect={() => {
-                                          handleTagClick(tag);
+                                          handleTagClick(tag.key);
                                         }}
                                       >
                                         <Check
@@ -462,8 +473,8 @@ export default function ModsDashboard() {
                                             isSelected ? "opacity-100" : "opacity-0"
                                           )}
                                         />
-                                        <span className="flex-grow">{t(`tag_${tag}`)}</span>
-                                        <span className="text-xs text-muted-foreground">{tagCounts[tag]}</span>
+                                        <span className="flex-grow">{tag.display}</span>
+                                        <span className="text-xs text-muted-foreground">{tagCounts[tag.key]}</span>
                                       </CommandItem>
                                     );
                                   })}
