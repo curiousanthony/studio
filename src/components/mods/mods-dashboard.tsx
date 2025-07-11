@@ -23,7 +23,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from '@/hooks/use-translations';
-import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -130,8 +129,7 @@ export default function ModsDashboard() {
       });
   }, [mods, activeCategory, activeTags, searchQuery, t]);
 
-  const availableTags = useMemo(() => {
-    // First, filter mods by category and search, as these are independent of tag selection.
+ const availableTags = useMemo(() => {
     const baseFilteredMods = mods.filter(mod => 
         (activeCategory === 'All' || mod.category === activeCategory) &&
         (searchQuery.trim() === '' || 
@@ -139,7 +137,6 @@ export default function ModsDashboard() {
          t(`mod_${mod.id}_description`).toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    // These are the mods that match the currently active tags.
     const currentlyFilteredMods = baseFilteredMods.filter(mod => 
         activeTags.every(tag => mod.tags.includes(tag))
     );
@@ -155,10 +152,8 @@ export default function ModsDashboard() {
 
     for (const tag of allPossibleTags) {
         if (activeTags.includes(tag)) {
-            // If the tag is already selected, its count is the total number of currently visible mods.
             tagCounts[tag] = currentlyFilteredMods.length;
         } else {
-            // If the tag is not selected, count how many of the currently visible mods ALSO have this tag.
             tagCounts[tag] = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
         }
     }
@@ -169,10 +164,8 @@ export default function ModsDashboard() {
             display: t(`tag_${tag}` as any),
             count: tagCounts[tag],
         }))
-        // Hide tags that would result in 0 mods if selected
         .filter(tag => tag.count > 0);
 
-    // Sort by translated display name
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
 
     return translated;
@@ -204,7 +197,6 @@ export default function ModsDashboard() {
     const modToToggle = mods.find(m => m.id === modId);
     if (!modToToggle) return;
 
-    // If user is trying to enable a mod with invalid config
     if (!modToToggle.enabled && !isModConfigValid(modToToggle)) {
       toast({
         title: t('modCantBeEnabledTitle'),
@@ -258,7 +250,6 @@ export default function ModsDashboard() {
     const jsMods = enabledMods.filter(mod => mod.modType === 'javascript');
     const cssMods = enabledMods.filter(mod => mod.modType === 'css');
     
-    // --- Link Generation ---
     const fontMod = enabledMods.find(m => m.id === 'global-font-customizer');
     const selectedFont = fontMod?.configOptions?.find(o => o.key === 'fontFamily')?.value;
     const needsGoogleIcons = enabledMods.some(mod => mod.requiresGoogleIcons);
@@ -277,7 +268,6 @@ export default function ModsDashboard() {
     }
     const linksBlock = links.join('\n');
 
-    // --- CSS Generation ---
     const cssString = cssMods.length > 0 ?
       cssMods.map(mod => {
         let modCss = mod.cssString || '';
@@ -288,7 +278,6 @@ export default function ModsDashboard() {
           });
         }
         
-        // Process conditionals based on config values
         modCss = modCss.replace(
             /\/\*\[--if ([a-zA-Z0-9_]+)--\]\*\/([\s\S]*?)\/\*\[--endif \1--\]\*\//g,
             (match, key, content) => {
@@ -298,7 +287,6 @@ export default function ModsDashboard() {
             }
         );
 
-        // Replace placeholders
         modCss = modCss.replace(/\{\{([a-zA-Z0-9_]+)\}\}/g, (_, key) => config[key.trim()] || '');
         
         if (modCss.trim() === '') return '';
@@ -309,7 +297,6 @@ export default function ModsDashboard() {
     
     const styleBlock = cssString ? `<style>\n${cssString}\n</style>` : '';
 
-    // --- JS Generation ---
     const scriptBlock = jsMods.length > 0 ? (() => {
       const modObjects = jsMods.map(mod => {
         const config: Record<string, string> = {};
@@ -397,11 +384,8 @@ export default function ModsDashboard() {
   return (
     <TooltipProvider>
       <div className="container mx-auto px-4 flex flex-col min-h-full">
-        <div className="flex-grow">
-          <header className="text-center pt-8 mb-6">
-              <div className="flex justify-end mb-4 -mt-4">
-                <LocaleSwitcher />
-              </div>
+        <div className="flex-grow pt-8">
+            <header className="text-center mb-8">
               <h1 className="font-headline text-4xl font-bold mb-1">{t('pageTitle')}</h1>
               <p className="text-md text-muted-foreground max-w-2xl mx-auto">
                   {t('pageDescription')}
@@ -412,25 +396,10 @@ export default function ModsDashboard() {
                     : t('gettingStarted')}
               </p>
           </header>
-          
-          <Accordion type="single" collapsible className="w-full mb-8">
-              <AccordionItem value="item-1">
-              <AccordionTrigger className="text-lg font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
-              <AccordionContent>
-                  <Card>
-                      <CardContent className="pt-6 text-sm space-y-4">
-                          <p>{t('step1')}</p>
-                          <p>{t('step2')}</p>
-                          <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
-                          <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
-                      </CardContent>
-                  </Card>
-              </AccordionContent>
-              </AccordionItem>
-          </Accordion>
+
 
           <div className="relative">
-            <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div className="sticky top-[65px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="relative md:col-span-1">
@@ -548,19 +517,39 @@ export default function ModsDashboard() {
             {filteredMods.length === 0 && (
                 <p className="text-center col-span-full text-muted-foreground mt-8">{t('noModsFound')}</p>
             )}
+          </div>
+          
+          <div className="my-16 space-y-16">
+            <section id="how-to-use">
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1">
+                    <AccordionTrigger className="text-2xl font-headline hover:no-underline">{t('howToUseTitle')}</AccordionTrigger>
+                    <AccordionContent>
+                        <Card>
+                            <CardContent className="pt-6 text-sm space-y-4">
+                                <p>{t('step1')}</p>
+                                <p>{t('step2')}</p>
+                                <p dangerouslySetInnerHTML={{ __html: t('step3') }} />
+                                <p dangerouslySetInnerHTML={{ __html: t('step4') }} />
+                            </CardContent>
+                        </Card>
+                    </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </section>
 
+            <section id="why-mods">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('whyTitle')}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-2">
+                        <p className="text-muted-foreground">{t('whyContent')}</p>
+                    </CardContent>
+                </Card>
+            </section>
           </div>
 
-          <section className="my-16">
-              <Card>
-                  <CardHeader>
-                      <CardTitle className="font-headline">{t('whyTitle')}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-2">
-                      <p className="text-muted-foreground">{t('whyContent')}</p>
-                  </CardContent>
-              </Card>
-          </section>
 
           <CodeOutput generatedCode={generatedCode} />
         </div>
@@ -588,10 +577,6 @@ export default function ModsDashboard() {
             </Button>
           </div>
         )}
-
-        <footer className="text-center p-4 text-muted-foreground text-sm">
-          <p dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}}/>
-        </footer>
       </div>
     </TooltipProvider>
   );
