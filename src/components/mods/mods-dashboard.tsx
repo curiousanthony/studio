@@ -394,8 +394,8 @@ export default function ModsDashboard() {
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
-                    <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
-                        <div className="relative md:col-span-1 w-full">
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-grow w-full">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="search"
@@ -405,7 +405,7 @@ export default function ModsDashboard() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         </div>
-                         <div className="w-full md:col-span-1">
+                         <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="grid w-full grid-cols-3">
                                 <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('all')}</TabsTrigger>
