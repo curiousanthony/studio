@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -354,7 +353,7 @@ export default function ModsDashboard() {
   
   // Run on Turbo navigation
   document.addEventListener("turbo:load", executeMods);
-<\/script>`;
+</script>`;
     })() : '';
 
     return [linksBlock, styleBlock, scriptBlock].filter(Boolean).join('\n\n');
@@ -395,112 +394,110 @@ export default function ModsDashboard() {
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col gap-4">
-                  <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-4">
-                      <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1 min-w-0">
-                          <div className="relative w-full md:w-80">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              type="search"
-                              placeholder={t('searchPlaceholder')}
-                              className="w-full pl-10"
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                          </div>
-                          <div className="w-full md:w-auto">
-                             <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                                <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto w-full md:w-auto">
-                                  <TabsTrigger
-                                    value="All"
-                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-r-none md:rounded-l-md rounded-t-md rounded-b-none"
-                                  >
-                                    {t('all')}
-                                  </TabsTrigger>
-                                  <TabsTrigger
-                                    value="Appearance"
-                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
-                                  >
-                                    {t('category_appearance')}
-                                  </TabsTrigger>
-                                  <TabsTrigger
-                                    value="Functionality"
-                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-l-none md:rounded-r-md rounded-b-md rounded-t-none"
-                                  >
-                                    {t('category_functionality')}
-                                  </TabsTrigger>
-                                </TabsList>
-                              </Tabs>
-                          </div>
+                  <div className="flex flex-col md:flex-row md:items-center gap-4">
+                      <div className="relative w-full md:w-80 flex-shrink-0">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="search"
+                          placeholder={t('searchPlaceholder')}
+                          className="w-full pl-10"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                       </div>
-                      <div className="flex flex-col items-start gap-y-2 md:flex-row md:items-center md:justify-end gap-x-4">
-                        <div className="flex gap-2 items-center">
-                          <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={tagPopoverOpen}
-                                className="w-auto justify-between"
+                      <div className="w-full md:w-auto">
+                         <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
+                            <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto w-full md:w-auto">
+                              <TabsTrigger
+                                value="All"
+                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-r-none md:rounded-l-md rounded-t-md rounded-b-none"
                               >
-                                <Filter className="mr-2 h-4 w-4 shrink-0" />
-                                {t('tagsLabel')}
-                                 {activeTags.length > 0 && (
-                                  <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                      {activeTags.length}
-                                  </div>
-                                )}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Command>
-                                <CommandInput placeholder={t('filterByTag')} />
-                                <CommandList>
-                                  <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
-                                  <CommandGroup>
-                                    {availableTags
-                                      .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
-                                      .map((tag) => {
-                                        const isSelected = activeTags.includes(tag.key);
-                                        return (
-                                          <CommandItem
-                                            key={tag.key}
-                                            value={tag.key}
-                                            onSelect={() => handleTagClick(tag.key)}
-                                          >
-                                            <Check
-                                              className={cn(
-                                                "mr-2 h-4 w-4",
-                                                isSelected ? "opacity-100" : "opacity-0"
-                                              )}
-                                            />
-                                            <span className="flex-grow">{tag.display}</span>
-                                            <span className="text-xs text-muted-foreground">{tag.count}</span>
-                                          </CommandItem>
-                                        );
-                                      })}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                            {activeTags.length > 0 && (
-                                <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
-                            )}
-                        </div>
-                        {!isMobile && (
-                          <div className="flex items-center gap-2">
-                              <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                                <LayoutGrid className="mr-2 h-4 w-4" />
-                                {t('layoutGrid')}
-                              </Button>
-                              <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                                <List className="mr-2 h-4 w-4" />
-                                {t('layoutList')}
-                              </Button>
-                          </div>
-                        )}
+                                {t('all')}
+                              </TabsTrigger>
+                              <TabsTrigger
+                                value="Appearance"
+                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                              >
+                                {t('category_appearance')}
+                              </TabsTrigger>
+                              <TabsTrigger
+                                value="Functionality"
+                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-l-none md:rounded-r-md rounded-b-md rounded-t-none"
+                              >
+                                {t('category_functionality')}
+                              </TabsTrigger>
+                            </TabsList>
+                          </Tabs>
                       </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex gap-2 items-center">
+                      <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={tagPopoverOpen}
+                            className="w-auto justify-between"
+                          >
+                            <Filter className="mr-2 h-4 w-4 shrink-0" />
+                            {t('tagsLabel')}
+                             {activeTags.length > 0 && (
+                              <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                  {activeTags.length}
+                              </div>
+                            )}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Command>
+                            <CommandInput placeholder={t('filterByTag')} />
+                            <CommandList>
+                              <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
+                              <CommandGroup>
+                                {availableTags
+                                  .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
+                                  .map((tag) => {
+                                    const isSelected = activeTags.includes(tag.key);
+                                    return (
+                                      <CommandItem
+                                        key={tag.key}
+                                        value={tag.key}
+                                        onSelect={() => handleTagClick(tag.key)}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            isSelected ? "opacity-100" : "opacity-0"
+                                          )}
+                                        />
+                                        <span className="flex-grow">{tag.display}</span>
+                                        <span className="text-xs text-muted-foreground">{tag.count}</span>
+                                      </CommandItem>
+                                    );
+                                  })}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                        {activeTags.length > 0 && (
+                            <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
+                        )}
+                    </div>
+                    {!isMobile && (
+                      <div className="flex items-center gap-2">
+                          <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                            <LayoutGrid className="mr-2 h-4 w-4" />
+                            {t('layoutGrid')}
+                          </Button>
+                          <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                            <List className="mr-2 h-4 w-4" />
+                            {t('layoutList')}
+                          </Button>
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center gap-x-2">
                       <p className="text-sm text-primary font-semibold">
@@ -605,3 +602,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
