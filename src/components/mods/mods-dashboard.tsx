@@ -405,12 +405,12 @@ export default function ModsDashboard() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         </div>
-                         <div className="w-full md:w-auto">
+                        <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="p-0 md:p-1 md:h-10 bg-transparent md:bg-muted flex flex-col md:grid md:grid-cols-3">
-                                <TabsTrigger value="All" className="w-full md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-b-none border-b md:border-b-0">All</TabsTrigger>
+                                <TabsTrigger value="All" className="w-full rounded-b-none border-b md:border-b-0 md:rounded-r-none md:rounded-l-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">All</TabsTrigger>
                                 <TabsTrigger value="Appearance" className="w-full rounded-none border-b md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="w-full md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-t-none">{t('category_functionality')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full rounded-t-none md:rounded-l-none md:rounded-r-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
