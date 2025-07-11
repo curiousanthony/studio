@@ -440,12 +440,7 @@ export default function ModsDashboard() {
                                   </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent className="w-64" align="start">
-                                  <Command onValueChange={(value) => {
-                                    if (value) {
-                                        handleTagClick(value);
-                                        setTagDropdownOpen(false);
-                                    }
-                                  }}>
+                                  <Command>
                                       <CommandInput placeholder={t('filterByTag')} />
                                       <CommandList>
                                           <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
@@ -456,6 +451,9 @@ export default function ModsDashboard() {
                                                       <CommandItem
                                                           key={tag}
                                                           value={tag}
+                                                          onSelect={() => {
+                                                            handleTagClick(tag);
+                                                          }}
                                                       >
                                                           <div className={cn(
                                                               "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
@@ -570,3 +568,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
