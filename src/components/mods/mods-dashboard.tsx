@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import { ClipboardCopy, Check, LayoutGrid, List, AlertCircle, ChevronDown, Filter } from 'lucide-react';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import {
   Accordion,
   AccordionContent,
@@ -20,13 +21,12 @@ import {
 } from "@/components/ui/accordion";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/card";
 import { useTranslations } from '@/hooks/use-translations';
 import LocaleSwitcher from '@/components/common/locale-switcher';
 import { cn } from '@/lib/utils';
@@ -56,6 +56,7 @@ export default function ModsDashboard() {
   const { t } = useTranslations();
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
+  const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -111,10 +112,19 @@ export default function ModsDashboard() {
     }
   }, [isMounted, mods, searchQuery, activeCategory, activeTags, layout]);
 
-  const allTags = useMemo(() => {
+  const { allTags, tagCounts } = useMemo(() => {
     const tags = new Set<string>();
-    allMods.forEach(mod => mod.tags.forEach(tag => tags.add(tag)));
-    return Array.from(tags).sort();
+    const counts: Record<string, number> = {};
+    allMods.forEach(mod => {
+      mod.tags.forEach(tag => {
+        tags.add(tag);
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
+    });
+    return {
+      allTags: Array.from(tags).sort((a, b) => a.localeCompare(b)),
+      tagCounts: counts,
+    };
   }, []);
 
   const enabledModsCount = useMemo(() => mods.filter(mod => mod.enabled).length, [mods]);
@@ -418,7 +428,7 @@ export default function ModsDashboard() {
                     </div>
                     <div className="mt-4 flex items-center justify-between">
                       <div className="flex flex-wrap gap-2 items-center">
-                          <DropdownMenu>
+                          <DropdownMenu open={tagDropdownOpen} onOpenChange={setTagDropdownOpen}>
                               <DropdownMenuTrigger asChild>
                                   <Button variant="outline">
                                       <Filter className="mr-2 h-4 w-4" />
@@ -431,19 +441,35 @@ export default function ModsDashboard() {
                                       <ChevronDown className="ml-2 h-4 w-4" />
                                   </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="w-56">
-                                  <DropdownMenuLabel>{t('filterByTag')}</DropdownMenuLabel>
-                                  <DropdownMenuSeparator />
-                                  {allTags.map(tag => (
-                                      <DropdownMenuCheckboxItem
-                                          key={tag}
-                                          checked={activeTags.includes(tag)}
-                                          onCheckedChange={() => handleTagClick(tag)}
-                                          onSelect={(e) => e.preventDefault()}
-                                      >
-                                          {t(`tag_${tag}`)}
-                                      </DropdownMenuCheckboxItem>
-                                  ))}
+                              <DropdownMenuContent className="w-64" align="start">
+                                  <Command>
+                                      <CommandInput placeholder={t('filterByTag')} />
+                                      <CommandList>
+                                          <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
+                                          <CommandGroup>
+                                              {allTags.map(tag => {
+                                                  const isSelected = activeTags.includes(tag);
+                                                  return (
+                                                      <CommandItem
+                                                          key={tag}
+                                                          onSelect={() => handleTagClick(tag)}
+                                                      >
+                                                          <div className={cn(
+                                                              "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                              isSelected
+                                                                  ? "bg-primary text-primary-foreground"
+                                                                  : "opacity-50 [&_svg]:invisible"
+                                                          )}>
+                                                              <Check className={cn("h-4 w-4")} />
+                                                          </div>
+                                                          <span className="flex-grow">{t(`tag_${tag}`)}</span>
+                                                          <span className="text-xs text-muted-foreground">{tagCounts[tag]}</span>
+                                                      </CommandItem>
+                                                  )
+                                              })}
+                                          </CommandGroup>
+                                      </CommandList>
+                                  </Command>
                               </DropdownMenuContent>
                           </DropdownMenu>
 
