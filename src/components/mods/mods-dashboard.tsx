@@ -407,10 +407,10 @@ export default function ModsDashboard() {
                         </div>
                          <div className="w-full md:w-auto">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList className="grid w-full grid-cols-3">
-                                <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('all')}</TabsTrigger>
-                                <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('category_appearance')}</TabsTrigger>
-                                <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-normal h-auto px-1 sm:px-3">{t('category_functionality')}</TabsTrigger>
+                              <TabsList className="w-full h-auto flex flex-col p-0 md:p-1 md:h-10 md:grid md:grid-cols-3 bg-transparent md:bg-muted">
+                                <TabsTrigger value="All" className="w-full rounded-none border-b md:rounded-sm md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
+                                <TabsTrigger value="Appearance" className="w-full rounded-none border-b md:rounded-sm md:border-b-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
+                                <TabsTrigger value="Functionality" className="w-full rounded-none md:rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
                               </TabsList>
                             </Tabs>
                         </div>
@@ -585,3 +585,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
