@@ -24,7 +24,7 @@
   "whyContent": "The SchoolMaker team needs to focus on features that make sense for a majority of customers. SchoolMaker Mods allows you to add features or customize the look of your school to your specific needs, without writing code. This tool simplifies the process of enabling, disabling, and configuring different features without having to manually edit code.",
   "generatedCodeTitle": "Generated Code",
   "generatedCodeDescription": "This is the generated code for all enabled mods, ready to be copied.",
-  "copyCodeButton": "{count} mod enabled | {count} mods enabled",
+  "copyCode": "Copy code",
   "copiedToClipboard": "Copied to clipboard!",
   "copiedToClipboardDescription": "You can now paste the code into your school.",
   "copyFailed": "Failed to copy",

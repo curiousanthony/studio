@@ -24,7 +24,7 @@
   "whyContent": "L'équipe de SchoolMaker doit se concentrer sur des fonctionnalités qui ont du sens pour une majorité de clients. SchoolMaker Mods vous permet d'ajouter des fonctionnalités ou de personnaliser l'apparence de votre école en fonction de vos besoins spécifiques, sans écrire de code. Cet outil simplifie le processus d'activation, de désactivation et de configuration de différentes fonctionnalités sans avoir à éditer manuellement le code.",
   "generatedCodeTitle": "Code Généré",
   "generatedCodeDescription": "Voici le code généré pour tous les mods activés, prêt à être copié.",
-  "copyCodeButton": "{count} mod activé | {count} mods activés",
+  "copyCode": "Copier le code",
   "copiedToClipboard": "Copié dans le presse-papiers !",
   "copiedToClipboardDescription": "Vous pouvez maintenant coller le code dans votre école.",
   "copyFailed": "La copie a échoué",
@@ -142,5 +142,5 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Paiement",
   "tag_pricing": "Tarifs",
-  "tag_checkout": "Validation"
+  "tag_checkout": "Paiement"
 }

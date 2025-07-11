@@ -144,22 +144,22 @@ export default function ModsDashboard() {
 
     const translated = Array.from(allPossibleTags)
         .map(tag => {
-            const count = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
             const isSelected = activeTags.includes(tag);
             
-            // If the tag is not selected, the count is how many mods would be added to the current selection
-            // If the tag is selected, we want to know how many mods are currently being shown
-            const displayCount = isSelected 
-                ? currentlyFilteredMods.length 
-                : currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
+            const modsWithThisTag = currentlyFilteredMods.filter(mod => mod.tags.includes(tag));
+            const count = modsWithThisTag.length;
+           
+            if (!isSelected && count === 0) {
+              return null;
+            }
 
             return {
                 key: tag,
                 display: t(`tag_${tag}` as any),
-                count: displayCount,
+                count,
             };
         })
-        .filter(tag => tag.count > 0);
+        .filter(Boolean) as { key: string; display: string; count: number }[];
 
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
 
@@ -389,7 +389,7 @@ export default function ModsDashboard() {
 
 
           <div className="relative">
-            <div className="sticky z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="relative md:col-span-1">
@@ -404,7 +404,7 @@ export default function ModsDashboard() {
                         </div>
                         <div className="flex items-center gap-2 md:col-span-1 justify-center md:justify-start">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList>
+                              <TabsList className="grid w-full grid-cols-3 md:w-auto">
                                 <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
                                 <TabsTrigger value="Appearance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_appearance')}</TabsTrigger>
                                 <TabsTrigger value="Functionality" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('category_functionality')}</TabsTrigger>
@@ -443,10 +443,9 @@ export default function ModsDashboard() {
                                     return (
                                       <CommandItem
                                         key={tag.key}
-                                        value={tag.key}
-                                        onSelect={(currentValue) => {
-                                          handleTagClick(currentValue);
-                                          setTagPopoverOpen(false);
+                                        value={tag.display}
+                                        onSelect={() => {
+                                          handleTagClick(tag.key);
                                         }}
                                       >
                                         <Check
@@ -519,7 +518,7 @@ export default function ModsDashboard() {
              <div className="fixed bottom-4 right-4 z-50">
                 <Button onClick={handleCopy} size="lg" className="shadow-lg">
                     {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
-                    {t('copyCodeButton', { count: enabledModsCount })}
+                    {t('copyCode')} ({t('enabledMods', { count: enabledModsCount })})
                 </Button>
               </div>
             )}
