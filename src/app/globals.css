@@ -81,4 +81,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  header.translate-y-0 ~ main div.sticky {
+    top: var(--header-height, 65px) !important;
+  }
+  header.-translate-y-full ~ main div.sticky {
+    top: 0 !important;
+  }
 }

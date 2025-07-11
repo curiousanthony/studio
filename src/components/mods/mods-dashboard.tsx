@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import type { Mod } from '@/types';
 import { allMods } from '@/lib/mods';
 import ModCard from './mod-card';
@@ -11,7 +11,7 @@ import PreviewModal from './preview-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search, Github } from 'lucide-react';
+import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -45,6 +45,7 @@ export default function ModsDashboard() {
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
   const [tagPopoverOpen, setTagPopoverOpen] = useState(false);
+  const filterContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -138,7 +139,7 @@ export default function ModsDashboard() {
     const tagCounts: Record<string, number> = {};
     const allPossibleTags = new Set<string>();
 
-    currentlyFilteredMods.forEach(mod => {
+    baseFilteredMods.forEach(mod => {
         mod.tags.forEach(tag => {
             allPossibleTags.add(tag);
         });
@@ -146,8 +147,10 @@ export default function ModsDashboard() {
 
     for (const tag of allPossibleTags) {
         if (activeTags.includes(tag)) {
+            // If tag is active, count is the total number of mods matching all active filters
             tagCounts[tag] = currentlyFilteredMods.length;
         } else {
+            // If tag is not active, count how many *more* mods would match if we added this tag
             tagCounts[tag] = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
         }
     }
@@ -158,7 +161,7 @@ export default function ModsDashboard() {
             display: t(`tag_${tag}` as any),
             count: tagCounts[tag],
         }))
-        .filter(tag => tag.count > 0);
+        .filter(tag => tag.count > 0); // Only show tags that would result in at least one mod
 
     translated.sort((a, b) => a.display.localeCompare(b.display, t.locale));
 
@@ -371,6 +374,24 @@ export default function ModsDashboard() {
     });
   };
   
+  useEffect(() => {
+    const header = document.querySelector('header');
+    if (header && filterContainerRef.current) {
+        const topValue = header.getBoundingClientRect().height;
+        const observer = new IntersectionObserver(
+            ([e]) => e.target.classList.toggle('is-pinned', e.intersectionRatio < 1),
+            { threshold: [1] }
+        );
+
+        observer.observe(filterContainerRef.current);
+        
+        const root = document.documentElement;
+        root.style.setProperty('--header-height', `${topValue}px`);
+
+        return () => observer.disconnect();
+    }
+  }, [isMounted]);
+
   if (!isMounted) {
     return null;
   }
@@ -384,16 +405,11 @@ export default function ModsDashboard() {
               <p className="text-md text-muted-foreground max-w-2xl mx-auto">
                   {t('pageDescription')}
               </p>
-              <p className="text-base text-primary font-semibold mt-2">
-                  {enabledModsCount > 0 
-                    ? t('enabledMods', { count: enabledModsCount }) 
-                    : t('gettingStarted')}
-              </p>
           </header>
 
 
           <div className="relative">
-            <div className="sticky top-[65px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
+            <div ref={filterContainerRef} className="sticky top-[var(--header-height,65px)] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div className="relative md:col-span-1">
@@ -471,6 +487,11 @@ export default function ModsDashboard() {
                           {activeTags.length > 0 && (
                               <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                           )}
+                          <p className="text-sm text-primary font-semibold">
+                            {enabledModsCount > 0 
+                              ? t('enabledMods', { count: enabledModsCount }) 
+                              : t('gettingStarted')}
+                          </p>
                       </div>
 
                       {!isMobile && (
@@ -513,7 +534,17 @@ export default function ModsDashboard() {
             )}
           </div>
           
+           {enabledModsCount > 0 && (
+              <div className="mt-16 flex justify-center">
+                <Button onClick={handleCopy} size="lg" className="shadow-lg">
+                    {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
+                    {t('copyCodeButton', { count: enabledModsCount })}
+                </Button>
+              </div>
+            )}
+
           <div className="my-16 space-y-16">
+            <CodeOutput generatedCode={generatedCode} />
             <section id="how-to-use">
                  <Card>
                     <CardHeader>
@@ -521,19 +552,19 @@ export default function ModsDashboard() {
                     </CardHeader>
                     <CardContent className="pt-2 text-base space-y-4">
                         <div className="flex items-start gap-4">
-                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">1</div>
+                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg shrink-0">1</div>
                             <p className="flex-1 pt-1">{t('step1')}</p>
                         </div>
                         <div className="flex items-start gap-4">
-                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">2</div>
+                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg shrink-0">2</div>
                             <p className="flex-1 pt-1">{t('step2')}</p>
                         </div>
                          <div className="flex items-start gap-4">
-                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">3</div>
+                             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg shrink-0">3</div>
                             <p className="flex-1 pt-1" dangerouslySetInnerHTML={{ __html: t('step3') }} />
                         </div>
                          <div className="flex items-start gap-4">
-                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg">4</div>
+                            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-primary-foreground font-bold text-lg shrink-0">4</div>
                             <p className="flex-1 pt-1" dangerouslySetInnerHTML={{ __html: t('step4') }} />
                         </div>
                     </CardContent>
@@ -551,9 +582,6 @@ export default function ModsDashboard() {
                 </Card>
             </section>
           </div>
-
-
-          <CodeOutput generatedCode={generatedCode} />
         </div>
         
         {selectedMod && (
@@ -569,15 +597,6 @@ export default function ModsDashboard() {
             mod={previewingMod}
             onClose={() => setPreviewingMod(null)}
           />
-        )}
-
-        {enabledModsCount > 0 && (
-          <div className="fixed bottom-6 right-6 z-50">
-            <Button onClick={handleCopy} size="lg" className="shadow-2xl">
-                {copied ? <Check className="mr-2 h-5 w-5" /> : <ClipboardCopy className="mr-2 h-5 w-5" />}
-                {t('copyCodeButton', { count: enabledModsCount })}
-            </Button>
-          </div>
         )}
       </div>
     </TooltipProvider>

@@ -8,10 +8,10 @@
   "navHowToUse": "Comment utiliser",
   "navWhyMods": "Pourquoi des Mods ?",
   "howToUseTitle": "Comment utiliser cet outil",
-  "step1": "Étape 1 : Activez et configurez les mods que vous souhaitez utiliser dans la liste ci-dessous.",
-  "step2": "Étape 2 : Cliquez sur le bouton flottant \"Copier le code\" en bas à droite pour copier le script généré.",
-  "step3": "Étape 3 : Dans votre tableau de bord d'administration SchoolMaker, allez dans <strong>Paramètres</strong> &gt; <strong>Code Personnalisé</strong>.",
-  "step4": "Étape 4 : Collez le code copié dans la zone de texte intitulée <strong>&lt;head&gt; Custom Code</strong> et enregistrez vos modifications. Les mods seront actifs sur votre site.",
+  "step1": "Activez et configurez les mods que vous souhaitez utiliser dans la liste ci-dessous.",
+  "step2": "Cliquez sur le bouton \"Copier le code\" pour copier le script généré.",
+  "step3": "Dans votre tableau de bord d'administration SchoolMaker, allez dans <strong>Paramètres</strong> &gt; <strong>Code Personnalisé</strong>.",
+  "step4": "Collez le code copié dans la zone de texte intitulée <strong>&lt;head&gt; Custom Code</strong> et enregistrez vos modifications. Les mods seront actifs sur votre site.",
   "searchPlaceholder": "Rechercher des mods...",
   "categoryLabel": "Catégorie :",
   "all": "Tous",
@@ -142,5 +142,5 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Paiement",
   "tag_pricing": "Tarifs",
-  "tag_checkout": "Paiement"
+  "tag_checkout": "Validation"
 }

@@ -9,7 +9,7 @@
   "navWhyMods": "Why Mods?",
   "howToUseTitle": "How to Use This Tool",
   "step1": "Enable and configure the mods you want to use from the list below.",
-  "step2": "Click the floating \"Copy Code\" button in the bottom right corner to copy the generated script to your clipboard.",
+  "step2": "Click the \"Copy Code\" button to copy the generated script to your clipboard.",
   "step3": "In your SchoolMaker admin dashboard, navigate to <strong>Settings</strong> &gt; <strong>Custom Code</strong>.",
   "step4": "Paste the copied code into the text area labeled <strong>&lt;head&gt; Custom Code</strong> and save your changes. The mods will be active on your live school site.",
   "searchPlaceholder": "Search mods...",
