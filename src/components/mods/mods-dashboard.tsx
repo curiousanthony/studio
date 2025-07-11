@@ -394,45 +394,45 @@ export default function ModsDashboard() {
 
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
-                <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex flex-col md:flex-row md:items-center gap-4 flex-grow">
-                        <div className="relative w-full md:w-80">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            type="search"
-                            placeholder={t('searchPlaceholder')}
-                            className="w-full pl-10"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                          />
-                        </div>
-                        <div className="w-full md:w-auto">
-                           <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                              <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto md:h-10 w-full md:w-auto">
-                                <TabsTrigger
-                                  value="All"
-                                  className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-t-md rounded-b-none md:rounded-r-none md:rounded-l-md"
-                                >
-                                  {t('all')}
-                                </TabsTrigger>
-                                <TabsTrigger
-                                  value="Appearance"
-                                  className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
-                                >
-                                  {t('category_appearance')}
-                                </TabsTrigger>
-                                <TabsTrigger
-                                  value="Functionality"
-                                  className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-b-md rounded-t-none md:rounded-l-none md:rounded-r-md"
-                                >
-                                  {t('category_functionality')}
-                                </TabsTrigger>
-                              </TabsList>
-                            </Tabs>
-                        </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex flex-col items-start md:flex-row md:items-center gap-4">
+                <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-4">
+                      <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1 min-w-0">
+                          <div className="relative w-full md:w-80">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              type="search"
+                              placeholder={t('searchPlaceholder')}
+                              className="w-full pl-10"
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                          </div>
+                          <div className="w-full md:w-auto">
+                             <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
+                                <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto w-full md:w-auto">
+                                  <TabsTrigger
+                                    value="All"
+                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-r-none md:rounded-l-md rounded-t-md rounded-b-none"
+                                  >
+                                    {t('all')}
+                                  </TabsTrigger>
+                                  <TabsTrigger
+                                    value="Appearance"
+                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                                  >
+                                    {t('category_appearance')}
+                                  </TabsTrigger>
+                                  <TabsTrigger
+                                    value="Functionality"
+                                    className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-l-none md:rounded-r-md rounded-b-md rounded-t-none"
+                                  >
+                                    {t('category_functionality')}
+                                  </TabsTrigger>
+                                </TabsList>
+                              </Tabs>
+                          </div>
+                      </div>
+                      <div className="flex flex-col items-start gap-y-2 md:flex-row md:items-center md:justify-end gap-x-4">
                         <div className="flex gap-2 items-center">
                           <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
                             <PopoverTrigger asChild>
@@ -488,29 +488,28 @@ export default function ModsDashboard() {
                                 <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                             )}
                         </div>
-                         <div className="flex items-center gap-x-2">
-                           <p className="text-sm text-primary font-semibold">
-                            {enabledModsCount > 0 
-                              ? t('enabledMods', { count: enabledModsCount }) 
-                              : t('gettingStarted')}
-                          </p>
-                           <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
-                         </div>
+                        {!isMobile && (
+                          <div className="flex items-center gap-2">
+                              <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
+                                <LayoutGrid className="mr-2 h-4 w-4" />
+                                {t('layoutGrid')}
+                              </Button>
+                              <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
+                                <List className="mr-2 h-4 w-4" />
+                                {t('layoutList')}
+                              </Button>
+                          </div>
+                        )}
                       </div>
-
-                      {!isMobile && (
-                        <div className="flex items-center gap-2">
-                            <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
-                              <LayoutGrid className="mr-2 h-4 w-4" />
-                              {t('layoutGrid')}
-                            </Button>
-                            <Button variant={layout === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('list')}>
-                              <List className="mr-2 h-4 w-4" />
-                              {t('layoutList')}
-                            </Button>
-                        </div>
-                      )}
-                    </div>
+                  </div>
+                  <div className="flex items-center gap-x-2">
+                      <p className="text-sm text-primary font-semibold">
+                      {enabledModsCount > 0 
+                          ? t('enabledMods', { count: enabledModsCount }) 
+                          : t('gettingStarted')}
+                      </p>
+                      <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                  </div>
                 </div>
             </div>
 
@@ -606,7 +605,3 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
-
-    
-
-    
