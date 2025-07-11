@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { Mod } from '@/types';
 import { allMods } from '@/lib/mods';
 import ModCard from './mod-card';
@@ -108,8 +108,8 @@ export default function ModsDashboard() {
         return mod.category === activeCategory;
       })
       .filter(mod => {
-        if (searchQuery.trim() === '') return true;
         const lowerCaseQuery = searchQuery.toLowerCase();
+        if (lowerCaseQuery.trim() === '') return true;
         const name = t(`mod_${mod.id}_name` as any).toLowerCase();
         const description = t(`mod_${mod.id}_description` as any).toLowerCase();
         return (
@@ -165,7 +165,7 @@ export default function ModsDashboard() {
         })
         .filter(Boolean) as { key: string; display: string; count: number }[];
 
-    translated.sort((a, b) => a.display.localeCompare(b.display, t.locale as string));
+    translated.sort((a, b) => a.display.localeCompare(b.display, undefined, { sensitivity: 'base' }));
 
     return translated;
   }, [mods, activeCategory, searchQuery, activeTags, t]);
@@ -391,7 +391,6 @@ export default function ModsDashboard() {
               </p>
           </header>
 
-
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm">
@@ -406,7 +405,7 @@ export default function ModsDashboard() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         </div>
-                        <div className="flex items-center gap-2 md:col-span-1 justify-center md:justify-start">
+                        <div className="flex items-center gap-2 md:col-span-1 md:justify-start">
                            <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
                               <TabsList className="grid w-full grid-cols-3 md:w-auto">
                                 <TabsTrigger value="All" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{t('all')}</TabsTrigger>
@@ -436,33 +435,33 @@ export default function ModsDashboard() {
                               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
+                          <PopoverContent className="w-auto p-0">
                             <Command>
                               <CommandInput placeholder={t('filterByTag')} />
                               <CommandList>
                                 <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
                                 <CommandGroup>
-                                  {availableTags.map((tag) => {
-                                    const isSelected = activeTags.includes(tag.key);
-                                    return (
-                                      <CommandItem
-                                        key={tag.key}
-                                        value={tag.display}
-                                        onSelect={() => {
-                                          handleTagClick(tag.key);
-                                        }}
-                                      >
-                                        <Check
-                                          className={cn(
-                                            "mr-2 h-4 w-4",
-                                            isSelected ? "opacity-100" : "opacity-0"
-                                          )}
-                                        />
-                                        <span className="flex-grow">{tag.display}</span>
-                                        <span className="text-xs text-muted-foreground">{tag.count}</span>
-                                      </CommandItem>
-                                    );
-                                  })}
+                                  {availableTags
+                                    .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
+                                    .map((tag) => {
+                                      const isSelected = activeTags.includes(tag.key);
+                                      return (
+                                        <CommandItem
+                                          key={tag.key}
+                                          value={tag.key}
+                                          onSelect={() => handleTagClick(tag.key)}
+                                        >
+                                          <Check
+                                            className={cn(
+                                              "mr-2 h-4 w-4",
+                                              isSelected ? "opacity-100" : "opacity-0"
+                                            )}
+                                          />
+                                          <span className="flex-grow">{tag.display}</span>
+                                          <span className="text-xs text-muted-foreground">{tag.count}</span>
+                                        </CommandItem>
+                                      );
+                                    })}
                                 </CommandGroup>
                               </CommandList>
                             </Command>
