@@ -20,18 +20,22 @@ export function AppFooter() {
   return (
     <footer className="border-t">
       <div className="container flex h-24 items-center justify-between">
-        <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
-          {/* <AppLogo className="h-6 w-6" /> */}
-          <span className="font-bold inline-block font-headline">{t('appName')}</span>
-        </a>
-        <div className="text-center text-sm text-muted-foreground max-w-sm">
+        <div className="flex-1">
+          <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
+            {/* <AppLogo className="h-6 w-6" /> */}
+            <span className="font-bold inline-block font-headline">{t('appName')}</span>
+          </a>
+        </div>
+        <div className="flex-initial text-center text-sm text-muted-foreground max-w-sm">
            <p className="mb-1" dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}} />
            <p>{t('createdBy')}</p>
         </div>
-        <a href="https://github.com/curiousanthony/SchoolMaker-Mods" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-muted-foreground underline-offset-4 hover:underline">
-          <Github className="h-4 w-4" />
-          {t('contributeOnGithub')}
-        </a>
+        <div className="flex-1 flex justify-end">
+          <a href="https://github.com/curiousanthony/SchoolMaker-Mods" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-muted-foreground underline-offset-4 hover:underline">
+            <Github className="h-4 w-4" />
+            {t('contributeOnGithub')}
+          </a>
+        </div>
       </div>
     </footer>
   );
