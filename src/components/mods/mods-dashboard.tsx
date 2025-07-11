@@ -450,7 +450,10 @@ export default function ModsDashboard() {
                                                   return (
                                                       <CommandItem
                                                           key={tag}
-                                                          onSelect={() => handleTagClick(tag)}
+                                                          onSelect={() => {
+                                                            handleTagClick(tag)
+                                                            setTagDropdownOpen(false)
+                                                          }}
                                                       >
                                                           <div className={cn(
                                                               "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
@@ -565,5 +568,3 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
-
-    
