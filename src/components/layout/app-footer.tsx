@@ -21,7 +21,7 @@ export function AppFooter() {
     <footer className="border-t">
       <div className="container flex h-24 items-center justify-between">
         <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
-          <AppLogo className="h-6 w-6" />
+          {/* <AppLogo className="h-6 w-6" /> */}
           <span className="font-bold inline-block font-headline">{t('appName')}</span>
         </a>
         <div className="text-center text-sm text-muted-foreground">

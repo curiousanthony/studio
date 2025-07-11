@@ -17,7 +17,7 @@ export function AppHeader() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <AppLogo className="h-6 w-6" />
+            {/* <AppLogo className="h-6 w-6" /> */}
             <span className="font-bold inline-block font-headline">{t('appName')}</span>
           </Link>
         </div>
