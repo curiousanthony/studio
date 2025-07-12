@@ -9,7 +9,33 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
+  configOptions: [
+    {
+      key: 'textColor',
+      label: 'Text Color',
+      type: 'color',
+      value: '#ffffff',
+      placeholder: '#ffffff',
+    },
+    {
+      key: 'fontWeight',
+      label: 'Font Weight',
+      type: 'select',
+      value: 'bold',
+      options: ['normal', 'bold', '500', '600', '700'],
+    },
+    {
+      key: 'animationDuration',
+      label: 'Animation Duration (s)',
+      type: 'number',
+      value: '1.2',
+      placeholder: '1.2',
+    }
+  ],
   functionString: `(config) => {
+    const duration = parseFloat(config.animationDuration) || 1.2;
+    const submitDelay = Math.max(0, (duration * 1000) - 400);
+
     // --- START: Style Injection ---
     const styles = \`
       @keyframes xpFloatUp {
@@ -33,12 +59,12 @@ export const mod: Mod = {
         transform: translateX(-50%);
         padding: 4px 8px;
         border-radius: 6px;
-        background-color: var(--color-primary-500);
+        background-color: var(--color-primary-500, #3B82F6);
         font-size: .9rem;
-        font-weight: bold;
-        color: white;
+        font-weight: \${config.fontWeight || 'bold'};
+        color: \${config.textColor || '#ffffff'};
         pointer-events: none;
-        animation: xpFloatUp 1.2s ease-out forwards;
+        animation: xpFloatUp \${duration}s ease-out forwards;
         z-index: 9999;
         white-space: nowrap;
       }
@@ -74,21 +100,19 @@ export const mod: Mod = {
             // This is the programmatic click, let it go through
             return;
         }
+        
+        const xp = getXPValue();
+        
+        if (xp === null) {
+            // If no XP value, just submit immediately without animation.
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
 
         isSubmitting = true;
         publishBtn.disabled = true;
-
-        const xp = getXPValue();
-
-        if (xp === null) {
-            // If no XP value, just submit immediately.
-            isSubmitting = true;
-            publishBtn.click();
-            return;
-        }
 
         const xpFloat = document.createElement("div");
         xpFloat.className = "xp-bonus-float";
@@ -103,12 +127,12 @@ export const mod: Mod = {
           publishBtn.disabled = false;
           // The isSubmitting flag will be true, so this click will be allowed
           publishBtn.click();
-        }, 800);
+        }, submitDelay);
 
         // Clean up the element after animation completes
         setTimeout(() => {
           xpFloat.remove();
-        }, 1200);
+        }, duration * 1000);
 
       }, true);
     }
