@@ -10,7 +10,7 @@ export const mod: Mod = {
   published: true,
   modType: 'javascript',
   functionString: `(config) => {
-    // --- START: Stlye Injection ---
+    // --- START: Style Injection ---
     const styles = \`
       @keyframes xpFloatUp {
         0% {
@@ -38,7 +38,7 @@ export const mod: Mod = {
         font-weight: bold;
         color: white;
         pointer-events: none;
-        animation: xpFloatUp 1s ease-out forwards;
+        animation: xpFloatUp 1.2s ease-out forwards;
         z-index: 9999;
         white-space: nowrap;
       }
@@ -69,25 +69,25 @@ export const mod: Mod = {
     if (publishBtn) {
       let isSubmitting = false;
 
-      // We use a mousedown listener to be more reliable
-      publishBtn.addEventListener("mousedown", function (e) {
-        if (isSubmitting || qs('.xp-bonus-float', publishBtn)) return;
+      publishBtn.addEventListener("click", function (e) {
+        if (isSubmitting) {
+            // This is the programmatic click, let it go through
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
 
         isSubmitting = true;
-        
-        // Disable the button to prevent multiple submissions
         publishBtn.disabled = true;
 
         const xp = getXPValue();
 
-        // If we can't get an XP value, submit the form normally.
         if (xp === null) {
-           const form = publishBtn.closest('form');
-           if (form) {
-              publishBtn.disabled = false;
-              form.submit();
-           }
-           return;
+            // If no XP value, just submit immediately.
+            isSubmitting = true;
+            publishBtn.click();
+            return;
         }
 
         const xpFloat = document.createElement("div");
@@ -98,22 +98,16 @@ export const mod: Mod = {
         publishBtn.style.position = "relative";
         publishBtn.appendChild(xpFloat);
 
-        // Submit the form after the animation is mostly visible
-        // This makes the UI feel responsive.
+        // Submit the form by re-clicking after a delay
         setTimeout(() => {
-          const form = publishBtn.closest('form');
-          if (form) {
-            // Re-enable button before submission if needed by the backend
-            publishBtn.disabled = false;
-            form.submit();
-          }
-        }, 400);
+          publishBtn.disabled = false;
+          // The isSubmitting flag will be true, so this click will be allowed
+          publishBtn.click();
+        }, 800);
 
-        // Clean up the element and state after animation completes
+        // Clean up the element after animation completes
         setTimeout(() => {
           xpFloat.remove();
-          isSubmitting = false;
-          publishBtn.disabled = false;
         }, 1200);
 
       }, true);
