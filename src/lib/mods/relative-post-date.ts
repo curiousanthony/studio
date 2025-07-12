@@ -35,14 +35,27 @@ export const mod: Mod = {
       };
       const parts = dateString.split(' ');
       if (parts.length !== 3) {
-        log("Invalid date format:", dateString);
+        log("Invalid date format - expected 3 parts, got:", parts.length);
         return null;
       }
+
       const day = parseInt(parts[0], 10);
-      const month = months[parts[1].toLowerCase()];
+      const monthName = parts[1].toLowerCase();
       const year = parseInt(parts[2], 10);
-      if (isNaN(day) || month === undefined || isNaN(year)) {
-        log("Invalid date values:", dateString);
+
+      if (isNaN(day) || day < 1 || day > 31) {
+        log("Invalid day value:", parts[0]);
+        return null;
+      }
+
+      const month = months[monthName];
+      if (month === undefined) {
+        log("Invalid month name:", parts[1]);
+        return null;
+      }
+
+      if (isNaN(year) || year < 1900 || year > 3000) {
+        log("Invalid year value:", parts[2]);
         return null;
       }
       const date = new Date(year, month, day);
