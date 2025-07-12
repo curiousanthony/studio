@@ -431,6 +431,7 @@ export default function ModsDashboard() {
                       </div>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex gap-4 items-center">
                     <div className="flex gap-2 items-center">
                       <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
                         <PopoverTrigger asChild>
@@ -486,6 +487,15 @@ export default function ModsDashboard() {
                             <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                         )}
                     </div>
+                    <div className="flex items-center gap-x-2">
+                        <p className="text-sm text-primary font-semibold">
+                        {enabledModsCount > 0 
+                            ? t('enabledMods', { count: enabledModsCount }) 
+                            : t('gettingStarted')}
+                        </p>
+                        <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                    </div>
+                  </div>
                     {!isMobile && (
                       <div className="flex items-center gap-2">
                           <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
@@ -498,14 +508,7 @@ export default function ModsDashboard() {
                           </Button>
                       </div>
                     )}
-                  </div>
-                  <div className="flex items-center gap-x-2">
-                      <p className="text-sm text-primary font-semibold">
-                      {enabledModsCount > 0 
-                          ? t('enabledMods', { count: enabledModsCount }) 
-                          : t('gettingStarted')}
-                      </p>
-                      <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                    
                   </div>
                 </div>
             </div>
