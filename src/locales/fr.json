@@ -124,6 +124,8 @@
   "mod_relative-post-date_description": "Remplace la date de publication absolue dans la communauté par une date relative (par ex. « la semaine dernière ») dans la langue de l'utilisateur.",
   "mod_centered-desktop-navigation_name": "Liens de navigation centrés",
   "mod_centered-desktop-navigation_description": "Centre les liens de navigation dans la barre de navigation sur ordinateur.",
+  "mod_community-xp-animation_name": "Animation d'XP de Communauté",
+  "mod_community-xp-animation_description": "Ajoute une animation flottante '+N XP' après la publication d'un message, donnant aux membres un petit shot de dopamine et un retour visuel qui incite à la participation.",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -149,5 +151,6 @@
   "tag_pricing": "Tarifs",
   "tag_checkout": "Achat",
   "tag_date": "Date",
-  "tag_time": "Temps"
+  "tag_time": "Temps",
+  "tag_animation": "Animation"
 }

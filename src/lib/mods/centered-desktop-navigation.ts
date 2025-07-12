@@ -11,11 +11,6 @@ export const mod: Mod = {
   modType: 'css',
   cssString: `
 /* --- Mod: Center Desktop Navigation Links --- */
-.desktop-navigation-bar > nav > div > div:first-child {
-  justify-content: center !important;
-  flex-grow: 1 !important;
-}
-
 .desktop-navigation-bar > nav > div > div:first-child > div:first-child {
   flex-grow: 0 !important;
 }

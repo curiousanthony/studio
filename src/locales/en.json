@@ -124,6 +124,8 @@
   "mod_relative-post-date_description": "Replaces the absolute post date in the community with a relative time (e.g., 'last week') in the user's language.",
   "mod_centered-desktop-navigation_name": "Centered Desktop Navigation",
   "mod_centered-desktop-navigation_description": "Centers the navigation links in the desktop navigation bar.",
+  "mod_community-xp-animation_name": "Community XP Animation",
+  "mod_community-xp-animation_description": "Adds a dynamic '+N XP' floating animation after publishing a post, giving members a small dopamine hit and visual feedback that incentivizes participation.",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -149,5 +151,6 @@
   "tag_pricing": "Pricing",
   "tag_checkout": "Checkout",
   "tag_date": "Date",
-  "tag_time": "Time"
+  "tag_time": "Time",
+  "tag_animation": "Animation"
 }

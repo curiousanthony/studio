@@ -13,6 +13,7 @@ import { mod as communityLevelBadgeMod } from './community-level-badge';
 import { mod as horizontalPaymentPlansMod } from './horizontal-payment-plans';
 import { mod as relativePostDateMod } from './relative-post-date';
 import { mod as centeredDesktopNavigationMod } from './centered-desktop-navigation';
+import { mod as communityXpAnimationMod } from './community-xp-animation';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -29,6 +30,7 @@ const allModsRaw: Mod[] = [
   horizontalPaymentPlansMod,
   relativePostDateMod,
   centeredDesktopNavigationMod,
+  communityXpAnimationMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`
