@@ -45,7 +45,7 @@ export const mod: Mod = {
         return null;
       }
       
-      const date = new Date(Date.UTC(year, month, day));
+      const date = new Date(year, month, day);
       return date;
     }
 
