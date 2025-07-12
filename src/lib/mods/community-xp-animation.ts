@@ -53,16 +53,16 @@ export const mod: Mod = {
 
     function getXPValue() {
       const xpElement = qs('a[data-original-title="Comment gagner des points?"]');
-      if (!xpElement) return 3; // fallback
+      if (!xpElement) return null;
       
       const content = xpElement.getAttribute("data-content");
-      if (!content) return 3;
+      if (!content) return null;
 
-      const match = content.match(/Créer un post<\\/span>:\\s*(\\d+)\\s*points/);
+      const match = content.match(/Créer un post<\\\\/span>:\\\\s*(\\\\d+)\\\\s*points/);
       if (match && match[1]) {
         return parseInt(match[1], 10);
       } else {
-        return 3; // fallback
+        return null;
       }
     }
 
@@ -79,6 +79,16 @@ export const mod: Mod = {
         publishBtn.disabled = true;
 
         const xp = getXPValue();
+
+        // If we can't get an XP value, submit the form normally.
+        if (xp === null) {
+           const form = publishBtn.closest('form');
+           if (form) {
+              publishBtn.disabled = false;
+              form.submit();
+           }
+           return;
+        }
 
         const xpFloat = document.createElement("div");
         xpFloat.className = "xp-bonus-float";
