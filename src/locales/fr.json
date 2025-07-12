@@ -38,7 +38,7 @@
   "previewDescription": "Un aperçu Avant/Après de ce que fait ce mod.",
   "previewBefore": "Avant",
   "previewAfter": "Après",
-  "footerDisclaimer": "Ce projet est indépendant et n'est pas affilié à <a href='https://schoolmaker.com/' target='_blank' rel='noopener noreferrer' className='underline hover:text-primary'>SchoolMaker</a>.",
+  "footerDisclaimer": "Ce projet est indépendant et n'est pas affilié à <a href='https://schoolmaker.com/' target='_blank' rel='noopener noreferrer' class='underline hover:text-primary'>SchoolMaker</a>.",
   "contributeOnGithub": "Contribuer sur GitHub",
   "createdBy": "Créé par Anthony Russo",
   "layout": "Affichage :",
@@ -120,6 +120,8 @@
   "mod_community-level-badge_config_description": "Pour chaque niveau, spécifiez un titre, une icône et une couleur. L'icône doit être un nom d'icône valide de <a href='https://fontawesome.com/v5/search?o=r&s=solid' target='_blank' class='underline'>Font Awesome V5</a> (par ex. 'seedling', 'star', 'user-graduate').",
   "mod_horizontal-payment-plans_name": "Plans de paiement horizontaux",
   "mod_horizontal-payment-plans_description": "Change la sélection du plan de paiement en un tableau de prix horizontal et rend le bouton \"Suivant\" pleine largeur.",
+  "mod_relative-post-date_name": "Date de publication relative",
+  "mod_relative-post-date_description": "Remplace la date de publication absolue dans la communauté par une date relative (par ex. « la semaine dernière ») dans la langue de l'utilisateur.",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -143,5 +145,7 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Paiement",
   "tag_pricing": "Tarifs",
-  "tag_checkout": "Achat"
+  "tag_checkout": "Achat",
+  "tag_date": "Date",
+  "tag_time": "Temps"
 }

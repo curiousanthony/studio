@@ -4,7 +4,7 @@
   "pageTitle": "Explore Mods",
   "pageDescription": "Select the Appearance & Functionality Mods to apply to your SchoolMaker School and enhance your Clients' User Experience!",
   "enabledMods": "{count} mod enabled | {count} mods enabled",
-  "showingMods": "Showing {count}",
+  "showingMods": "Showing {count} mod | Showing {count} mods",
   "gettingStarted": "Select your first mod to get started!",
   "navHowToUse": "How to use",
   "navWhyMods": "Why Mods?",
@@ -120,6 +120,8 @@
   "mod_community-level-badge_config_description": "For each level, specify a title, an icon, and a color. The icon should be a valid <a href='https://fontawesome.com/v5/search?o=r&s=solid' target='_blank' class='underline'>Font Awesome V5 icon name</a> (e.g., 'award', 'star', 'user-graduate').",
   "mod_horizontal-payment-plans_name": "Horizontal Payment Plans",
   "mod_horizontal-payment-plans_description": "Changes the payment plan selection to a horizontal pricing table and makes the \"Next\" button full width.",
+  "mod_relative-post-date_name": "Relative Post Date",
+  "mod_relative-post-date_description": "Replaces the absolute post date in the community with a relative time (e.g., 'last week') in the user's language.",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -143,5 +145,7 @@
   "tag_gamification": "Gamification",
   "tag_payment": "Payment",
   "tag_pricing": "Pricing",
-  "tag_checkout": "Checkout"
+  "tag_checkout": "Checkout",
+  "tag_date": "Date",
+  "tag_time": "Time"
 }

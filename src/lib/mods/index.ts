@@ -11,6 +11,7 @@ import { mod as sidebarToggleCustomizerMod } from './sidebar-toggle-customizer';
 import { mod as globalFontCustomizerMod } from './global-font-customizer';
 import { mod as communityLevelBadgeMod } from './community-level-badge';
 import { mod as horizontalPaymentPlansMod } from './horizontal-payment-plans';
+import { mod as relativePostDateMod } from './relative-post-date';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -25,6 +26,7 @@ const allModsRaw: Mod[] = [
   globalFontCustomizerMod,
   communityLevelBadgeMod,
   horizontalPaymentPlansMod,
+  relativePostDateMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`
