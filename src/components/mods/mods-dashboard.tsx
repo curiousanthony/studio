@@ -545,7 +545,7 @@ export default function ModsDashboard() {
 
           <div className="my-16 space-y-16">
             <CodeOutput generatedCode={generatedCode} />
-            <section id="how-to-use">
+            <section id="how-to-use" className="scroll-mt-20">
                  <Card>
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl">{t('howToUseTitle')}</CardTitle>
@@ -571,7 +571,7 @@ export default function ModsDashboard() {
                 </Card>
             </section>
 
-            <section id="why-mods">
+            <section id="why-mods" className="scroll-mt-20">
                 <Card>
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl">{t('whyTitle')}</CardTitle>

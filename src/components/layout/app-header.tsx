@@ -12,7 +12,7 @@ export function AppHeader() {
   
   return (
     <header className={cn(
-      "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm"
+      "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm flex justify-center"
     )}>
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">

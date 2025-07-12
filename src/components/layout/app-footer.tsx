@@ -18,7 +18,7 @@ export function AppFooter() {
   };
 
   return (
-    <footer className="border-t">
+    <footer className="border-t flex justify-center">
       <div className="container flex flex-col md:flex-row h-auto md:h-24 items-center justify-between py-6 md:py-0 gap-6 md:gap-0">
         <div className="w-full md:w-auto md:flex-1 flex items-center justify-center md:justify-start">
            <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
@@ -28,8 +28,8 @@ export function AppFooter() {
         </div>
         
         <div className="flex-initial text-center text-sm text-muted-foreground order-last md:order-none max-w-md">
-           <p className="mb-1" dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}} />
            <p>{t('createdBy')}</p>
+           <p className="mb-1" dangerouslySetInnerHTML={{ __html: t('footerDisclaimer')}} />
         </div>
 
         <div className="w-full md:w-auto md:flex-1 flex items-center justify-center md:justify-end">
