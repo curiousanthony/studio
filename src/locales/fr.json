@@ -122,6 +122,8 @@
   "mod_horizontal-payment-plans_description": "Change la sélection du plan de paiement en un tableau de prix horizontal et rend le bouton \"Suivant\" pleine largeur.",
   "mod_relative-post-date_name": "Date de publication relative",
   "mod_relative-post-date_description": "Remplace la date de publication absolue dans la communauté par une date relative (par ex. « la semaine dernière ») dans la langue de l'utilisateur.",
+  "mod_centered-desktop-navigation_name": "Liens de navigation centrés",
+  "mod_centered-desktop-navigation_description": "Centre les liens de navigation dans la barre de navigation sur ordinateur.",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",

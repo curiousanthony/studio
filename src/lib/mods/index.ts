@@ -12,6 +12,7 @@ import { mod as globalFontCustomizerMod } from './global-font-customizer';
 import { mod as communityLevelBadgeMod } from './community-level-badge';
 import { mod as horizontalPaymentPlansMod } from './horizontal-payment-plans';
 import { mod as relativePostDateMod } from './relative-post-date';
+import { mod as centeredDesktopNavigationMod } from './centered-desktop-navigation';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -27,6 +28,7 @@ const allModsRaw: Mod[] = [
   communityLevelBadgeMod,
   horizontalPaymentPlansMod,
   relativePostDateMod,
+  centeredDesktopNavigationMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`
