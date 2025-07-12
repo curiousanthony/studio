@@ -13,9 +13,9 @@ export const mod: Mod = {
     {
       key: 'textColor',
       label: 'Text Color',
-      type: 'color',
-      value: '#ffffff',
-      placeholder: '#ffffff',
+      type: 'select',
+      value: 'primary',
+      options: ['primary', 'blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'],
     },
     {
       key: 'fontWeight',
@@ -37,6 +37,10 @@ export const mod: Mod = {
     const submitDelay = Math.max(0, (duration * 1000) - 400);
 
     // --- START: Style Injection ---
+    const colorValue = config.textColor === 'primary' 
+      ? 'var(--color-primary-500, #3B82F6)' 
+      : \`var(--color-\${config.textColor}-500)\`;
+
     const styles = \`
       @keyframes xpFloatUp {
         0% {
@@ -59,10 +63,10 @@ export const mod: Mod = {
         transform: translateX(-50%);
         padding: 4px 8px;
         border-radius: 6px;
-        background-color: var(--color-primary-500, #3B82F6);
+        background-color: \${colorValue};
         font-size: .9rem;
         font-weight: \${config.fontWeight || 'bold'};
-        color: \${config.textColor || '#ffffff'};
+        color: #ffffff;
         pointer-events: none;
         animation: xpFloatUp \${duration}s ease-out forwards;
         z-index: 9999;
@@ -87,16 +91,22 @@ export const mod: Mod = {
       const match = content.match(/Créer un post<\\\\/span>:\\\\s*(\\\\d+)\\\\s*points/);
       if (match && match[1]) {
         return parseInt(match[1], 10);
-      } else {
-        return null;
       }
+      
+      // Fallback for different languages or HTML structures
+      const genericMatch = content.match(/post[^:]*:\\\\s*(\\\\d+)/i);
+      if (genericMatch && genericMatch[1]) {
+        return parseInt(genericMatch[1], 10);
+      }
+      
+      return null;
     }
 
     if (publishBtn) {
-      let isSubmitting = false;
-
+      const form = publishBtn.closest('form');
+      
       publishBtn.addEventListener("click", function (e) {
-        if (isSubmitting) {
+        if (publishBtn.dataset.xpAnimating === 'true') {
             // This is the programmatic click, let it go through
             return;
         }
@@ -111,27 +121,32 @@ export const mod: Mod = {
         e.preventDefault();
         e.stopPropagation();
 
-        isSubmitting = true;
+        if (publishBtn.dataset.xpAnimating === 'true') return;
+
+        publishBtn.dataset.xpAnimating = 'true';
         publishBtn.disabled = true;
 
         const xpFloat = document.createElement("div");
         xpFloat.className = "xp-bonus-float";
         xpFloat.textContent = \`+\${xp} XP ✨\`;
 
-        // Make button relative to position the animation
         publishBtn.style.position = "relative";
         publishBtn.appendChild(xpFloat);
 
-        // Submit the form by re-clicking after a delay
         setTimeout(() => {
-          publishBtn.disabled = false;
-          // The isSubmitting flag will be true, so this click will be allowed
-          publishBtn.click();
+          if (form) {
+            form.submit();
+          } else {
+             // Fallback if form isn't found, re-enable button and allow normal flow
+             publishBtn.disabled = false;
+             delete publishBtn.dataset.xpAnimating;
+          }
         }, submitDelay);
 
-        // Clean up the element after animation completes
         setTimeout(() => {
           xpFloat.remove();
+          publishBtn.disabled = false;
+          delete publishBtn.dataset.xpAnimating;
         }, duration * 1000);
 
       }, true);
