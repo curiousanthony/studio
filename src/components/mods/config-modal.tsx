@@ -182,6 +182,7 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
         case 'text':
         case 'color':
         case 'select':
+        case 'color_select':
         default:
           let stringSchema = z.string();
           if (option.required) {
@@ -331,6 +332,28 @@ export default function ConfigModal({ mod, onSave, onClose }: ConfigModalProps) 
                                         />
                                     </div>
                                 );
+                              case 'color_select':
+                                  return (
+                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder={t('levelColorPlaceholder')} />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {option.options?.map(color => (
+                                                <SelectItem key={color} value={color}>
+                                                    <div className="flex items-center gap-2">
+                                                        {color !== 'primary' && (
+                                                            <div className={`w-3 h-3 rounded-full bg-${color}-500`}></div>
+                                                        )}
+                                                        {t(`color_${color}`)}
+                                                    </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                  );
                               case 'select':
                                 return (
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>

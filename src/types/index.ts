@@ -1,7 +1,7 @@
 export interface ConfigOption {
   key: string;
   label: string;
-  type: 'text' | 'select' | 'number' | 'color' | 'checkbox' | 'level_config';
+  type: 'text' | 'select' | 'number' | 'color' | 'checkbox' | 'level_config' | 'color_select';
   placeholder?: string;
   options?: string[];
   value: string;

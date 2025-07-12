@@ -13,7 +13,7 @@ export const mod: Mod = {
     {
       key: 'textColor',
       label: 'Text Color',
-      type: 'select',
+      type: 'color_select',
       value: 'primary',
       options: ['primary', 'blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'gray'],
     },
@@ -121,8 +121,6 @@ export const mod: Mod = {
         e.preventDefault();
         e.stopPropagation();
 
-        if (publishBtn.dataset.xpAnimating === 'true') return;
-
         publishBtn.dataset.xpAnimating = 'true';
         publishBtn.disabled = true;
 
@@ -135,9 +133,11 @@ export const mod: Mod = {
 
         setTimeout(() => {
           if (form) {
-            form.submit();
+            // Re-enable and click programmatically
+            publishBtn.disabled = false;
+            publishBtn.click();
           } else {
-             // Fallback if form isn't found, re-enable button and allow normal flow
+             // Fallback if form isn't found
              publishBtn.disabled = false;
              delete publishBtn.dataset.xpAnimating;
           }
@@ -145,8 +145,11 @@ export const mod: Mod = {
 
         setTimeout(() => {
           xpFloat.remove();
-          publishBtn.disabled = false;
-          delete publishBtn.dataset.xpAnimating;
+          // Final cleanup
+          if (publishBtn.dataset.xpAnimating) {
+            publishBtn.disabled = false;
+            delete publishBtn.dataset.xpAnimating;
+          }
         }, duration * 1000);
 
       }, true);
