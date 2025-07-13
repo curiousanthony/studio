@@ -9,6 +9,8 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
+  mediaUrl: '/images/mods/community-xp-animation-after.webm',
+  previewEnabled: true,
   configOptions: [
     {
       key: 'textColor',
