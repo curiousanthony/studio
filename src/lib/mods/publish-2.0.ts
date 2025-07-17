@@ -9,12 +9,11 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
-  mediaUrl: '/images/mods/publish-2.0-after.webm',
   previewEnabled: true,
   configOptions: [
     {
       key: 'titlePlaceholder',
-      label: 'Title Placeholder Greeting',
+      label: 'Title Placeholder Greeting (before time of day and first name)',
       type: 'text',
       value: '👋 What do you want to share',
       placeholder: '👋 What do you want to share',
@@ -177,7 +176,10 @@ export const mod: Mod = {
     
     const contentAreaEl = qs("#poll-form", formEl);
     const spacePickerRowEl = qs("div:has(> #forums_topic_space_id)", formEl);
-    if (!contentAreaEl || !spacePickerRowEl) return;
+    if (!contentAreaEl || !spacePickerRowEl) {
+      console.warn('Publish 2.0 Mod: Required DOM elements not found');
+      return;
+    }
     
     // Hide elements initially
     contentAreaEl.style.display = "none";
