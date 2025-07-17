@@ -14,6 +14,7 @@ import { mod as horizontalPaymentPlansMod } from './horizontal-payment-plans';
 import { mod as relativePostDateMod } from './relative-post-date';
 import { mod as centeredDesktopNavigationMod } from './centered-desktop-navigation';
 import { mod as communityXpAnimationMod } from './community-xp-animation';
+import { mod as publish20Mod } from './publish-2.0';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -31,6 +32,7 @@ const allModsRaw: Mod[] = [
   relativePostDateMod,
   centeredDesktopNavigationMod,
   communityXpAnimationMod,
+  publish20Mod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

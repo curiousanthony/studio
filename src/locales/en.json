@@ -129,6 +129,10 @@
   "mod_community-xp-animation_config_textColor_label": "Background Color",
   "mod_community-xp-animation_config_fontWeight_label": "Font Weight",
   "mod_community-xp-animation_config_animationDuration_label": "Animation Duration (s)",
+  "mod_publish-2.0_name": "Publish 2.0",
+  "mod_publish-2.0_description": "Revamps the UI for publishing a community post. It hides the full editor until the user clicks the title field, which features an engaging, dynamic placeholder to encourage posting.",
+  "mod_publish-2.0_config_titlePlaceholder_label": "Title Placeholder Greeting",
+  "mod_publish-2.0_config_contentPlaceholder_label": "Content Placeholder",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
   "tag_ui": "UI",
@@ -155,5 +159,6 @@
   "tag_checkout": "Checkout",
   "tag_date": "Date",
   "tag_time": "Time",
-  "tag_animation": "Animation"
+  "tag_animation": "Animation",
+  "tag_form": "Form"
 }

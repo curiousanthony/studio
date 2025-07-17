@@ -129,6 +129,10 @@
   "mod_community-xp-animation_config_textColor_label": "Couleur de fond",
   "mod_community-xp-animation_config_fontWeight_label": "Graisse de la police",
   "mod_community-xp-animation_config_animationDuration_label": "Durée de l'animation (s)",
+  "mod_publish-2.0_name": "Publier 2.0",
+  "mod_publish-2.0_description": "Modernise l'interface de publication d'un message dans la communauté. L'éditeur complet est masqué jusqu'à ce que l'utilisateur clique sur le champ du titre, qui comporte un texte d'accroche dynamique pour encourager la publication.",
+  "mod_publish-2.0_config_titlePlaceholder_label": "Phrase d'accroche pour le titre",
+  "mod_publish-2.0_config_contentPlaceholder_label": "Texte pour le contenu",
   "category_appearance": "Apparence",
   "category_functionality": "Fonctionnalité",
   "tag_ui": "UI",
@@ -155,5 +159,6 @@
   "tag_checkout": "Achat",
   "tag_date": "Date",
   "tag_time": "Temps",
-  "tag_animation": "Animation"
+  "tag_animation": "Animation",
+  "tag_form": "Formulaire"
 }
