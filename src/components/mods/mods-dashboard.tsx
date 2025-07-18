@@ -132,6 +132,7 @@ export default function ModsDashboard() {
   }, [mods]);
 
  const availableTags = useMemo(() => {
+    // Start with mods filtered by category and search query.
     const baseFilteredMods = mods.filter(mod => 
         (activeCategory === 'All' || mod.category === activeCategory) &&
         (searchQuery.trim() === '' || 
@@ -139,36 +140,35 @@ export default function ModsDashboard() {
          t(`mod_${mod.id}_description` as any).toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    const currentlyFilteredMods = baseFilteredMods.filter(mod => 
-        activeTags.every(tag => mod.tags.includes(tag))
-    );
-
+    // Get all unique tags from this base-filtered list.
     const allPossibleTags = new Set<string>();
     baseFilteredMods.forEach(mod => {
-        mod.tags.forEach(tag => {
-            allPossibleTags.add(tag);
-        });
+        mod.tags.forEach(tag => allPossibleTags.add(tag));
     });
 
     const translated = Array.from(allPossibleTags)
         .map(tag => {
             const isSelected = activeTags.includes(tag);
             
-            const tempFilteredMods = baseFilteredMods.filter(mod => {
-              const currentTags = isSelected ? activeTags.filter(t => t !== tag) : [...activeTags, tag];
-              return currentTags.every(t => mod.tags.includes(t));
-            });
+            // This is the list of mods that match the currently active tags.
+            const currentlyFilteredMods = baseFilteredMods.filter(mod => 
+                activeTags.every(t => mod.tags.includes(t))
+            );
 
-            const count = tempFilteredMods.length;
-           
-            if (!isSelected && activeTags.length > 0 && !currentlyFilteredMods.some(m => m.tags.includes(tag))) {
+            // Calculate the count based on the *currently filtered* list.
+            const count = currentlyFilteredMods.filter(mod => mod.tags.includes(tag)).length;
+            
+            // If the tag is not selected and no mods in the current view have it, don't show it.
+            if (!isSelected && count === 0 && activeTags.length > 0) {
               return null;
             }
 
             return {
                 key: tag,
                 display: t(`tag_${tag}` as any),
-                count,
+                // If the tag is selected, show the count of mods with that tag.
+                // If not selected, show how many would be added if it were selected.
+                count: isSelected ? count : currentlyFilteredMods.filter(m => m.tags.includes(tag)).length,
             };
         })
         .filter(Boolean) as { key: string; display: string; count: number }[];
@@ -503,6 +503,8 @@ export default function ModsDashboard() {
                                       key={tag.key}
                                       value={tag.key}
                                       onSelect={() => handleTagClick(tag.key)}
+                                      disabled={tag.count === 0 && !activeTags.includes(tag.key)}
+                                      className={cn(tag.count === 0 && !activeTags.includes(tag.key) && "text-muted-foreground/50")}
                                     >
                                       <Check
                                         className={cn(
@@ -647,3 +649,5 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
+
+    
