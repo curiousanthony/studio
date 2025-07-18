@@ -1,3 +1,4 @@
+
 import type { Mod } from '@/types';
 
 export const mod: Mod = {
@@ -7,9 +8,10 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['community', 'ux', 'ui', 'form'],
   enabled: false,
-  published: false,
+  published: true,
   modType: 'javascript',
   previewEnabled: true,
+  mediaUrl: '/images/mods/publish-2.0-after.webm',
   configOptions: [
     {
       key: 'titlePlaceholder',
@@ -143,7 +145,10 @@ export const mod: Mod = {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const nameEl = doc.querySelector("div.text-center > p:first-child");
-        if (!nameEl) return "";
+        if (!nameEl) {
+           console.error("Publish 2.0 Mod Error: Name element not found after fetching user profile!");
+           return "";
+        }
         
         const firstName = nameEl.textContent.trim().split(" ")[0];
         window.ModData.firstName = firstName;
@@ -175,7 +180,7 @@ export const mod: Mod = {
     if (!titleInputEl) return;
     
     const contentAreaEl = qs("#poll-form", formEl);
-    const spacePickerRowEl = qs("div:has(> #forums_topic_space_id)", formEl);
+    const spacePickerRowEl = qs("div:first-child", formEl);
     if (!contentAreaEl || !spacePickerRowEl) {
       console.warn('Publish 2.0 Mod: Required DOM elements not found');
       return;
