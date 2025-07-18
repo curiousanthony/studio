@@ -172,6 +172,7 @@ export default function ModsDashboard() {
 
 
   const enabledModsCount = useMemo(() => mods.filter(mod => mod.enabled).length, [mods]);
+  const allModsEnabled = useMemo(() => mods.length > 0 && enabledModsCount === mods.length, [mods, enabledModsCount]);
 
   const isModConfigValid = (mod: Mod): boolean => {
     if (!mod.configOptions) {
@@ -240,6 +241,18 @@ export default function ModsDashboard() {
     setActiveTags(prev =>
       prev.includes(tagKey) ? prev.filter(t => t !== tagKey) : [...prev, tagKey]
     );
+  };
+
+  const handleToggleAll = () => {
+    const enableAll = !allModsEnabled;
+    const modsToUpdate = mods.map(mod => {
+      if (enableAll && !isModConfigValid(mod)) {
+        // Don't enable invalid mods
+        return mod;
+      }
+      return { ...mod, enabled: enableAll };
+    });
+    setMods(modsToUpdate);
   };
 
   const generatedCode = useMemo(() => {
@@ -432,6 +445,9 @@ export default function ModsDashboard() {
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex gap-4 items-center">
+                     <Button variant="outline" onClick={handleToggleAll}>
+                        {allModsEnabled ? t('disableAll') : t('enableAll')}
+                      </Button>
                     <div className="flex gap-2 items-center">
                       <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
                         <PopoverTrigger asChild>
@@ -605,5 +621,3 @@ export default function ModsDashboard() {
     </TooltipProvider>
   );
 }
-
-    
