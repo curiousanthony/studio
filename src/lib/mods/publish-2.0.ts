@@ -101,6 +101,8 @@ export const mod: Mod = {
         padding-block: .6rem !important;
         padding-inline: .3rem !important;
         background-color: hsl(0, 0%, 97%);
+        position: sticky;
+        top: 0;
       }
       
       #new_topic_form trix-toolbar .trix-button-group {
