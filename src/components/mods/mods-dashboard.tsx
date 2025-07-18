@@ -15,7 +15,6 @@ import { ClipboardCopy, Check, LayoutGrid, List, ChevronsUpDown, Filter, Search 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from '@/hooks/use-translations';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -45,6 +44,7 @@ export default function ModsDashboard() {
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
   const [tagPopoverOpen, setTagPopoverOpen] = useState(false);
+  const [categoryPopoverOpen, setCategoryPopoverOpen] = useState(false);
   
   useEffect(() => {
     try {
@@ -122,6 +122,14 @@ export default function ModsDashboard() {
         return activeTags.every(tag => mod.tags.includes(tag));
       });
   }, [mods, activeCategory, activeTags, searchQuery, t]);
+
+  const categoryCounts = useMemo(() => {
+    return {
+      All: mods.length,
+      Appearance: mods.filter(m => m.category === 'Appearance').length,
+      Functionality: mods.filter(m => m.category === 'Functionality').length,
+    };
+  }, [mods]);
 
  const availableTags = useMemo(() => {
     const baseFilteredMods = mods.filter(mod => 
@@ -393,6 +401,12 @@ export default function ModsDashboard() {
     return null;
   }
 
+  const categoryOptions: { value: Category, label: string }[] = [
+    { value: 'All', label: t('all') },
+    { value: 'Appearance', label: t('category_appearance') },
+    { value: 'Functionality', label: t('category_functionality') },
+  ];
+
   return (
     <TooltipProvider>
       <div className="container mx-auto px-4 flex flex-col min-h-full">
@@ -407,8 +421,8 @@ export default function ModsDashboard() {
           <div className="relative">
             <div className="sticky top-[64px] z-20 bg-background/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-4 mb-8 border-b">
                 <div className="p-4 bg-card border rounded-lg shadow-sm flex flex-col gap-4">
-                  <div className="flex flex-col md:flex-row md:items-center gap-4">
-                      <div className="relative w-full md:w-80 flex-shrink-0">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4">
+                      <div className="relative w-full md:flex-1">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           type="search"
@@ -418,91 +432,99 @@ export default function ModsDashboard() {
                           onChange={(e) => setSearchQuery(e.target.value)}
                         />
                       </div>
-                      <div className="w-full md:w-auto">
-                         <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as Category)}>
-                            <TabsList className="p-0 bg-transparent flex flex-col md:flex-row h-auto w-full md:w-auto">
-                              <TabsTrigger
-                                value="All"
-                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-r-none md:rounded-l-md rounded-t-md rounded-b-none"
-                              >
-                                {t('all')}
-                              </TabsTrigger>
-                              <TabsTrigger
-                                value="Appearance"
-                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
-                              >
-                                {t('category_appearance')}
-                              </TabsTrigger>
-                              <TabsTrigger
-                                value="Functionality"
-                                className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground md:rounded-l-none md:rounded-r-md rounded-b-md rounded-t-none"
-                              >
-                                {t('category_functionality')}
-                              </TabsTrigger>
-                            </TabsList>
-                          </Tabs>
-                      </div>
-                  </div>
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex gap-4 items-center">
-                     <Button variant="outline" onClick={handleToggleAll}>
-                        {allModsEnabled ? t('disableAll') : t('enableAll')}
-                      </Button>
-                    <div className="flex gap-2 items-center">
-                      <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={tagPopoverOpen}
-                            className="w-auto justify-between"
-                          >
-                            <Filter className="mr-2 h-4 w-4 shrink-0" />
-                            {t('tagsLabel')}
-                             {activeTags.length > 0 && (
-                              <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                  {activeTags.length}
-                              </div>
-                            )}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Command>
-                            <CommandInput placeholder={t('filterByTag')} />
-                            <CommandList>
-                              <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
-                              <CommandGroup>
-                                {availableTags
-                                  .filter(tag => tag.display.toLowerCase().includes(searchQuery.toLowerCase()))
-                                  .map((tag) => {
-                                    const isSelected = activeTags.includes(tag.key);
-                                    return (
-                                      <CommandItem
-                                        key={tag.key}
-                                        value={tag.key}
-                                        onSelect={() => handleTagClick(tag.key)}
-                                      >
-                                        <Check
-                                          className={cn(
-                                            "mr-2 h-4 w-4",
-                                            isSelected ? "opacity-100" : "opacity-0"
-                                          )}
-                                        />
-                                        <span className="flex-grow">{tag.display}</span>
-                                        <span className="text-xs text-muted-foreground">{tag.count}</span>
-                                      </CommandItem>
-                                    );
-                                  })}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                        {activeTags.length > 0 && (
+                      <div className="flex items-center gap-4">
+                         <Popover open={categoryPopoverOpen} onOpenChange={setCategoryPopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={categoryPopoverOpen}
+                              className="w-[200px] justify-between"
+                            >
+                              {t(`category_${activeCategory.toLowerCase()}` as any) || t('all')}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandList>
+                                <CommandGroup>
+                                  {categoryOptions.map((cat) => (
+                                    <CommandItem
+                                      key={cat.value}
+                                      value={cat.value}
+                                      onSelect={(currentValue) => {
+                                        setActiveCategory(currentValue as Category);
+                                        setCategoryPopoverOpen(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          activeCategory === cat.value ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      <span className="flex-grow">{cat.label}</span>
+                                      <span className="text-xs text-muted-foreground">{categoryCounts[cat.value]}</span>
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+
+                        <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={tagPopoverOpen}
+                              className="w-auto justify-between"
+                            >
+                              <Filter className="mr-2 h-4 w-4 shrink-0" />
+                              {t('tagsLabel')}
+                              {activeTags.length > 0 && (
+                                <div className="ml-2 h-4 w-4 text-xs flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                    {activeTags.length}
+                                </div>
+                              )}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Command>
+                              <CommandInput placeholder={t('filterByTag')} />
+                              <CommandList>
+                                <CommandEmpty>{t('noTagsFound')}</CommandEmpty>
+                                <CommandGroup>
+                                  {availableTags.map((tag) => (
+                                    <CommandItem
+                                      key={tag.key}
+                                      value={tag.key}
+                                      onSelect={() => handleTagClick(tag.key)}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          activeTags.includes(tag.key) ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      <span className="flex-grow">{tag.display}</span>
+                                      <span className="text-xs text-muted-foreground">{tag.count}</span>
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                         {activeTags.length > 0 && (
                             <Button variant="ghost" size="sm" onClick={() => setActiveTags([])} className="h-auto py-0.5 px-2">{t('clear')}</Button>
                         )}
-                    </div>
+                      </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-x-2">
                         <p className="text-sm text-primary font-semibold">
                         {enabledModsCount > 0 
@@ -511,7 +533,13 @@ export default function ModsDashboard() {
                         </p>
                         <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
                     </div>
-                  </div>
+
+                    <div className="flex-grow md:flex-grow-0 order-first md:order-none w-full md:w-auto">
+                        <Button variant="outline" onClick={handleToggleAll} className="w-full md:w-auto">
+                            {allModsEnabled ? t('disableAll') : t('enableAll')}
+                        </Button>
+                    </div>
+
                     {!isMobile && (
                       <div className="flex items-center gap-2">
                           <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
