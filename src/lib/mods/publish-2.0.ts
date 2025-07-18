@@ -8,7 +8,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['community', 'ux', 'ui', 'form'],
   enabled: false,
-  published: false,
+  published: true,
   modType: 'javascript',
   previewEnabled: true,
   mediaUrl: '/images/mods/publish-2.0-after.webm',
@@ -172,15 +172,15 @@ export const mod: Mod = {
     if (!titleInputEl) return;
     
     const contentAreaEl = qs("#poll-form", formEl);
-    const spacePickerRowEl = qs("div:first-child", formEl);
-    if (!contentAreaEl || !spacePickerRowEl) {
+    //const spacePickerRowEl = qs("div:first-child", formEl);
+    if (!contentAreaEl) {
       log('Publish 2.0 Mod Warning: Required DOM elements for form not found');
       return;
     }
     
     // Hide elements initially
     contentAreaEl.style.display = "none";
-    spacePickerRowEl.style.display = "none";
+    //spacePickerRowEl.style.display = "none";
 
     const userFirstName = await getUserFirstName();
     const momentOfDayString = getMomentOfDayString();
@@ -195,7 +195,7 @@ export const mod: Mod = {
       if (restOfFormVisible) return;
 
       contentAreaEl.style.display = "block";
-      spacePickerRowEl.style.display = 'block';
+      //spacePickerRowEl.style.display = 'flex';
 
       const contentInputEl = qs("trix-editor", contentAreaEl);
       if(contentInputEl) {
