@@ -7,7 +7,7 @@ export const mod: Mod = {
   category: 'Appearance',
   tags: ['community', 'ux', 'ui', 'form'],
   enabled: false,
-  published: true,
+  published: false,
   modType: 'javascript',
   previewEnabled: true,
   configOptions: [
