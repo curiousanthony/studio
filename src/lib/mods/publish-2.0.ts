@@ -146,7 +146,7 @@ export const mod: Mod = {
         const doc = parser.parseFromString(html, "text/html");
         const nameEl = doc.querySelector("div.text-center > p:first-child");
         if (!nameEl) {
-           console.error("Publish 2.0 Mod Error: Name element not found after fetching user profile!");
+           log("Publish 2.0 Mod Error: Name element not found after fetching user profile!");
            return "";
         }
         
@@ -154,25 +154,17 @@ export const mod: Mod = {
         window.ModData.firstName = firstName;
         return firstName;
       } catch (error) {
-        console.error('Publish 2.0 Mod Error:', error.message);
+        log('Publish 2.0 Mod Error:', error.message);
         return "";
       }
     }
 
     function getMomentOfDayString() {
       const hour = new Date().getHours();
-      const lang = document.documentElement.lang || 'fr';
-      if (lang === 'fr') {
-        if (hour >= 5 && hour < 11) return "ce matin";
-        if (hour >= 11 && hour < 17) return "cet après-midi";
-        if (hour >= 17 && hour < 22) return "ce soir";
-        return "aujourd'hui";
-      } else { // English fallbacks
-        if (hour >= 5 && hour < 12) return "this morning";
-        if (hour >= 12 && hour < 18) return "this afternoon";
-        if (hour >= 18 && hour < 22) return "tonight";
-        return "today";
-      }
+      if (hour >= 5 && hour < 11) return "ce matin";
+      if (hour >= 11 && hour < 17) return "cet après-midi";
+      if (hour >= 17 && hour < 22) return "ce soir";
+      return "aujourd'hui";
     }
     // --- END: Helper Functions ---
     
@@ -182,7 +174,7 @@ export const mod: Mod = {
     const contentAreaEl = qs("#poll-form", formEl);
     const spacePickerRowEl = qs("div:first-child", formEl);
     if (!contentAreaEl || !spacePickerRowEl) {
-      console.warn('Publish 2.0 Mod: Required DOM elements not found');
+      log('Publish 2.0 Mod Warning: Required DOM elements for form not found');
       return;
     }
     

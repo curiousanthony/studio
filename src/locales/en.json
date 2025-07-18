@@ -131,7 +131,7 @@
   "mod_community-xp-animation_config_animationDuration_label": "Animation Duration (s)",
   "mod_publish-2.0_name": "Publish 2.0",
   "mod_publish-2.0_description": "Revamps the UI for publishing a community post. It hides the full editor until the user clicks the title field, which features an engaging, dynamic placeholder to encourage posting.",
-  "mod_publish-2.0_config_titlePlaceholder_label": "Title Placeholder Greeting",
+  "mod_publish-2.0_config_titlePlaceholder_label": "Title Placeholder Greeting (before time of day and first name)",
   "mod_publish-2.0_config_contentPlaceholder_label": "Content Placeholder",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
