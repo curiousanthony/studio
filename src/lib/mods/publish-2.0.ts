@@ -11,6 +11,7 @@ export const mod: Mod = {
   published: true,
   modType: 'javascript',
   previewEnabled: true,
+  mediaBeforeUrl: '/images/mods/publish-2.0-before.png',
   mediaUrl: '/images/mods/publish-2.0-after.webm',
   configOptions: [
     {
@@ -192,7 +193,18 @@ export const mod: Mod = {
     let restOfFormVisible = false;
 
     titleInputEl.addEventListener("click", () => {
+    // Do nothing if uncollapsed at least once
       if (restOfFormVisible) return;
+
+      // Disable publish button if the 2 fields are empty initially
+      const submitBtn = formEl.querySelector("button[type='submit']");
+      if (!submitBtn) return;
+      const contentEditorEl = formEl.querySelector("trix-editor")
+
+      if(!contentEditorEl) log('Publish 2.0 Mod Error: Content editor element not found!')
+
+      // Initial state: disable the button
+      submitBtn.disabled = true
 
       contentAreaEl.style.display = "block";
       //spacePickerRowEl.style.display = 'flex';
