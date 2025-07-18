@@ -524,25 +524,23 @@ export default function ModsDashboard() {
                         )}
                       </div>
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex items-center gap-x-4 md:order-2">
-                        <div className="flex-grow md:flex-grow-0 order-first md:order-none w-full md:w-auto">
-                            <Button variant="outline" onClick={handleToggleAll} className="w-full md:w-auto">
-                                {allModsEnabled ? t('disableAll') : t('enableAll')}
-                            </Button>
-                        </div>
-                        <div className="flex items-center gap-x-2">
-                            <p className="text-sm text-primary font-semibold">
-                            {enabledModsCount > 0 
-                                ? t('enabledMods', { count: enabledModsCount }) 
-                                : t('gettingStarted')}
-                            </p>
-                            <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
-                        </div>
-                    </div>
+                  <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4">
+                      <div className="w-full md:w-auto order-2 md:order-1">
+                          <Button variant="outline" onClick={handleToggleAll} className="w-full md:w-auto">
+                              {allModsEnabled ? t('disableAll') : t('enableAll')}
+                          </Button>
+                      </div>
+                      <div className="flex items-center gap-x-2 order-1 md:order-2">
+                          <p className="text-sm text-primary font-semibold">
+                          {enabledModsCount > 0 
+                              ? t('enabledMods', { count: enabledModsCount }) 
+                              : t('gettingStarted')}
+                          </p>
+                          <p className="text-sm text-muted-foreground font-medium">({t('showingMods', {count: filteredMods.length})})</p>
+                      </div>
                    
                     {!isMobile && (
-                      <div className="flex items-center gap-2 md:order-3">
+                      <div className="flex items-center gap-2 order-3 ml-auto">
                           <Button variant={layout === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setLayout('grid')}>
                             <LayoutGrid className="mr-2 h-4 w-4" />
                             {t('layoutGrid')}
