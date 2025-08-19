@@ -9,6 +9,8 @@ export const mod: Mod = {
   enabled: false,
   published: true,
   modType: 'javascript',
+  mediaUrl: '/images/mods/unread-notification-title-indicator-after.png',
+  previewEnabled: true,
   configOptions: [
     {
       key: 'notificationSymbol',
