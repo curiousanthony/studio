@@ -22,7 +22,7 @@ export function AppFooter() {
       <div className="container flex flex-col md:flex-row h-auto md:h-24 items-center justify-between py-6 md:py-0 gap-6 md:gap-0">
         <div className="w-full md:w-auto md:flex-1 flex items-center justify-center md:justify-start">
            <a href="#" onClick={scrollToTop} className="flex items-center space-x-2">
-            {/* <AppLogo className="h-6 w-6" /> */}
+            <AppLogo className="h-6 w-6" />
             <span className="font-bold inline-block font-headline">{t('appName')}</span>
           </a>
         </div>
