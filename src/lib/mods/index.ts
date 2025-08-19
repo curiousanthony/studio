@@ -15,6 +15,7 @@ import { mod as relativePostDateMod } from './relative-post-date';
 import { mod as centeredDesktopNavigationMod } from './centered-desktop-navigation';
 import { mod as communityXpAnimationMod } from './community-xp-animation';
 import { mod as publish20Mod } from './publish-2.0';
+import { mod as unreadNotificationTitleIndicatorMod } from './unread-notification-title-indicator';
 
 const allModsRaw: Mod[] = [
   transformSchoolNameMod,
@@ -33,6 +34,7 @@ const allModsRaw: Mod[] = [
   centeredDesktopNavigationMod,
   communityXpAnimationMod,
   publish20Mod,
+  unreadNotificationTitleIndicatorMod,
 ];
 
 // Filter out mods that are explicitly set to `published: false`

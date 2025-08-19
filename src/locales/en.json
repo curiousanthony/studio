@@ -135,6 +135,9 @@
   "mod_publish-2.0_description": "Revamps the UI for publishing a community post. It hides the full editor until the user clicks the title field, which features an engaging, dynamic placeholder to encourage posting.",
   "mod_publish-2.0_config_titlePlaceholder_label": "Title Placeholder Greeting (before time of day and first name)",
   "mod_publish-2.0_config_contentPlaceholder_label": "Content Placeholder",
+  "mod_unread-notification-title-indicator_name": "Unread Notification Title Indicator",
+  "mod_unread-notification-title-indicator_description": "Adds a symbol prefix like \"(!)\" to the page title to indicate when there are unread notifications.",
+  "mod_unread-notification-title-indicator_config_notificationSymbol_label": "Notification Symbol",
   "category_all": "All",
   "category_appearance": "Appearance",
   "category_functionality": "Functionality",
@@ -163,5 +166,6 @@
   "tag_date": "Date",
   "tag_time": "Time",
   "tag_animation": "Animation",
-  "tag_form": "Form"
+  "tag_form": "Form",
+  "tag_notifications": "Notifications"
 }
